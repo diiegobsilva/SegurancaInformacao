@@ -37,17 +37,11 @@ function Cadastro() {
   useEffect(() => { }, []);
 
   return (
-    <form className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" noValidate id="form-solicitacao" onSubmit={formik.handleSubmit} style={{ margin: "8px" }}>
+    <form>
       <div className="text-center mb-4">
         <h1 className="text-dark fw-bolder mb-3 font-padrao-titulo">CADASTRAR CLIENTE</h1>
         <div className="text-gray-500 fs-6 font-padrao-titulo mb-5" style={{ letterSpacing: 0 }}>Preencha os campos para cadastrar um cliente!</div>
       </div>
-
-      {formik.status && (
-        <div className="mb-5 alert alert-danger">
-          <div className="alert-text font-weight-bold">{formik.status}</div>
-        </div>
-      )}
 
       <div className="row">
         <div className="col-lg-4">
@@ -193,7 +187,6 @@ function Cadastro() {
             )}
           </div>
         </div>
-
       </div>
 
 

@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-no-target-blank */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect } from "react";
 import { useFormik } from "formik";
 import "../App.css";
@@ -114,33 +112,90 @@ function Cadastro() {
         <div className="col-lg-4">
           {/* begin::Form group Editora */}
           <div className="fv-row mb-3">
-            <label className="form-label fw-bolder text-dark fs-6">Cargo</label>
-            <input placeholder="Cargo" type="text" autoComplete="off" {...formik.getFieldProps("cargo")}
-              onChange={formik.handleChange} value={formik.values.cargo}
+            <label className="form-label fw-bolder text-dark fs-6">Senha</label>
+            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("senha")}
+              onChange={formik.handleChange} value={formik.values.endereco}
               className={clsx(
                 "form-control bg-transparent",
                 {
                   "is-invalid":
-                    formik.touched.cargo && formik.errors.cargo,
+                    formik.touched.senha && formik.errors.senha,
                 },
                 {
                   "is-valid":
-                    formik.touched.cargo &&
-                    !formik.errors.cargo,
+                    formik.touched.senha &&
+                    !formik.errors.senha,
                 }
               )}
             />
-            {formik.touched.cargo && formik.errors.cargo && (
+            {formik.touched.senha && formik.errors.senha && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.cargo}</span>
+                  <span role="alert">{formik.errors.senha}</span>
                 </div>
               </div>
             )}
           </div>
-          {/* end::Form group Editora */}
         </div>
+
+
+        <div className="col-lg-4">
+          <div className="fv-row mb-3">
+            <label className="form-label fw-bolder text-dark fs-6">Endereço</label>
+            <input placeholder="Endereço" type="text" autoComplete="off" {...formik.getFieldProps("endereco")}
+              onChange={formik.handleChange} value={formik.values.endereco}
+              className={clsx(
+                "form-control bg-transparent",
+                {
+                  "is-invalid":
+                    formik.touched.endereco && formik.errors.endereco,
+                },
+                {
+                  "is-valid":
+                    formik.touched.endereco &&
+                    !formik.errors.endereco,
+                }
+              )}
+            />
+            {formik.touched.endereco && formik.errors.endereco && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.endereco}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-4">
+          <div className="fv-row mb-4">
+            <label className="form-label fw-bolder text-dark fs-6">Telefone</label>
+            <input placeholder="Telefone" type="text" autoComplete="off" {...formik.getFieldProps("telefone")}
+              onChange={formik.handleChange} value={formik.values.endereco}
+              className={clsx(
+                "form-control bg-transparent",
+                {
+                  "is-invalid":
+                    formik.touched.telefone && formik.errors.telefone,
+                },
+                {
+                  "is-valid":
+                    formik.touched.telefone &&
+                    !formik.errors.telefone,
+                }
+              )}
+            />
+            {formik.touched.telefone && formik.errors.telefone && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.telefone}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
+
 
       {/* begin::Form group */}
       <div className="d-flex align-items-center justify-content-between mt-4">

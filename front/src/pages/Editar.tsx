@@ -36,7 +36,7 @@ function EditarCliente() {
 
       nome: data?.nome ?? "",
       email: data?.email ?? "",
-      cargo: data?.cargo ?? "",
+      cargo: data?.endereco ?? "",
 
     },
     validationSchema: registrationSchema,

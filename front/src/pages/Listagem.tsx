@@ -90,7 +90,7 @@ function ListagemCliente() {
     (item) =>
       item.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.cargo.toLowerCase().includes(searchQuery.toLowerCase())
+      item.endereco.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -109,7 +109,7 @@ function ListagemCliente() {
                 <th onClick={() => sorting("id")} className="text-center">ID{order === "ASC" ? <FaSortUp /> : <FaSortDown />}</th>
                 <th onClick={() => sorting("nome")} className="text-center">Nome{order === "ASC" ? <FaSortUp /> : <FaSortDown />}</th>
                 <th onClick={() => sorting("email")} className="text-center">Email{order === "ASC" ? <FaSortUp /> : <FaSortDown />}</th>
-                <th onClick={() => sorting("cargo")} className="text-center">Cargo{order === "ASC" ? <FaSortUp /> : <FaSortDown />}</th>
+                <th onClick={() => sorting("endereco")} className="text-center">Cargo{order === "ASC" ? <FaSortUp /> : <FaSortDown />}</th>
                 <th className="text-center">Ações</th>
               </tr>
             </thead>
@@ -123,7 +123,7 @@ function ListagemCliente() {
                       <td className="text-center">{data.id}</td>
                       <td className="text-center">{data.nome}</td>
                       <td className="text-center">{data.email}</td>
-                      <td className="text-center">{data.cargo}</td>
+                      <td className="text-center">{data.endereco}</td>
                       <td className="text-center"><Link to={"/editar/" + data.id}><img style={{ width: '25px' }} src={editar} alt='Editar' /></Link>
                         <img style={{ width: "35px" }} src={excluir} alt="Excluir" onClick={() => handleDeleteBook(data.id)} />
                       </td>

@@ -1,13 +1,17 @@
 export const initialValues = {
     nome: "",
     email: "",
-    cargo: ""
+    endereco: "",
+    senha: "",
+    telefone: "",
 }
 
 export interface Clientes {
     id: number;
     nome: string;
     email: string;
-    cargo: string;
+    senha: string;
+    telefone: string;
+    endereco: string;
 }
 

@@ -5,6 +5,7 @@ import Cadastro from "./pages/Cadastro";
 import ListagemCliente from "./pages/Listagem";
 import EditarCliente from "./pages/Editar";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           
           <div className='container bg-light-opacity rounded mx-auto' style={{padding:"2rem"}}>
             <Routes>
+                <Route path="/" element={<Home />} />
                 <Route path="/cadastro" element={<Cadastro />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/listagem" element={<ListagemCliente />} />

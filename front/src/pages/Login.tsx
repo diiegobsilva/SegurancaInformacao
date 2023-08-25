@@ -34,7 +34,6 @@ function Login() {
     }
   }
 
-  useEffect(() => { }, []);
 
   return (
     <form>
@@ -44,67 +43,69 @@ function Login() {
       </div>
 
       <div className="row">
-  <div className="col-lg-6">
-    <div className="fv-row mb-3">
-      <label className="form-label fw-bolder text-dark fs-6">Email</label>
-      <input
-        placeholder="Email"
-        type="text"
-        autoComplete="off"
-        {...formik.getFieldProps("email")}
-        onChange={formik.handleChange}
-        value={formik.values.email}
-        className={clsx(
-          "form-control bg-transparent",
-          {
-            "is-invalid": formik.touched.email && formik.errors.email,
-          },
-          {
-            "is-valid": formik.touched.email && !formik.errors.email,
-          }
-        )}
-      />
-      {formik.touched.email && formik.errors.email && (
-        <div className="fv-plugins-message-container">
-          <div className="fv-help-block">
-            <span role="alert">{formik.errors.email}</span>
+        <div className="col-lg-6">
+          <div className="fv-row mb-3">
+            <label className="form-label fw-bolder text-dark fs-6">Email</label>
+            <input
+              placeholder="Email"
+              type="text"
+              autoComplete="off"
+              {...formik.getFieldProps("email")}
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              className={clsx(
+                "form-control bg-transparent",
+                {
+                  "is-invalid": formik.touched.email && formik.errors.email,
+                },
+                {
+                  "is-valid": formik.touched.email && !formik.errors.email,
+                }
+              )}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.email}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
-    </div>
-  </div>
-  <div className="col-lg-6">
-    <div className="fv-row mb-3">
-      <label className="form-label fw-bolder text-dark fs-6">Senha</label>
-      <input
-        placeholder="Senha"
-        type="password"
-        autoComplete="off"
-        {...formik.getFieldProps("senha")}
-        onChange={formik.handleChange}
-        value={formik.values.senha}
-        className={clsx(
-          "form-control bg-transparent",
-          {
-            "is-invalid": formik.touched.senha && formik.errors.senha,
-          },
-          {
-            "is-valid": formik.touched.senha && !formik.errors.senha,
-          }
-        )}
-      />
-      {formik.touched.senha && formik.errors.senha && (
-        <div className="fv-plugins-message-container">
-          <div className="fv-help-block">
-            <span role="alert">{formik.errors.senha}</span>
+        <div className="col-lg-6">
+          <div className="fv-row mb-3">
+            <label className="form-label fw-bolder text-dark fs-6">Senha</label>
+            <input
+              placeholder="Senha"
+              type="password"
+              autoComplete="off"
+              {...formik.getFieldProps("senha")}
+              onChange={formik.handleChange}
+              value={formik.values.senha}
+              className={clsx(
+                "form-control bg-transparent",
+                {
+                  "is-invalid": formik.touched.senha && formik.errors.senha,
+                },
+                {
+                  "is-valid": formik.touched.senha && !formik.errors.senha,
+                }
+              )}
+            />
+            {formik.touched.senha && formik.errors.senha && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.senha}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
-    </div>
-  </div>
-</div>
+      </div>
 
       <div className="d-flex align-items-center justify-content-between mt-4">
+        <a href="/cadastro">Cadastrar</a>
+
         <button type="button" className="btn btn-form" onClick={onClickEnviar} disabled={formik.isSubmitting}>
           Entrar
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-check-fill" viewBox="0 0 16 16">

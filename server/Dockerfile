@@ -8,5 +8,6 @@ COPY ./src /opt/server/src
 COPY *.json /opt/server/
 
 RUN npm i
+RUN npm run migration:run
 
 CMD [ "npm", "run", "dev" ]

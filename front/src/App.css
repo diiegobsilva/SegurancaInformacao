@@ -200,6 +200,7 @@ input::-webkit-inner-spin-button {
 }
 
 .buttonHome {
+  font-family: 'Coolvetica', sans-serif;
   font-size: 30px;
   font-weight: bolder;
   width: 170px;

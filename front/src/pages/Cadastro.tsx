@@ -132,7 +132,6 @@ function Cadastro() {
           </div>
         </div>
 
-
         <div className="col-lg-4">
           <div className="fv-row mb-3">
             <label className="form-label fw-bolder text-dark fs-6">Endereço</label>
@@ -187,8 +186,64 @@ function Cadastro() {
             )}
           </div>
         </div>
-      </div>
+        <div className="col-lg-4">
+          <div className="fv-row mb-4">
+            <label className="form-label fw-bolder text-dark fs-6">Confirmar Senha</label>
+            <input placeholder="password" type="text" autoComplete="off" {...formik.getFieldProps("senha")}
+              onChange={formik.handleChange} value={formik.values.endereco}
+              className={clsx(
+                "form-control bg-transparent",
+                {
+                  "is-invalid":
+                    formik.touched.senha && formik.errors.senha,
+                },
+                {
+                  "is-valid":
+                    formik.touched.senha &&
+                    !formik.errors.senha,
+                }
+              )}
+            />
+            {formik.touched.senha && formik.errors.senha && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.senha}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
 
+        <div className="col-lg-4">
+          <div className="form-check">
+            <input type="checkbox" />
+            <label className="form-check-label">
+              Aceito o tratamento dos meus dados pessoais para finalidades de marketing direto (email, SMS, etc.) relacionados com estudos de mercado, oportunidades de compra e promoções em curso.
+            </label>
+          </div>
+        </div>
+
+        <div className="col-lg-4">
+          <div className="form-check">
+            <input type="checkbox" />
+            <label className="form-check-label" >
+              * Aceitação dos Termos e Condições e da Política de Privacidade Li e aceito os Termos e Condições de utilização, venda e a Política de Privacidade. Caso a sua encomenda seja para levantamento na loja, o seu Nome e Apelido constarão no ecrã existente no interior do restaurante em conjunto com a indicação do tempo de espera. Se pretender que a informação não conste, sugerimos que insira um símbolo no campo Apelido (p.e. ***).
+            </label>
+          </div>
+        </div>
+        
+        <div className="col-lg-4">
+          <div className="selecetSexo">
+            <select>
+              <option value="" label="Selecione o sexo" disabled selected/>
+              <option value="masculino" label="Masculino" />
+              <option value="feminino" label="Feminino" />
+              <option value="outro" label="Outro" />
+            </select>   
+          </div>
+        </div>
+
+      </div>
 
       {/* begin::Form group */}
       <div className="d-flex align-items-center justify-content-between mt-4">

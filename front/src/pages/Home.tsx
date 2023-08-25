@@ -1,58 +1,63 @@
-import React from "react";
 import "../App.css";
-import clsx from "clsx";
+import pizza1 from "../images/pizza1.jpg";
+import pizza2 from "../images/pizza2.jpg";
+import pizza3 from "../images/pizza3.jpg";
+import pizza4 from "../images/pizza4.jpg";
+import pizza5 from "../images/pizza5.jpg";
+import pizza6 from "../images/pizza6.jpg";
 
 function Home() {
- 
-  const menuItems = [
-    {
-      name: "Pizza de Pepperoni",
-      description: "Molho de tomate, queijo derretido e pepperoni.",
-      price: "$12.99",
-      imageUrl: "https://example.com/pizza-pepperoni.jpg", 
-    },
-    {
-      name: "Pizza Vegetariana",
-      description: "Molho de tomate, queijo, pimentão, cebola, cogumelos e azeitonas.",
-      price: "$11.99",
-      imageUrl: "https://example.com/pizza-vegetariana.jpg", 
-    },
-
-  ];
 
   return (
     <div className="home-container">
-      <header className="header">
-        <h1 className="headline">Bem-vindo à Pizzaria Do Sakaue!</h1>
-        <p className="subheadline">A melhor pizza da cidade, entregue na sua porta.</p>
-      </header>
+      <div className="text-center mb-4">
+        <h1 className="text-dark fw-bolder mb-3 font-padrao-titulo">CARDÁPIO</h1>
+        <div style={{ letterSpacing: 0, fontSize: 16, fontWeight: "bold" }}>Inicie o seu pedido escolhendo uma deliciosa pizza do nosso cardápio. Sinta-se à vontade!</div>
+      </div>
 
-      <section className="special-pizza">
 
-      </section>
-
-      <section className="menu">
-        <h2 className="section-title">Nosso Menu</h2>
-        <div className="menu-items">
-          {menuItems.map((item, index) => (
-            <div className="menu-item-card" key={index}>
-              <div className="menu-item-image">
-                <img src={item.imageUrl} alt={item.name} />
-              </div>
-              <div className="menu-item-info">
-                <h3 className="item-name">{item.name}</h3>
-                <p className="item-description">{item.description}</p>
-                <span className="item-price">{item.price}</span>
-                <button className="order-button">Comprar</button>
-              </div>
+      <div className="menu-items">
+        <div className="menu-column">
+          <div className="menu-item-card">
+            <div className="menu-item-image">
+              <img src={pizza1} alt="Brócolis e Queijo Branco" />
+              <h3 className="item-name">Calabresa e Brócolis</h3>
+              <p className="item-description">Calabresa, Queijo e Brócolis</p>
             </div>
-          ))}
+            <div className="menu-item-image">
+              <img src={pizza2} alt="Napolitana" />
+              <h3 className="item-name">Napolitana</h3>
+              <p className="item-description">Queijo e Pepperoni</p>
+            </div>
+            <div className="menu-item-image">
+              <img src={pizza3} alt="Brócolis e Queijo Provolone" />
+              <h3 className="item-name">Brócolis e Queijo Branco</h3>
+              <p className="item-description">Brócolis e Queijo Branco</p>
+            </div>
+          </div>
         </div>
-      </section>
 
-      <section className="contact">
-
-      </section>
+        <div className="menu-column">
+          <div className="menu-item-card">
+            <div className="menu-item-image">
+              <img src={pizza4} alt="Clássica" />
+              <h3 className="item-name">Clássica</h3>
+              <p className="item-description">Queijo e Presunto</p>
+            </div>
+            <div className="menu-item-image">
+              <img src={pizza5} alt="Calabresa e Brócolis" />
+              <h3 className="item-name">Brócolis e Queijo Provolone</h3>
+              <p className="item-description">Brócolis, Queijo Provolone e Queijo Minas</p>
+            </div>
+            <div className="menu-item-image">
+              <img src={pizza6} alt="Calabresa" />
+              <h3 className="item-name">Calabresa</h3>
+              <p className="item-description">Calabresa, Cebola e Tomate</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" className="btn btn-form" >Comprar</button>
     </div>
   );
 }

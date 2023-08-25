@@ -2,6 +2,7 @@ import AppDataSource from "../data-source";
 import { Request, Response } from 'express';
 import { Cliente } from "../entities/Cliente";
 import { generateToken } from "../middlewares";
+import { loggerDelete, loggerUpdate } from "../config/logger";
 
 class ClienteController {
 
@@ -20,7 +21,7 @@ class ClienteController {
           .addSelect('cliente.password')
           .where("cliente.email=:email", { email })
           .getOne();
-    
+          loggerUpdate.info("Sucesso")
         if (usuario && usuario.id) {
           console.log(usuario)
           const r = await usuario.compare(password);
@@ -90,6 +91,7 @@ class ClienteController {
         const clienteRepository = AppDataSource.getRepository(Cliente)
         const findCliente = await clienteRepository.findOneBy({id: idCliente})
         const allCliente = await clienteRepository.remove(findCliente)
+        loggerDelete.info("Sucesso")
         return res.json(allCliente)
     }
 

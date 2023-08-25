@@ -12,7 +12,7 @@ function Home() {
     <div className="home-container">
       <div className="text-center mb-4">
         <h1 className="text-dark fw-bolder mb-3 font-padrao-titulo">CARDÁPIO</h1>
-        <div style={{ letterSpacing: 0, fontSize: 16, fontWeight: "bold" }}>Inicie o seu pedido escolhendo uma deliciosa pizza do nosso cardápio. Sinta-se à vontade!</div>
+        <div style={{ letterSpacing: 0, fontSize: 18}}>Inicie o seu pedido escolhendo uma deliciosa pizza do nosso cardápio. Sinta-se à vontade!</div>
       </div>
 
 

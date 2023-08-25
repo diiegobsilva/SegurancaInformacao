@@ -137,15 +137,10 @@ input::-webkit-inner-spin-button {
   background-size: 25px;
 }
 
+
+
 /* Estilo Home */
 
-
-.font-padrao-titulo {
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-}
-
-/* Estilos para a seção do menu */
 .menu-items {
   display: flex;
   justify-content: space-between;

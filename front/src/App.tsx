@@ -6,6 +6,7 @@ import ListagemCliente from "./pages/Listagem";
 import EditarCliente from "./pages/Editar";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Perfil from "./pages/Perfil";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/cadastro" element={<Cadastro />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/perfil" element={<Perfil />} />
                 <Route path="/listagem" element={<ListagemCliente />} />
                 <Route path="editar/:id" element={<EditarCliente />} />
             </Routes>

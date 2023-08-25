@@ -231,16 +231,14 @@ function Cadastro() {
             </label>
           </div>
         </div>
-        
+
         <div className="col-lg-4">
-          <div className="selecetSexo">
-            <select>
-              <option value="" label="Selecione o sexo" disabled selected/>
-              <option value="masculino" label="Masculino" />
-              <option value="feminino" label="Feminino" />
-              <option value="outro" label="Outro" />
-            </select>   
-          </div>
+          <select className="form-label fw-bolder text-dark form-control bg-transparent mt-4 ">
+            <option value="" label="Selecione o sexo" disabled selected />
+            <option value="masculino" label="Masculino" />
+            <option value="feminino" label="Feminino" />
+            <option value="outro" label="Outro" />
+          </select>
         </div>
 
       </div>

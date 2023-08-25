@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
+import * as bcrypt from "bcrypt";
 
 @Entity({name:"cliente"})
 export class Cliente {
@@ -14,5 +15,28 @@ export class Cliente {
 
     @Column({nullable: false})
     sexo: string;
+
+    @Column({nullable: false})
+    telefone: string;
+
+    @Column({nullable: false})
+    endereco: string
+
+    @Column({nullable: false})
+    password: string
+
+    @BeforeInsert() //a função hashPassword é disparada antes do insert e update
+    @BeforeUpdate()
+    hashPassword(): void {
+        if (this.password) {
+            // a senha é codificada usando o algoritmo do pacote bcrypt
+            this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+        }
+    }
+
+    compare(input: string): Promise<boolean> {
+        // a senha fornecida em input é comparada com a senha do registro armazenado no SGBD
+        return bcrypt.compare(input, this.password);
+    }
 
 }

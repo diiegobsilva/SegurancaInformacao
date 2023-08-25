@@ -5,6 +5,7 @@ const routes = Router();
 routes.get('/historic', ClienteController.getHistoricCliente);
 routes.get('/specific/:uuid', ClienteController.getCliente);
 
+routes.post('/login', ClienteController.login)
 routes.post('/create', ClienteController.postCliente);
 
 routes.put('/modify/:uuid', ClienteController.putCliente);

@@ -10,4 +10,4 @@ COPY *.json /opt/server/
 RUN npm i
 RUN npm run migration:run
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]

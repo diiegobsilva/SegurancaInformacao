@@ -21,11 +21,11 @@ import { DataSource } from "typeorm";
 const AppDataSource = new DataSource({
   database: "clientes",
   type: "mysql", 
-  host: "192.168.15.79", 
+  host: "172.17.0.1", 
   port: 3306, 
-  username: "fatec",
-  password: "11",
-  connectTimeout: 30000,
+  username: "root",
+  password: "fatec",
+ // connectTimeout: 30000,
 
   synchronize: false,
   logging: false,

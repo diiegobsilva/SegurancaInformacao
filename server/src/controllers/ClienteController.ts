@@ -24,7 +24,7 @@ class ClienteController {
         const insertCliente = new Cliente();
         insertCliente.nome = createCliente.nome
         insertCliente.email = createCliente.email
-        insertCliente.cargo = createCliente.cargo
+        insertCliente.sexo = createCliente.sexo
      
         const allCliente = await clienteRepository.save(insertCliente)
         return res.json(allCliente)
@@ -37,7 +37,7 @@ class ClienteController {
         const findCliente = await clienteRepository.findOneBy({id: idCliente})
         findCliente.nome = createCliente.nome
         findCliente.email = createCliente.email
-        findCliente.cargo = createCliente.cargo
+        findCliente.sexo = createCliente.sexo
         const allCliente = await clienteRepository.save(findCliente)
         return res.json(allCliente)
     }

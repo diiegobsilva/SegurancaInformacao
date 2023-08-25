@@ -13,6 +13,6 @@ export class Cliente {
     email: string;
 
     @Column({nullable: false})
-    cargo: string;
+    sexo: string;
 
 }

@@ -100,32 +100,31 @@ function Cadastro() {
               </div>
             )}
           </div>
-          {/* end::Form group Livro */}
         </div>
 
         <div className="col-lg-4">
-          {/* begin::Form group Editora */}
+
           <div className="fv-row mb-3">
             <label className="form-label fw-bolder text-dark fs-6">Senha</label>
-            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("senha")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("password")}
+              onChange={formik.handleChange} value={formik.values.password}
               className={clsx(
                 "form-control bg-transparent",
                 {
                   "is-invalid":
-                    formik.touched.senha && formik.errors.senha,
+                    formik.touched.password && formik.errors.password,
                 },
                 {
                   "is-valid":
-                    formik.touched.senha &&
-                    !formik.errors.senha,
+                    formik.touched.password &&
+                    !formik.errors.password,
                 }
               )}
             />
-            {formik.touched.senha && formik.errors.senha && (
+            {formik.touched.password && formik.errors.password && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.senha}</span>
+                  <span role="alert">{formik.errors.password}</span>
                 </div>
               </div>
             )}
@@ -163,7 +162,7 @@ function Cadastro() {
           <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Telefone</label>
             <input placeholder="Telefone" type="text" autoComplete="off" {...formik.getFieldProps("telefone")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+              onChange={formik.handleChange} value={formik.values.telefone}
               className={clsx(
                 "form-control bg-transparent",
                 {
@@ -189,25 +188,25 @@ function Cadastro() {
         <div className="col-lg-4">
           <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Confirmar Senha</label>
-            <input placeholder="password" type="text" autoComplete="off" {...formik.getFieldProps("senha")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("password")}
+              onChange={formik.handleChange} value={formik.values.password}
               className={clsx(
                 "form-control bg-transparent",
                 {
                   "is-invalid":
-                    formik.touched.senha && formik.errors.senha,
+                    formik.touched.password && formik.errors.password,
                 },
                 {
                   "is-valid":
-                    formik.touched.senha &&
-                    !formik.errors.senha,
+                    formik.touched.password &&
+                    !formik.errors.password,
                 }
               )}
             />
-            {formik.touched.senha && formik.errors.senha && (
+            {formik.touched.password && formik.errors.password && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.senha}</span>
+                  <span role="alert">{formik.errors.password}</span>
                 </div>
               </div>
             )}

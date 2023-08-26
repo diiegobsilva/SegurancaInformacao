@@ -33,8 +33,7 @@ function Login() {
       avisoConcluido();
     }
   }
-
-
+  
   return (
     <form>
       <div className="text-center mb-4">
@@ -81,21 +80,21 @@ function Login() {
               autoComplete="off"
               {...formik.getFieldProps("senha")}
               onChange={formik.handleChange}
-              value={formik.values.senha}
+              value={formik.values.password}
               className={clsx(
                 "form-control bg-transparent",
                 {
-                  "is-invalid": formik.touched.senha && formik.errors.senha,
+                  "is-invalid": formik.touched.password && formik.errors.password,
                 },
                 {
-                  "is-valid": formik.touched.senha && !formik.errors.senha,
+                  "is-valid": formik.touched.password && !formik.errors.password,
                 }
               )}
             />
-            {formik.touched.senha && formik.errors.senha && (
+            {formik.touched.password && formik.errors.password && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.senha}</span>
+                  <span role="alert">{formik.errors.password}</span>
                 </div>
               </div>
             )}

@@ -8,7 +8,7 @@ const registrationSchema = Yup.object().shape({
     email: Yup.string()
       .required('O Email é obrigatório'),
 
-    senha: Yup.string()
+    password: Yup.string()
       .required('A Senha é obrigatório'),
 
     endereco: Yup.string()

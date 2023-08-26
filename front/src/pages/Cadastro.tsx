@@ -25,16 +25,23 @@ function Cadastro() {
     formik.resetForm();
   }
 
+  function confirmarPassword(confirmPassword: string) {
+    const { password } = formik.values;
+    if (password !== confirmPassword) {
+      formik.setFieldError("confirmPassword", "As senhas não coincidem.");
+    } else {
+      formik.setFieldError("confirmPassword", "");
+    }
+  }
+
   function onClickEnviar() {
-    if (!formik.isValid) {
+    if (!formik.isValid || formik.errors.confirmPassword) {
       avisoErro();
     } else {
       formik.submitForm();
       avisoConcluido();
     }
   }
-
-  useEffect(() => { }, []);
 
   return (
     <form>
@@ -188,25 +195,30 @@ function Cadastro() {
         <div className="col-lg-4">
           <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Confirmar Senha</label>
-            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("password")}
-              onChange={formik.handleChange} value={formik.values.password}
+            <input
+              placeholder="Confirmar Senha"
+              type="password"
+              autoComplete="off"
+              {...formik.getFieldProps("confirmPassword")}
+              onChange={(e) => {
+                formik.handleChange(e);
+                confirmarPassword(e.target.value);
+              }}
+              value={formik.values.confirmPassword}
               className={clsx(
                 "form-control bg-transparent",
                 {
-                  "is-invalid":
-                    formik.touched.password && formik.errors.password,
+                  "is-invalid": formik.touched.confirmPassword && formik.errors.confirmPassword,
                 },
                 {
-                  "is-valid":
-                    formik.touched.password &&
-                    !formik.errors.password,
+                  "is-valid": formik.touched.confirmPassword && !formik.errors.confirmPassword,
                 }
               )}
             />
-            {formik.touched.password && formik.errors.password && (
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.password}</span>
+                  <span role="alert">{formik.errors.confirmPassword}</span>
                 </div>
               </div>
             )}

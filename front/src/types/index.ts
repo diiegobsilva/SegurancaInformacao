@@ -5,6 +5,7 @@ export const initialValues = {
     sexo: "",
     telefone: "",
     password: "",
+    confirmPassword: "",
 }
 
 export interface Clientes {
@@ -15,5 +16,6 @@ export interface Clientes {
     telefone: string;
     sexo: string;
     endereco: string;   
+    confirmPassword: string,
 }
 

@@ -232,8 +232,8 @@ function Cadastro() {
         </div>
 
         <div className="col-lg-4">
-          <select className="form-label fw-bolder text-dark form-control bg-transparent mt-4 ">
-            <option value="" label="Selecione o sexo" disabled selected />
+          <select className="form-label fw-bolder text-dark form-control bg-transparent mt-4" {...formik.getFieldProps("sexo")} >
+            <option value="" label="Selecione o sexo" disabled />
             <option value="masculino" label="Masculino" />
             <option value="feminino" label="Feminino" />
             <option value="outro" label="Outro" />

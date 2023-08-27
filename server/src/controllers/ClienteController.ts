@@ -91,7 +91,7 @@ class ClienteController {
         const clienteRepository = AppDataSource.getRepository(Cliente)
         const findCliente = await clienteRepository.findOneBy({id: idCliente})
         const allCliente = await clienteRepository.remove(findCliente)
-        loggerDelete.info("Sucesso")
+        loggerDelete.info(`id: ${idCliente}`)
         return res.json(allCliente)
     }
 

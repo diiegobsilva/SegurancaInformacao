@@ -11,7 +11,7 @@ function Header() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav"></Navbar.Toggle>
             <Nav>
               <Nav.Link href="/">PIZZARIA SAKAUE</Nav.Link>
-              <Nav.Link href="">Meu Perfil</Nav.Link>
+              <Nav.Link href="/perfil">Meu Perfil</Nav.Link>
             </Nav>
         </Container>
       </Navbar>

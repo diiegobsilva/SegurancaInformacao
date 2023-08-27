@@ -25,16 +25,23 @@ function Cadastro() {
     formik.resetForm();
   }
 
+  function confirmarPassword(confirmPassword: string) {
+    const { password } = formik.values;
+    if (password !== confirmPassword) {
+      formik.setFieldError("confirmPassword", "As senhas não coincidem.");
+    } else {
+      formik.setFieldError("confirmPassword", "");
+    }
+  }
+
   function onClickEnviar() {
-    if (!formik.isValid) {
+    if (!formik.isValid || formik.errors.confirmPassword) {
       avisoErro();
     } else {
       formik.submitForm();
       avisoConcluido();
     }
   }
-
-  useEffect(() => { }, []);
 
   return (
     <form>
@@ -100,32 +107,31 @@ function Cadastro() {
               </div>
             )}
           </div>
-          {/* end::Form group Livro */}
         </div>
 
         <div className="col-lg-4">
-          {/* begin::Form group Editora */}
+
           <div className="fv-row mb-3">
             <label className="form-label fw-bolder text-dark fs-6">Senha</label>
-            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("senha")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+            <input placeholder="Senha" type="password" autoComplete="off" {...formik.getFieldProps("password")}
+              onChange={formik.handleChange} value={formik.values.password}
               className={clsx(
                 "form-control bg-transparent",
                 {
                   "is-invalid":
-                    formik.touched.senha && formik.errors.senha,
+                    formik.touched.password && formik.errors.password,
                 },
                 {
                   "is-valid":
-                    formik.touched.senha &&
-                    !formik.errors.senha,
+                    formik.touched.password &&
+                    !formik.errors.password,
                 }
               )}
             />
-            {formik.touched.senha && formik.errors.senha && (
+            {formik.touched.password && formik.errors.password && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.senha}</span>
+                  <span role="alert">{formik.errors.password}</span>
                 </div>
               </div>
             )}
@@ -163,7 +169,7 @@ function Cadastro() {
           <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Telefone</label>
             <input placeholder="Telefone" type="text" autoComplete="off" {...formik.getFieldProps("telefone")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+              onChange={formik.handleChange} value={formik.values.telefone}
               className={clsx(
                 "form-control bg-transparent",
                 {
@@ -189,25 +195,30 @@ function Cadastro() {
         <div className="col-lg-4">
           <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Confirmar Senha</label>
-            <input placeholder="password" type="text" autoComplete="off" {...formik.getFieldProps("senha")}
-              onChange={formik.handleChange} value={formik.values.endereco}
+            <input
+              placeholder="Confirmar Senha"
+              type="password"
+              autoComplete="off"
+              {...formik.getFieldProps("confirmPassword")}
+              onChange={(e) => {
+                formik.handleChange(e);
+                confirmarPassword(e.target.value);
+              }}
+              value={formik.values.confirmPassword}
               className={clsx(
                 "form-control bg-transparent",
                 {
-                  "is-invalid":
-                    formik.touched.senha && formik.errors.senha,
+                  "is-invalid": formik.touched.confirmPassword && formik.errors.confirmPassword,
                 },
                 {
-                  "is-valid":
-                    formik.touched.senha &&
-                    !formik.errors.senha,
+                  "is-valid": formik.touched.confirmPassword && !formik.errors.confirmPassword,
                 }
               )}
             />
-            {formik.touched.senha && formik.errors.senha && (
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.senha}</span>
+                  <span role="alert">{formik.errors.confirmPassword}</span>
                 </div>
               </div>
             )}
@@ -231,16 +242,14 @@ function Cadastro() {
             </label>
           </div>
         </div>
-        
+
         <div className="col-lg-4">
-          <div className="selecetSexo">
-            <select>
-              <option value="" label="Selecione o sexo" disabled selected/>
-              <option value="masculino" label="Masculino" />
-              <option value="feminino" label="Feminino" />
-              <option value="outro" label="Outro" />
-            </select>   
-          </div>
+          <select className="form-label fw-bolder text-dark form-control bg-transparent mt-4" {...formik.getFieldProps("sexo")} >
+            <option value="" label="Selecione o sexo" disabled />
+            <option value="masculino" label="Masculino" />
+            <option value="feminino" label="Feminino" />
+            <option value="outro" label="Outro" />
+          </select>
         </div>
 
       </div>

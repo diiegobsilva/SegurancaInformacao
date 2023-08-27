@@ -52,13 +52,33 @@ class ClienteController {
         return res.json(allCliente)
     }
 
-    public async getCliente (req: Request, res: Response) : Promise<Response> {
-        const idCliente:any = req.params.uuid
-        const clienteRepository = AppDataSource.getRepository(Cliente)
-        const allCliente = await clienteRepository.findOneBy({id: idCliente})
-        return res.json(allCliente)
-    }
+    public async getCliente(req: Request, res: Response): Promise<Response> {
+      try {
+          const idCliente: any = req.params.uuid;
+          const clienteRepository = AppDataSource.getRepository(Cliente);
+          const cliente = await clienteRepository.findOneBy({ id: idCliente });
 
+          if (!cliente) {
+              return res.status(404).json({ error: 'Cliente não encontrado' });
+          }
+
+          const { nome, email, sexo, telefone, endereco } = cliente;
+
+          const clienteData = {
+              id: idCliente,
+              nome,
+              email,
+              sexo,
+              telefone,
+              endereco,
+          };
+
+          return res.json(clienteData);
+      } catch (error) {
+          console.error('Erro ao buscar cliente:', error);
+          return res.status(500).json({ error: 'Erro ao buscar cliente' });
+      }
+  }
     public async postCliente (req: Request, res: Response) : Promise<Response> {
         const createCliente = req.body
         const clienteRepository = AppDataSource.getRepository(Cliente)
@@ -74,17 +94,31 @@ class ClienteController {
         return res.json(allCliente)
     }
 
-    public async putCliente (req: Request, res: Response) : Promise<Response> {
-        const createCliente = req.body
-        const idCliente:any = req.params.uuid
-        const clienteRepository = AppDataSource.getRepository(Cliente)
-        const findCliente = await clienteRepository.findOneBy({id: idCliente})
-        findCliente.nome = createCliente.nome
-        findCliente.email = createCliente.email
-        findCliente.sexo = createCliente.sexo
-        const allCliente = await clienteRepository.save(findCliente)
-        return res.json(allCliente)
-    }
+    public async putCliente(req: Request, res: Response): Promise<Response> {
+      try {
+          const createCliente = req.body;
+          const idCliente: any = req.params.uuid;
+          const clienteRepository = AppDataSource.getRepository(Cliente);
+          const findCliente = await clienteRepository.findOne(idCliente);
+  
+          if (!findCliente) {
+              return res.status(404).json({ error: 'Cliente não encontrado' });
+          }
+  
+          findCliente.nome = createCliente.nome;
+          findCliente.sexo = createCliente.sexo;
+          findCliente.telefone = createCliente.telefone;
+  
+          const updatedCliente = await clienteRepository.save(findCliente);
+  
+          return res.json(updatedCliente);
+      } catch (error) {
+          console.error('Erro ao atualizar cliente:', error);
+          return res.status(500).json({ error: 'Erro ao atualizar cliente' });
+      }
+  }
+  
+  
 
     public async deleteCliente (req: Request, res: Response) : Promise<Response> {
         const idCliente:any = req.params.uuid

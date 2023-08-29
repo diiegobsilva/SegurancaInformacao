@@ -9,4 +9,5 @@ IDS=$(tail -n $NUMERO_LINHAS logs/deleteuser.log | cut -d ":" -f6)
 for i in $IDS    
 do
         echo "valor - $i"
+        docker exec mysql-server mysql -h"localhost" -u"root" -p"fatec" -e"use clientes;"  -e "DELETE FROM cliente WHERE id = 9;"
 done

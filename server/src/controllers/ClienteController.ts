@@ -44,7 +44,6 @@ class ClienteController {
     }
   }
 
-<<<<<<< HEAD
     public async putCliente(req: Request, res: Response): Promise<Response> {
       try {
         const createCliente = req.body;
@@ -97,7 +96,6 @@ class ClienteController {
     }
   
   
-=======
 
   public async getHistoricCliente(req: Request, res: Response): Promise<Response> {
     const clienteRepository = AppDataSource.getRepository(Cliente)
@@ -105,7 +103,6 @@ class ClienteController {
     console.log(allCliente)
     return res.json(allCliente)
   }
->>>>>>> 4927a6b7ec86b2f0366b6bb3390f1d654172363e
 
   public async getCliente(req: Request, res: Response): Promise<Response> {
     try {
@@ -154,29 +151,29 @@ class ClienteController {
     return res.json(allCliente)
   }
 
-  public async putCliente(req: Request, res: Response): Promise<Response> {
-    try {
-      const createCliente = req.body;
-      const idCliente: any = req.params.uuid;
-      const clienteRepository = AppDataSource.getRepository(Cliente);
-      const findCliente = await clienteRepository.findOne(idCliente);
+  // public async putCliente(req: Request, res: Response): Promise<Response> {
+  //   try {
+  //     const createCliente = req.body;
+  //     const idCliente: any = req.params.uuid;
+  //     const clienteRepository = AppDataSource.getRepository(Cliente);
+  //     const findCliente = await clienteRepository.findOne(idCliente);
 
-      if (!findCliente) {
-        return res.status(404).json({ error: 'Cliente não encontrado' });
-      }
+  //     if (!findCliente) {
+  //       return res.status(404).json({ error: 'Cliente não encontrado' });
+  //     }
 
-      findCliente.nome = createCliente.nome;
-      findCliente.sexo = createCliente.sexo;
-      findCliente.telefone = createCliente.telefone;
+  //     findCliente.nome = createCliente.nome;
+  //     findCliente.sexo = createCliente.sexo;
+  //     findCliente.telefone = createCliente.telefone;
 
-      const updatedCliente = await clienteRepository.save(findCliente);
+  //     const updatedCliente = await clienteRepository.save(findCliente);
 
-      return res.json(updatedCliente);
-    } catch (error) {
-      console.error('Erro ao atualizar cliente:', error);
-      return res.status(500).json({ error: 'Erro ao atualizar cliente' });
-    }
-  }
+  //     return res.json(updatedCliente);
+  //   } catch (error) {
+  //     console.error('Erro ao atualizar cliente:', error);
+  //     return res.status(500).json({ error: 'Erro ao atualizar cliente' });
+  //   }
+  // }
 
 
 

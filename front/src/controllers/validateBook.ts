@@ -13,6 +13,11 @@ const registrationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "As senhas não coincidem.") 
     .required("A confirmação de senha é obrigatória."),
 
+  confirmEmail: Yup.string()
+    .oneOf([Yup.ref("email")], "Os email não coincidem.") 
+    .required("A confirmação de email é obrigatório."),
+    
+
   endereco: Yup.string().required("O endereço é obrigatório."),
 
   telefone: Yup.string().required("O telefone é obrigatório."),

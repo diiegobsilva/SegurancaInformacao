@@ -1,29 +1,41 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 import * as bcrypt from "bcrypt";
 
-@Entity({name:"cliente"})
+@Entity({ name: "cliente" })
 export class Cliente {
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     nome: string;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     email: string;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     sexo: string;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     telefone: string;
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     endereco: string
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     password: string
+
+    @Column({ nullable: false })
+    termo_dados: number
+
+    @Column({ nullable: false })
+    termo_sms: number
+
+    @Column({ nullable: false })
+    termo_email: number
+
+    @Column({ nullable: false })
+    termo_cookies: number
 
     @BeforeInsert() //a função hashPassword é disparada antes do insert e update
     @BeforeUpdate()

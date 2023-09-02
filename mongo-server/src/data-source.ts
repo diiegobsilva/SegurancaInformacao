@@ -5,7 +5,7 @@ import { Cliente } from "./entity/Cliente"
 export const AppDataSource = new DataSource({
     type: "mongodb",
     database: "clientes",
-    url: "mongodb://some-mongo:27017/test?directConnection=true&appName=mongosh+1.10.5",
+    url: "mongodb://db:27017/",
     //host: "mongo-server",
     // port: 27018,
     // username: null,

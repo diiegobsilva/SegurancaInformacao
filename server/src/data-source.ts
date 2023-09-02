@@ -21,7 +21,7 @@ import { DataSource } from "typeorm";
 const AppDataSource = new DataSource({
   database: "clientes",
   type: "mysql", 
-  host: "172.21.0.2", 
+  host: "172.18.0.2", 
   port: 3306, 
   username: "root",
   password: "fatec",

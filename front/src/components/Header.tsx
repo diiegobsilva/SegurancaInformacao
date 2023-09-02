@@ -12,6 +12,8 @@ function Header() {
             <Nav>
               <Nav.Link href="/">PIZZARIA SAKAUE</Nav.Link>
               <Nav.Link href="/perfil">Meu Perfil</Nav.Link>
+              <Nav.Link href="/editar/:id">Editar</Nav.Link>
+              <Nav.Link href="/listagem">Listagem</Nav.Link>
             </Nav>
         </Container>
       </Navbar>

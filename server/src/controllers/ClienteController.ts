@@ -96,27 +96,54 @@ class ClienteController {
 
     public async putCliente(req: Request, res: Response): Promise<Response> {
       try {
-          const createCliente = req.body;
-          const idCliente: any = req.params.uuid;
-          const clienteRepository = AppDataSource.getRepository(Cliente);
-          const findCliente = await clienteRepository.findOne(idCliente);
-  
-          if (!findCliente) {
-              return res.status(404).json({ error: 'Cliente não encontrado' });
-          }
-  
+        const createCliente = req.body;
+        const idCliente: any = req.params.uuid;
+        const clienteRepository = AppDataSource.getRepository(Cliente);
+        const findCliente = await clienteRepository.findOneBy({ id: idCliente });
+
+        if (!findCliente) {
+          return res.status(404).json({ error: 'Cliente não encontrado' });
+        }
+
+        // Registre a alteração no loggerUpdate
+        loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
+
+        // Verifique cada campo e atualize o cliente
+        if (createCliente.nome !== undefined) {
           findCliente.nome = createCliente.nome;
+        }
+
+        if (createCliente.email !== undefined) {
+          findCliente.email = createCliente.email;
+        }
+
+        if (createCliente.sexo !== undefined) {
           findCliente.sexo = createCliente.sexo;
+        }
+
+        if (createCliente.password !== undefined) {
+          // Lembre-se de que você pode optar por não atualizar a senha aqui por motivos de segurança
+          findCliente.password = createCliente.password;
+        }
+
+        if (createCliente.telefone !== undefined) {
           findCliente.telefone = createCliente.telefone;
-  
-          const updatedCliente = await clienteRepository.save(findCliente);
-  
-          return res.json(updatedCliente);
+        }
+
+        // Salve as alterações no cliente
+        const updatedCliente = await clienteRepository.save(findCliente);
+
+        return res.json(updatedCliente);
       } catch (error) {
-          console.error('Erro ao atualizar cliente:', error);
-          return res.status(500).json({ error: 'Erro ao atualizar cliente' });
+        console.error('Erro ao atualizar cliente:', error);
+
+        // Registre o erro no loggerDelete
+
+        // loggerDelete.error(Erro ao atualizar cliente: ID ${idCliente}, Erro: ${error});
+
+        return res.status(500).json({ error: 'Erro ao atualizar cliente' });
       }
-  }
+    }
   
   
 

@@ -39,6 +39,16 @@ function Cadastro() {
     }
   }
 
+  function confirmarEmail(confirmEmail: string) {
+    const { email } = formik.values;
+    if (email !== confirmEmail) {
+      formik.setFieldError("confirmEmail", "As senhas não coincidem.");
+    } else {
+      formik.setFieldError("confirmEmail", "");
+    }
+  }
+
+
   function onClickEnviar() {
     if (!formik.isValid || formik.errors.confirmPassword) {
       avisoErro();
@@ -114,29 +124,34 @@ function Cadastro() {
             )}
           </div>
         </div>
+
         <div className="col-lg-3">
-          {/* begin::Form group Livro */}
-          <div className="fv-row mb-3">
+          <div className="fv-row mb-4">
             <label className="form-label fw-bolder text-dark fs-6">Confirmar Email</label>
-            <input placeholder="Email" type="text" autoComplete="off" {...formik.getFieldProps("email")}
-              onChange={formik.handleChange} value={formik.values.email}
+            <input
+              placeholder="Confirmar Email"
+              type="text"
+              autoComplete="off"
+              {...formik.getFieldProps("confirmEmail")}
+              onChange={(e) => {
+                formik.handleChange(e);
+                confirmarPassword(e.target.value);
+              }}
+              value={formik.values.confirmEmail}
               className={clsx(
                 "form-control bg-transparent",
                 {
-                  "is-invalid":
-                    formik.touched.email && formik.errors.email,
+                  "is-invalid": formik.touched.confirmEmail && formik.errors.confirmEmail,
                 },
                 {
-                  "is-valid":
-                    formik.touched.email &&
-                    !formik.errors.email,
+                  "is-valid": formik.touched.confirmEmail && !formik.errors.confirmEmail,
                 }
               )}
             />
-            {formik.touched.email && formik.errors.email && (
+            {formik.touched.confirmEmail && formik.errors.confirmEmail && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
-                  <span role="alert">{formik.errors.email}</span>
+                  <span role="alert">{formik.errors.confirmEmail}</span>
                 </div>
               </div>
             )}
@@ -268,31 +283,125 @@ function Cadastro() {
           </div>
         </div>
 
-        <div className="col-lg-3" >
-          <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-            <input type="checkbox" />
-            <label style={{ marginRight: 58 }} onClick={TermoMarketing}>Dados pessoais para Marketing.</label>
+        <div className="col-lg-3">
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <input
+              type="checkbox"
+              checked={formik.values.termo_dados === 1}
+              onChange={(e) =>
+                formik.setFieldValue("termo_dados", e.target.checked ? 1 : 0)
+              }
+              className={clsx(
+                {
+                  "is-invalid":
+                    formik.touched.termo_dados && formik.errors.termo_dados,
+                },
+                {
+                  "is-valid":
+                    formik.touched.termo_dados && !formik.errors.termo_dados,
+                }
+              )}
+            />
+            <label style={{ marginRight: 58 }} onClick={TermoMarketing}>
+              Dados pessoais para Marketing.
+            </label>
+            {formik.touched.termo_dados && formik.errors.termo_dados && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.termo_dados}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="col-lg-3" >
-          <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-            <input type="checkbox" />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <input
+              type="checkbox"
+              checked={formik.values.termo_sms === 1}
+              onChange={(e) =>
+                formik.setFieldValue("termo_sms", e.target.checked ? 1 : 0)
+              }
+              className={clsx(
+                {
+                  "is-invalid":
+                    formik.touched.termo_sms && formik.errors.termo_sms,
+                },
+                {
+                  "is-valid":
+                    formik.touched.termo_sms && !formik.errors.termo_sms,
+                }
+              )}
+            />
             <label onClick={TermoCondicoesPrivacidade}>Condições e da Política de Privacidade Li</label>
+            {formik.touched.termo_sms && formik.errors.termo_sms && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.termo_sms}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="col-lg-3" >
           <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-            <input type="checkbox" />
+          <input
+              type="checkbox"
+              checked={formik.values.termo_email === 1}
+              onChange={(e) =>
+                formik.setFieldValue("termo_email", e.target.checked ? 1 : 0)
+              }
+              className={clsx(
+                {
+                  "is-invalid":
+                    formik.touched.termo_email && formik.errors.termo_email,
+                },
+                {
+                  "is-valid":
+                    formik.touched.termo_email && !formik.errors.termo_email,
+                }
+              )}
+            />
             <label style={{ marginRight: 50 }} onClick={TermoMarketing}>Dados pessoais para Marketing.</label>
+            {formik.touched.termo_email && formik.errors.termo_email && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.termo_email}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="col-lg-3" >
           <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-            <input type="checkbox" />
+          <input
+              type="checkbox"
+              checked={formik.values.termo_cookies === 1}
+              onChange={(e) =>
+                formik.setFieldValue("termo_cookies", e.target.checked ? 1 : 0)
+              }
+              className={clsx(
+                {
+                  "is-invalid":
+                    formik.touched.termo_cookies && formik.errors.termo_cookies,
+                },
+                {
+                  "is-valid":
+                    formik.touched.termo_cookies && !formik.errors.termo_cookies,
+                }
+              )}
+            />
             <label style={{ marginRight: 50 }} onClick={TermoCondicoesPrivacidade}>Dados pessoais para Marketing.</label>
+            {formik.touched.termo_cookies && formik.errors.termo_cookies && (
+              <div className="fv-plugins-message-container">
+                <div className="fv-help-block">
+                  <span role="alert">{formik.errors.termo_cookies}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -6,6 +6,11 @@ export const initialValues = {
     telefone: "",
     password: "",
     confirmPassword: "",
+    confirmEmail: "",
+    termo_dados: 0,
+    termo_sms: 0,
+    termo_email: 0,
+    termo_cookies: 0,
 }
 
 export interface Clientes {
@@ -16,6 +21,10 @@ export interface Clientes {
     telefone: string;
     sexo: string;
     endereco: string;   
-    confirmPassword: string,
+    confirmPassword: string;
+    confirmEmail: string;
+    termo_dados: number;
+    termo_sms: number,
+    termo_email: number,
+    termo_cookies: number,
 }
-

@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { Cliente } from "./entity/Cliente"
+import { ClienteEntity } from "./entity/Update"
 
 export const AppDataSource = new DataSource({
     type: "mongodb",
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
     // password: null,
     synchronize: true,
     logging: false,
-    entities: [Cliente],
+    entities: [Cliente, ClienteEntity],
     migrations: [],
     subscribers: [],
 })

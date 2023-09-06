@@ -19,7 +19,7 @@ class UpdateController {
 
     public async postCli(req: Request, res: Response): Promise<Response> {
         try{
-            const { id, nome, email, sexo, telefone, endereco, password, termo_dados, termo_sms, termo_email, termo_cookies } = req.body;
+            const { id, nome, email, sexo, telefone, endereco, password } = req.body;
             const rep = AppDataSource.getRepository(ClienteEntity);
             const insert = new ClienteEntity();
         
@@ -31,10 +31,6 @@ class UpdateController {
             insert.telefone = telefone;
             insert.endereco = endereco;
             insert.password = password;
-            insert.termo_dados = termo_dados;
-            insert.termo_sms = termo_sms;
-            insert.termo_email = termo_email;
-            insert.termo_cookies = termo_cookies;
             insert.date = new Date();
         
             const save = await rep.save(insert);

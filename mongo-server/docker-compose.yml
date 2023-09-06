@@ -9,7 +9,7 @@ services:
     links:
       - db
     ports:
-      - '3001:3001'
+      - '3002:3001'
     networks:
       - host
 
@@ -18,8 +18,6 @@ services:
     container_name: MONGODB_APP
     ports:
       - '27018:27017'
-    volumes:
-      - ./data/mongo:/data/db
     networks:
       - host
   

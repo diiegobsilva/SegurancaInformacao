@@ -6,6 +6,7 @@ export class  ClienteEntity {
 
     @ObjectIdColumn()
     id: ObjectId
+    
     @Column()
     cli_id: string
 
@@ -29,18 +30,6 @@ export class  ClienteEntity {
 
     @Column({ nullable: false })
     password: string
-
-    @Column({ nullable: false })
-    termo_dados: number
-
-    @Column({ nullable: false })
-    termo_sms: number
-
-    @Column({ nullable: false })
-    termo_email: number
-
-    @Column({ nullable: false })
-    termo_cookies: number
 
     @BeforeInsert() //a função hashPassword é disparada antes do insert e update
     @BeforeUpdate()

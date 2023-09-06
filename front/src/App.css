@@ -166,11 +166,19 @@ input::-webkit-inner-spin-button {
 }
 
 .menu-item-image-comprar img {
-  width: 35%;
+  width: 30%;
   height: auto;
   border-radius: 10px;
 }
-
+.menu-item-image-comprar{
+  display: flex;
+  background-color: rgb(235, 235, 235);
+}
+.test{
+  padding-left: 20px;
+  
+ 
+}
 .item-name {
   font-weight: bold;
   align-items: center;

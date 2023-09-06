@@ -44,30 +44,19 @@ function TelaComprar() {
       </div>
 
       <div className="row">
-        <div>
+        <div className="col-lg-12">
+
           <div className="menu-column">
-            <div className="menu-item-card">
-            </div>
             <div className="menu-item-card">
               <div className="menu-item-image-comprar">
                 <img src={pizza5} alt="Calabresa e Brócolis" />
-                <div className="item-details">
-                  <h3 className="item-name">Brócolis e Queijo Provolone</h3>
-                  <div className="quantity-controls">
-                  </div>
-                </div>
-                <p className="item-description">Brócolis, Queijo Provolone e Queijo Minas</p>
+                <div className="test">sjaoiS</div>
               </div>
             </div>
+
             <div className="menu-item-card">
               <div className="menu-item-image-comprar">
                 <img src={pizza6} alt="Calabresa" />
-                <div className="item-details">
-                  <h3 className="item-name">Calabresa</h3>
-                  <div className="quantity-controls">
-                  </div>
-                </div>
-                <p className="item-description">Calabresa, Cebola e Tomate</p>
               </div>
             </div>
           </div>

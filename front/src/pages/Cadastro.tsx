@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { useFormik } from "formik";
 import "../App.css";
 import axios from "axios";
-import { TermoMarketing, avisoConcluido, avisoErro, registrationSchema } from "../controllers";
+import { avisoConcluido, avisoErro, registrationSchema } from "../controllers";
 import { URI } from "../enumerations/uri";
 import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal from 'sweetalert2';
-import { TermoCondicoesPrivacidade } from "../controllers/termos";
+import { TermoDados, TermoSms, TermoEmail, TermoCookies } from "../controllers/termos";
 
 
 
@@ -302,8 +302,8 @@ function Cadastro() {
                 }
               )}
             />
-            <label style={{ marginRight: 58 }} onClick={TermoMarketing}>
-              Dados pessoais para Marketing.
+            <label style={{ marginRight: 58 }} onClick={TermoDados}>
+              Termo para tratamento de dados.
             </label>
             {formik.touched.termo_dados && formik.errors.termo_dados && (
               <div className="fv-plugins-message-container">
@@ -334,7 +334,7 @@ function Cadastro() {
                 }
               )}
             />
-            <label onClick={TermoCondicoesPrivacidade}>Condições e da Política de Privacidade Li</label>
+            <label onClick={TermoSms}>Termo para autorização de envio de SMS</label>
             {formik.touched.termo_sms && formik.errors.termo_sms && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
@@ -364,7 +364,7 @@ function Cadastro() {
                 }
               )}
             />
-            <label style={{ marginRight: 50 }} onClick={TermoMarketing}>Dados pessoais para Marketing.</label>
+            <label style={{ marginRight: 50 }} onClick={TermoEmail}>Termo para envio de E-mail.</label>
             {formik.touched.termo_email && formik.errors.termo_email && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">
@@ -394,7 +394,7 @@ function Cadastro() {
                 }
               )}
             />
-            <label style={{ marginRight: 50 }} onClick={TermoCondicoesPrivacidade}>Dados pessoais para Marketing.</label>
+            <label style={{ marginRight: 50 }} onClick={TermoCookies}>Termo para autorização da colete de cookies.</label>
             {formik.touched.termo_cookies && formik.errors.termo_cookies && (
               <div className="fv-plugins-message-container">
                 <div className="fv-help-block">

@@ -1,11 +1,21 @@
 import Swal from "sweetalert2";
 
-function TermoMarketing() {
-    Swal.fire('Aceito o tratamento dos meus dados pessoais para finalidades de marketing direto (email, SMS, etc.) relacionados com estudos de mercado, oportunidades de compra e promoções em curso.')
-  }
+function TermoDados() {
+  Swal.fire('Ao se cadastrar, você declara o seu CONSENTIMENTO para coletarmos, tratarmos e armazenarmos dados sobre você quando julgarmos adequados à prestação de nossos serviços, tais como: nome, endereço, gênero, e-mail, telefone e cookies.')
+}
 
-function TermoCondicoesPrivacidade() {
-    Swal.fire('Aceitação dos Termos e Condições e da Política de Privacidade Li e aceito os Termos e Condições de utilização, venda e a Política de Privacidade. Caso a sua encomenda seja para levantamento na loja, o seu Nome e Apelido constarão no ecrã existente no interior do restaurante em conjunto com a indicação do tempo de espera.')
-   
-  } 
-export {TermoMarketing, TermoCondicoesPrivacidade}
+function TermoSms() {
+  Swal.fire('Ao se cadastrar, você declara o seu CONSENTIMENTO para que utilizemos o seu telefone para fins de marketing, pelo qual ocorrerão as comunicações de envio de SMS contendo promoções e ações de marketing da pizzaria.')
+
+}
+
+function TermoEmail() {
+  Swal.fire('Ao se cadastrar, você declara o seu CONSENTIMENTO para que utilizemos o seu e-mail para fins de marketing, pelo qual ocorrerão as comunicações de envio de E-mail contendo promoções e ações de marketing da pizzaria.')
+
+}
+
+function TermoCookies() {
+  Swal.fire('Ao se cadastrar, você declara o seu CONSENTIMENTO para que possamos registrar dados de sua visita à plataforma através de cookies e outras tecnologias de rastreamento incluindo seu endereço IP e nome de domínio, a versão do seu navegador e do seu sistema operacional, dados de tráfego online, dados de localização, logs da web e outros dados de navegação. ')
+
+}
+export { TermoDados, TermoSms, TermoEmail, TermoCookies }

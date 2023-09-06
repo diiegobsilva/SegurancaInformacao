@@ -7,6 +7,7 @@ import EditarCliente from "./pages/Editar";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
+import TelaComprar from "./pages/TelaComprar";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/perfil" element={<Perfil />} />
                 <Route path="/listagem" element={<ListagemCliente />} />
                 <Route path="editar/:id" element={<EditarCliente />} />
+                <Route path="/comprar" element={<TelaComprar />} />
             </Routes>
           </div>
               

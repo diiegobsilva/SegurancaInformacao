@@ -165,6 +165,12 @@ input::-webkit-inner-spin-button {
   border-radius: 10px;
 }
 
+.menu-item-image-comprar img {
+  width: 35%;
+  height: auto;
+  border-radius: 10px;
+}
+
 .item-name {
   font-weight: bold;
   align-items: center;

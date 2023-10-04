@@ -1,22 +1,21 @@
 import "reflect-metadata"
-import { DataSource } from "typeorm"
+
 import { Cliente } from "./entity/Cliente"
 import { ClienteEntity } from "./entity/Update"
+import { DataSource } from "typeorm";
+import 'dotenv/config';
 
 export const AppDataSource = new DataSource({
-    type: "mongodb",
-    database: "clientes",
-    url: "mongodb://db:27017/",
-    //host: "mongo-server",
-    // port: 27018,
-    // username: null,
-    // password: null,
-    synchronize: true,
-    logging: false,
-    entities: [Cliente, ClienteEntity],
-    migrations: [],
-    subscribers: [],
-})
+  type: "mongodb", 
+  url: `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.CLUSTER}.gyfwek9.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
+  synchronize: true, 
+  logging: true, 
+  entities: ["src/entities/*.ts"], 
+  subscribers: [],
+  maxQueryExecutionTime: 2000,
+  useUnifiedTopology: true
+});
+
 
 AppDataSource.initialize()
   .then(() => {

@@ -17,5 +17,11 @@ function avisoErroDeletar() {
   });
   
 }
-
-export { avisoErro, avisoErroDeletar };
+function avisoErroLogin(){
+  Swal.fire({
+    icon: 'error',
+    title: 'Erro',
+    text: 'Não foi possível realizar o login.',
+  })
+}
+export { avisoErro, avisoErroDeletar, avisoErroLogin };

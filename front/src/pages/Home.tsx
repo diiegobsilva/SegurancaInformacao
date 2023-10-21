@@ -6,12 +6,15 @@ import pizza3 from "../images/pizza3.jpg";
 import pizza4 from "../images/pizza4.jpg";
 import pizza5 from "../images/pizza5.jpg";
 import pizza6 from "../images/pizza6.jpg";
+import { useNavigate } from 'react-router-dom';
+
 
 interface PizzaQuantities {
   [key: string]: number;
 }
 
 function Home() {
+  const navigate = useNavigate();
   const [pizzaQuantities, setPizzaQuantities] = useState<PizzaQuantities>({
     pizza1: 0,
     pizza2: 0,
@@ -136,7 +139,7 @@ function Home() {
         </div>
       </div>
       <div className="button-container d-flex justify-content-center mt-4">
-        <button type="button" className="buttonHome">Comprar</button>
+        <button type="button" className="buttonHome" onClick={() => navigate('/comprar')} >Comprar</button>
      </div>
     </div>
   );

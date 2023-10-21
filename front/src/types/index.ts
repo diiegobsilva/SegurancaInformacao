@@ -11,7 +11,9 @@ export const initialValues = {
     termo_sms: 0,
     termo_email: 0,
     termo_cookies: 0,
+    price: 0
 }
+
 
 export interface Clientes {
     id: number;

@@ -141,11 +141,7 @@ class ClienteController {
     insertCliente.endereco = createCliente.endereco
     insertCliente.telefone = createCliente.telefone
     insertCliente.password = createCliente.password
-    insertCliente.termo_dados = createCliente.termo_dados
-    insertCliente.termo_sms = createCliente.termo_sms
-    insertCliente.termo_email = createCliente.termo_email
-    insertCliente.termo_cookies = createCliente.termo_cookies
-
+    
 
     const allCliente = await clienteRepository.save(insertCliente)
     return res.json(allCliente)

@@ -34,6 +34,9 @@ class ClienteController {
           id: usuario.id,
           nome: usuario.nome,
           userEmail: usuario.email,
+          sexo: usuario.sexo,
+          telefone: usuario.telefone,
+          endereco: usuario.endereco,
           token
         });
       }
@@ -55,7 +58,7 @@ class ClienteController {
           return res.status(404).json({ error: 'Cliente não encontrado' });
         }
 
-        // Registre a alteração no loggerUpdate
+
         loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
 
         // Verifique cada campo e atualize o cliente

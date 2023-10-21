@@ -16,8 +16,7 @@ function Login() {
   function receberEmail(evento: any) {
     let entrada = evento.target.value;
     setEmail(entrada)
-    console.log(email);
-    
+    console.log(email); 
 }
 
 function receberSenha(evento: any) {

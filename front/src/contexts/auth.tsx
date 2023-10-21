@@ -36,10 +36,16 @@ export const AuthProvider = ({children}:any) => {
             const res = await axios.post(URI.LOGIN_USER, {email: email, password: password});
             const loggedUser = res.data.userEmail;  
             const token = res.data.token;
-            console.log(res.data.email);
+            const userName = res.data.nome;
+            const userTelefone = res.data.telefone
+            const userEndereco = res.data.endereco
+            const userSexo = res.data.sexo
             localStorage.setItem('email', JSON.stringify(loggedUser));
-            localStorage.setItem('token', token);
-            console.log(res);
+            localStorage.setItem('nome', userName);
+            localStorage.setItem('telefone', userTelefone);
+            localStorage.setItem('endereco', userEndereco);
+            localStorage.setItem('sexo', userSexo);
+
     
             api.defaults.headers.Authorization = `Bearer ${token}`;
             api.defaults.headers.common = { Authorization: `Bearer ${token}` };

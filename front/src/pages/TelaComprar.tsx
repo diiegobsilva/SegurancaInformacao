@@ -27,14 +27,14 @@ function TelaComprar() {
           <div className="menu-column">
                 <img src={pizza3} alt="Brócolis e Queijo Provolone" />
                 <p className="item-description"> Brócolis e Queijo Provolone</p>
-                <h5 className="item-name">Preço: 35,00 R$</h5>
+                <h5 className="item-name">Preço: R$ 35,00</h5>
           </div>
         </div>
         <div className="col-lg-4">
           <div className="menu-column">
                 <img src={pizza5} alt="Calabresa e Brócolis" />
                 <p className="item-description">Brócolis e Queijo Branco</p>
-                <h5 className="item-name">Preço: 45,00 R$</h5>
+                <h5 className="item-name">Preço: R$ 45,00</h5>
           </div>
         </div>
 
@@ -42,7 +42,7 @@ function TelaComprar() {
           <div className="menu-column">
                 <img src={pizza2} alt="Calabresa, Cebola e Tomates" />
                 <p className="item-description">Calabresa, Cebola e Tomate</p>
-                <h5 className="item-name">Preço: 45,00 R$</h5>
+                <h5 className="item-name">Preço: R$ 45,00</h5>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ function TelaComprar() {
       <div className="input-container">
         <div className="col-lg-6 total-input">
           <label>Total:</label>
-          <input type="text" value={'125,00 R$'} readOnly />
+          <input type="text" value={'R$ 125,00'} readOnly />
         </div>
         <div className="col-lg-6 forma-pagamento-input">
 

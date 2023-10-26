@@ -15,17 +15,16 @@ function App() {
   
         <div className="bg-div">
           
-          <Private><Header/></Private>
+          <Header/>
           
           <div className='d-flex flex-center flex-column flex-column-fluid hf-spacing px-2 mt-5'>
             <div className='container bg-light-opacity rounded mx-auto' style={{padding:"2rem"}}>
               <Routes>
-                <Route path="/" element={<Private><Home /></Private>} />
-                <Route path="/perfil" element={<Private><Perfil /></Private>} />
-                <Route path="/listagem" element={<Private><ListagemCliente /></Private>} />
-                <Route path="/editar/:id" element={<Private><EditarCliente /></Private>} />
-                <Route path="/comprar" element={<Private><TelaComprar /></Private>} />
-
+                <Route path="/" element={<Home />} />
+                <Route path="/perfil" element={<Perfil />} />
+                <Route path="/listagem" element={<ListagemCliente />} />
+                <Route path="/editar/:id" element={<EditarCliente />} />
+                <Route path="/comprar" element={<TelaComprar />} />
                 <Route path="/cadastro" element={<Cadastro/>} />
                 <Route path="/login" element={<Login />} />
               </Routes>

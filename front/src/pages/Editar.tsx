@@ -1,199 +1,123 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import clsx from "clsx";
-import "../App.css";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { avisoConcluido, avisoErro, registrationSchema } from "../controllers";
-import { URI } from "../enumerations/uri";
-import { Clientes } from "../types";
-
+import clsx from "clsx";
 
 function EditarCliente() {
-  const id = window.location.href.split("/")[4];
+  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [sexo, setSexo] = useState("");
+  const [clientID, setClientID] = useState(""); // Set the client ID as needed
 
-  const [data, setData] = useState<Clientes>();
+  async function handleUpdateClient() {
+    const updatedClientData = {
+      email,
+      nome,
+      telefone,
+      endereco,
+      sexo,
+    };
 
-  useEffect(() => {
-    async function fetchClientes(id: string) {
-      axios
-        .get(`${URI.PEGAR_CLIENTE_ESPECIFICO}${id}`)
-        .then((response) => {
-          const fetchedData = response.data;
-          setData(fetchedData);
-          formik.setValues(fetchedData);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    fetchClientes(id);
-  }, []);
+    try {
+      // Make a PUT request to your server to update the client
+      const response = await axios.put(`/api/clientes/${clientID}`, updatedClientData);
 
-  const formik = useFormik({
-    initialValues: {
-
-      nome: data?.nome ?? "",
-      email: data?.email ?? "",
-      cargo: data?.endereco ?? "",
-
-    },
-    validationSchema: registrationSchema,
-    initialErrors: { nome: "" },
-    onSubmit: async (values) => {
-      try {
-        const updatedData = {
-          nome: values.nome,
-          email: values.email,
-          cargo: values.cargo,
-
-        };
-
-        await axios.put(`${URI.ALTERA_CLIENTE}${id}`, updatedData);
-      } catch (error) {
-        console.log(error);
-        formik.setStatus("Ocorreu um erro ao atualizar as informações.");
-      }
-    },
-  });
-
-  function onClickLimpar() {
-    formik.resetForm();
-  }
-
-  function onClickEnviar() {
-    if (!formik.isValid) {
-      avisoErro();
-    } else {
-      formik.submitForm();
-      avisoConcluido().then((res: any) => {
-        window.location.assign("/listagem");
-      })
-
+      // Handle the response as needed
+      console.log('Client updated:', response.data);
+    } catch (error) {
+      // Handle errors
+      console.error('Error updating client:', error);
     }
   }
 
   return (
-    <>
-      <form className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" noValidate id="form-solicitacao" onSubmit={formik.handleSubmit} style={{ margin: "8px" }}>
+    <div>
+      <form>
         <div className="text-center mb-4">
-          <h1 className="text-dark fw-bolder mb-3 font-padrao-titulo">Editar Cliente</h1>
-          <div className="text-gray-500 fs-6 font-padrao-titulo mb-5" style={{ letterSpacing: 0 }}>Preencha os campos para atualizar as informações</div>
+          <h1 className="text-dark fw-bolder mb-3 font-padrao-titulo">Meu Perfil</h1>
         </div>
-
-        {formik.status && (
-          <div className="mb-5 alert alert-danger">
-            <div className="alert-text font-weight-bold">{formik.status}</div>
-          </div>
-        )}
 
         <div className="row">
           <div className="col-lg-4">
-            {/* begin::Form group Nome */}
-            <div className="fv-row mb-3">
-              <label className="form-label fw-bolder text-dark fs-6">Nome</label>
-              <input type="text" autoComplete="off" {...formik.getFieldProps("nome")}
-                className={clsx(
-                  "form-control bg-transparent",
-                  {
-                    "is-invalid":
-                      formik.touched.nome && formik.errors.nome,
-                  },
-                  {
-                    "is-valid":
-                      formik.touched.nome &&
-                      !formik.errors.nome,
-                  }
-                )}
-              />
-              {formik.touched.nome && formik.errors.nome && (
-                <div className="fv-plugins-message-container">
-                  <div className="fv-help-block">
-                    <span role="alert">{formik.errors.nome}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            {/* end::Form group Nome */}
-          </div>
-
-          <div className="col-lg-4">
-            {/* begin::Form group Livro */}
             <div className="fv-row mb-3">
               <label className="form-label fw-bolder text-dark fs-6">Email</label>
-              <input type="text" autoComplete="off" {...formik.getFieldProps("email")}
-                className={clsx(
-                  "form-control bg-transparent",
-                  {
-                    "is-invalid":
-                      formik.touched.email && formik.errors.email,
-                  },
-                  {
-                    "is-valid":
-                      formik.touched.email &&
-                      !formik.errors.email,
-                  }
-                )}
+              <input
+                placeholder="Email"
+                type="text"
+                autoComplete="off"
+                className={clsx("form-control bg-transparent")}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
-              {formik.touched.email && formik.errors.email && (
-                <div className="fv-plugins-message-container">
-                  <div className="fv-help-block">
-                    <span role="alert">{formik.errors.email}</span>
-                  </div>
-                </div>
-              )}
             </div>
-            {/* end::Form group Livro */}
           </div>
-
           <div className="col-lg-4">
-            {/* begin::Form group Editora */}
             <div className="fv-row mb-3">
-              <label className="form-label fw-bolder text-dark fs-6">Cargo</label>
-              <input type="text" autoComplete="off" {...formik.getFieldProps("cargo")}
-                className={clsx(
-                  "form-control bg-transparent",
-                  {
-                    "is-invalid":
-                      formik.touched.cargo && formik.errors.cargo,
-                  },
-                  {
-                    "is-valid":
-                      formik.touched.cargo &&
-                      !formik.errors.cargo,
-                  }
-                )}
+              <label className="form-label fw-bolder text-dark fs-6">Nome</label>
+              <input
+                autoComplete="off"
+                placeholder="Nome"
+                type="text"
+                className={clsx("form-control bg-transparent")}
+                onChange={(e) => setNome(e.target.value)}
+                value={nome}
               />
-              {formik.touched.cargo && formik.errors.cargo && (
-                <div className="fv-plugins-message-container">
-                  <div className="fv-help-block">
-                    <span role="alert">{formik.errors.cargo}</span>
-                  </div>
-                </div>
-              )}
             </div>
-            {/* end::Form group Editora */}
+          </div>
+          <div className="col-lg-4">
+            <div className="fv-row mb-4">
+              <label className="form-label fw-bolder text-dark fs-6">Telefone</label>
+              <input
+                placeholder="Telefone"
+                type="text"
+                autoComplete="off"
+                className={clsx("form-control bg-transparent")}
+                onChange={(e) => setTelefone(e.target.value)}
+                value={telefone}
+              />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="fv-row mb-3">
+              <label className="form-label fw-bolder text-dark fs-6">Endereço</label>
+              <input
+                placeholder="Endereço"
+                type="text"
+                autoComplete="off"
+                className={clsx("form-control bg-transparent")}
+                onChange={(e) => setEndereco(e.target.value)}
+                value={endereco}
+              />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <select
+              className="form-label fw-bolder text-dark form-control bg-transparent mt-4"
+              onChange={(e) => setSexo(e.target.value)}
+              value={sexo}
+            >
+              <option value="" label="Selecione o sexo" disabled />
+              <option value="masculino" label="Masculino" />
+              <option value="feminino" label="Feminino" />
+              <option value="outro" label="Outro" />
+            </select>
           </div>
         </div>
-
         <div className="d-flex align-items-center justify-content-between mt-4">
-          <button type="button" className="btn btn-form" onClick={onClickLimpar}>Limpar
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-backspace-fill" viewBox="0 0 16 16">
-              <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2V3zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8 5.829 5.854z" />
-            </svg>
-          </button>
-
-          <button type="button" className="btn btn-form" onClick={onClickEnviar} disabled={formik.isSubmitting}>Salvar
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-check-fill" viewBox="0 0 16 16">
-              <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 1.59 2.498C8 14 8 13 8 12.5a4.5 4.5 0 0 1 5.026-4.47L15.964.686Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
-              <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z" />
-            </svg>
+          <button
+            type="button"
+            className="btn btn-form"
+            style={{ width: "120px", height: "16px" }}
+            onClick={handleUpdateClient}
+          >
+            Update Client
           </button>
         </div>
-        {/* end::Form group */}
       </form>
-    </>
+    </div>
   );
 }
 

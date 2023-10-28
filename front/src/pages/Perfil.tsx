@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 import clsx from "clsx";
+import axios from "axios";
 
 function Perfil() {
+  const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -12,46 +14,64 @@ function Perfil() {
 
   useEffect(() => {
     const carregarDadosDaLocalStorage = () => {
-        const emailLocal = (localStorage.getItem("email") || "").replace(/['"]+/g, '');
-        const nomeLocal = (localStorage.getItem("nome") || "").replace(/['"]+/g, '');
-        const telefoneLocal = (localStorage.getItem("telefone") || "").replace(/['"]+/g, '');
-        const enderecoLocal = (localStorage.getItem("endereco") || "").replace(/['"]+/g, '');
-        const sexoLocal = (localStorage.getItem("sexo") || "").replace(/['"]+/g, '');
-      
-        setEmail(emailLocal);
-        setNome(nomeLocal);
-        setTelefone(telefoneLocal);
-        setEndereco(enderecoLocal);
-        setSexo(sexoLocal);
-      };
-      carregarDadosDaLocalStorage()
+      const id = (localStorage.getItem("id") || "").replace(/['"]+/g, '');
+      const emailLocal = (localStorage.getItem("email") || "").replace(/['"]+/g, '');
+      const nomeLocal = (localStorage.getItem("nome") || "").replace(/['"]+/g, '');
+      const telefoneLocal = (localStorage.getItem("telefone") || "").replace(/['"]+/g, '');
+      const enderecoLocal = (localStorage.getItem("endereco") || "").replace(/['"]+/g, '');
+      const sexoLocal = (localStorage.getItem("sexo") || "").replace(/['"]+/g, '');
+
+      setUserId(id);
+      setEmail(emailLocal);
+      setNome(nomeLocal);
+      setTelefone(telefoneLocal);
+      setEndereco(enderecoLocal);
+      setSexo(sexoLocal);
+    };
+    carregarDadosDaLocalStorage()
   }, []);
 
+  console.log("foda se");
+  console.log("foda se");
+  console.log(userId);
   console.log(email);
   console.log(nome);
   console.log(endereco);
   console.log(telefone);
   console.log(sexo);
 
-  const handleEmailChange = (event:any) => {
+
+  const handleEmailChange = (event: any) => {
     setEmail(event.target.value);
   };
 
-  const handleNomeChange = (event:any) => {
+  const handleNomeChange = (event: any) => {
     setNome(event.target.value);
   };
 
-  const handleTelefoneChange = (event:any) => {
+  const handleTelefoneChange = (event: any) => {
     setTelefone(event.target.value);
   };
 
-  const handleEnderecoChange = (event:any) => {
+  const handleEnderecoChange = (event: any) => {
+    console.log(event.target.value);
+    
     setEndereco(event.target.value);
   };
 
-  const handleSexoChange = (event:any) => {
+  const handleSexoChange = (event: any) => {
     setSexo(event.target.value);
   };
+
+  const handleAtualiza = async () => {
+    try {
+      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco});
+      console.log('Cliente alterado uhuuuu: ');
+    } catch (error) {
+      console.error('Error updating client:', error);
+    }
+  }
+
 
   return (
     <>
@@ -131,6 +151,9 @@ function Perfil() {
         <div className="d-flex align-items-center justify-content-between mt-4">
           <button type="button" className="btn btn-form" style={{ width: "120px", height: "16" }}>
             Alterar Senha
+          </button>
+          <button onClick={handleAtualiza} type="button" className="btn btn-form" style={{ width: "120px", height: "16" }} >
+            Alterar
           </button>
         </div>
       </form>

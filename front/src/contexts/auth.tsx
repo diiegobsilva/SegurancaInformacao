@@ -34,12 +34,14 @@ export const AuthProvider = ({children}:any) => {
       async function login(email:string, password:string){
         try {
             const res = await axios.post(URI.LOGIN_USER, {email: email, password: password});
+            const userId = res.data.id;
             const loggedUser = res.data.userEmail;  
             const token = res.data.token;
             const userName = res.data.nome;
             const userTelefone = res.data.telefone
             const userEndereco = res.data.endereco
             const userSexo = res.data.sexo
+            localStorage.setItem('id', userId);
             localStorage.setItem('email', JSON.stringify(loggedUser));
             localStorage.setItem('nome', userName);
             localStorage.setItem('telefone', userTelefone);

@@ -53,14 +53,10 @@ class ClienteController {
         const idCliente: any = req.params.uuid;
         const clienteRepository = AppDataSource.getRepository(Cliente);
         const findCliente = await clienteRepository.findOneBy({ id: idCliente });
-
         if (!findCliente) {
           return res.status(404).json({ error: 'Cliente não encontrado' });
         }
-
-
         loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
-
         // Verifique cada campo e atualize o cliente
         if (createCliente.nome !== undefined) {
           findCliente.nome = createCliente.nome;
@@ -74,13 +70,12 @@ class ClienteController {
           findCliente.sexo = createCliente.sexo;
         }
 
-        if (createCliente.password !== undefined) {
-          // Lembre-se de que você pode optar por não atualizar a senha aqui por motivos de segurança
-          findCliente.password = createCliente.password;
-        }
-
         if (createCliente.telefone !== undefined) {
           findCliente.telefone = createCliente.telefone;
+        }
+
+        if (createCliente.endereco !== undefined) {
+          findCliente.endereco = createCliente.endereco;
         }
 
         // Salve as alterações no cliente

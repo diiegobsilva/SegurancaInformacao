@@ -47,7 +47,7 @@ export const AuthProvider = ({children}:any) => {
             localStorage.setItem('telefone', userTelefone);
             localStorage.setItem('endereco', userEndereco);
             localStorage.setItem('sexo', userSexo);
-
+            localStorage.setItem('token', token);
     
             api.defaults.headers.Authorization = `Bearer ${token}`;
             api.defaults.headers.common = { Authorization: `Bearer ${token}` };
@@ -88,9 +88,13 @@ export const Private = ({ children }:any) => {
     if(loading){
         return <div className="loading">Carregando...</div>
     }
-    // if(!authenticated){
-    //     return <Navigate to={"/login"}/> 
-    // }
+    if(!authenticated){
+        console.log(authenticated);
+        
+        return <Navigate to={"/login"}/> 
+
+    }
+
 
     return children;
 

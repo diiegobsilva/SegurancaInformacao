@@ -155,6 +155,9 @@ function Perfil() {
           <button onClick={handleAtualiza} type="button" className="btn btn-form" style={{ width: "120px", height: "16" }} >
             Alterar
           </button>
+          <a style={{ }} >
+            Excluir conta
+          </a>
         </div>
       </form>
     </>

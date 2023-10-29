@@ -1,11 +1,46 @@
 import { Container, Table } from "react-bootstrap";
+import { format } from "date-fns";
 import "../App.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+interface Termo {
+  id: number;
+  obrigatorio: string;
+  descricao: string;
+  data: string;
+}
 
 function Termo() {
+  const [obrigatorio, setObrigatorio] = useState('true'); 
+  const [descricao, setDescricao] = useState('');
+  const [termos, setTermos] = useState<Termo[]>([]);
+
+  const handleCreateTermo = async () => {
+    try {
+      const response = await axios.post('termos/create', {
+        obrigatorio: obrigatorio === 'true', 
+        descricao: descricao,
+      });
+
+      setObrigatorio('true');
+      setDescricao('');
+
+      console.log('Termo criado com sucesso:', response.data);
+    } catch (error) {
+      console.error('Erro ao criar termo:', error);
+    }
+  };
+
+  useEffect(() => {
+    axios.get('termos/termos')
+      .then((response) => setTermos(response.data))
+      .catch((error) => console.error('Erro ao buscar termos:', error));
+  }, []);
 
   return (
     <div>
-      <label className="labelArea">Ultima Versões: </label>
+      <label className="labelArea">Últimas Versões:</label>
       <Container className="">
         <Container className="table-container">
           <Table className="custom-table">
@@ -19,30 +54,55 @@ function Termo() {
                 <th className="text-center">Termos</th>
               </tr>
             </thead>
-            
             <tbody>
-              <tr>
-                <td className="text-center">teste</td>
-                <td className="text-center">teste</td>
-                <td className="text-center">teste</td>
-                <td className="text-center">teste</td>
-                <td className="text-center">teste</td>
-                <td className="text-center">teste</td>
-      
-              </tr>
+              {Array.isArray(termos) ? (
+                termos.map((termo) => (
+                  <tr key={termo.id}>
+                    <td className="text-center">Ação</td>
+                    <td className="text-center">Versão</td>
+                    <td className="text-center">{termo.obrigatorio.toString()}</td>
+                    <td className="text-center">Padrão</td>
+                    <td className="text-center">
+          {format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")} {/* Formata a data e hora */}
+        </td>
+                    <td className="text-center">{termo.descricao}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6}>Nenhum termo disponível.</td>
+                </tr>
+              )}
             </tbody>
           </Table>
         </Container>
-
-      <div>
-       <label className="labelArea"> Termos e Condições: </label>
-        <textarea className="textArea"/>
-      </div>
-      <div  className="button-container"> 
-        <button type="button"className="custom-button" >Salvar</button>
-      </div>
-     
-
+        <div>
+          <label className="labelArea">Termos e Condições:</label>
+          <textarea
+            className="textArea"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="labelArea">Obrigatório:</label>
+          <select
+            value={obrigatorio}
+            onChange={(e) => setObrigatorio(e.target.value)}
+          >
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </select>
+        </div>
+        <div className="button-container">
+          <button
+            type="button"
+            className="custom-button"
+            onClick={handleCreateTermo}
+          >
+            Salvar
+          </button>
+        </div>
       </Container>
     </div>
   );

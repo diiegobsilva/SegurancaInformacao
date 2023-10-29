@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Perfil from "./pages/Perfil";
 import TelaComprar from "./pages/TelaComprar";
 import { Private } from "./contexts/auth"; 
+import Termo from "./pages/Termo";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/comprar" element={<Private><TelaComprar /></Private>} />
                 <Route path="/cadastro" element={<Cadastro/>} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/termo" element={<Termo />} />
               </Routes>
             </div>
           </div>

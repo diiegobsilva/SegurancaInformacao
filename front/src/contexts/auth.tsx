@@ -88,12 +88,12 @@ export const Private = ({ children }:any) => {
     if(loading){
         return <div className="loading">Carregando...</div>
     }
-    if(!authenticated){
-        console.log(authenticated);
+    // if(!authenticated){
+    //     console.log(authenticated);
         
-        return <Navigate to={"/login"}/> 
+    //     return <Navigate to={"/login"}/> 
 
-    }
+    // }
 
 
     return children;

@@ -74,11 +74,14 @@ function Termo() {
         </Container>
         <div>
           <label className="labelArea">Termos e Condições:</label>
+          {termos.map((termo, index) => (
           <textarea
+            key={index}
             className="textArea"
             value={termo.descricao}
             onChange={(e) => setDescricao(e.target.value)}
           />
+))}
         </div>
 
         <div className="col-lg-3">

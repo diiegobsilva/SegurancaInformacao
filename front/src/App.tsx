@@ -10,6 +10,7 @@ import Perfil from "./pages/Perfil";
 import TelaComprar from "./pages/TelaComprar";
 import { Private } from "./contexts/auth"; 
 import Termo from "./pages/Termo";
+import AlterarSenha from "./pages/AlterarSenha";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/" element={<Private><Home /></Private>} />
                 <Route path="/perfil" element={<Private><Perfil /></Private>} />
                 <Route path="/comprar" element={<Private><TelaComprar /></Private>} />
+                <Route path="/senha" element={<Private><AlterarSenha /></Private>} />
                 <Route path="/cadastro" element={<Cadastro/>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/termo" element={<Termo />} />

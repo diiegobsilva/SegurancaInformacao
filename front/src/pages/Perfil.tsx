@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "../App.css";
 import clsx from "clsx";
 import axios from "axios";
+import { avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
+import { Link } from "react-router-dom";
 
 function Perfil() {
   const [userId, setUserId] = useState("");
@@ -69,6 +71,21 @@ function Perfil() {
       console.log('Cliente alterado uhuuuu: ');
     } catch (error) {
       console.error('Error updating client:', error);
+    }
+  }
+
+  async function handleDeleteUser() {
+    try {
+      avisoDeletar().then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.delete(`/cliente/delete/${userId}`);
+        }
+
+      })
+
+    } catch (error) {
+      console.error(error);
+      avisoErroDeletar();
     }
   }
 
@@ -149,15 +166,17 @@ function Perfil() {
         </div>
 
         <div className="d-flex align-items-center justify-content-between mt-4">
+        <Link to={"/senha"}>
           <button type="button" className="btn btn-form" style={{ width: "120px", height: "16" }}>
             Alterar Senha
           </button>
+        </Link>
           <button onClick={handleAtualiza} type="button" className="btn btn-form" style={{ width: "120px", height: "16" }} >
             Alterar
           </button>
-          <a style={{ }} >
+          <button onClick={handleDeleteUser} type="button" className="btn btn-form" style={{ width: "120px", height: "16" }} >
             Excluir conta
-          </a>
+          </button>
         </div>
       </form>
     </>

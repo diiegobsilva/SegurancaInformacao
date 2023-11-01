@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../App.css";
 import clsx from "clsx";
 import axios from "axios";
-import { avisoDeletar, avisoErroAlterarSenha, avisoErroDeletar, avisoSenhaAlterada } from "../controllers/avisoConcluido";
+import { avisoErroAlterarSenha, avisoSenhaAlterada } from "../controllers/avisoConcluido";
 
 function AlterarSenha() {
   const [novaSenha, setnovaSenha] = useState("");

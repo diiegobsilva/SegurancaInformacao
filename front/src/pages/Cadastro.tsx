@@ -170,7 +170,8 @@ function Cadastro() {
         </div>
 
         <div className="col-lg-3">
-          <select className="form-label fw-bolder text-dark form-control  mt-4" {...formik.getFieldProps("sexo")} >
+        <label className="form-label fw-bolder text-dark fs-6">Genero</label>
+          <select className="form-label fw-bolder text-dark form-control" {...formik.getFieldProps("sexo")} >
             <option value="" label="Selecione o Genero" disabled />
             <option value="masculino" label="Masculino" />
             <option value="feminino" label="Feminino" />
@@ -296,6 +297,7 @@ function Cadastro() {
 
         <div className="col-lg-9">
           <div style={{ display: "flex"}}>
+            
             <input
               type="checkbox"
               checked={formik.values.termo_dados === 1}

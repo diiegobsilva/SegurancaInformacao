@@ -84,16 +84,17 @@ function Termo() {
             onChange={(e) => setDescricao(e.target.value)}
           />
         </div>
-        <div>
+
+        <div className="col-lg-3">
           <label className="labelArea">Obrigatório:</label>
-          <select
-            value={obrigatorio}
-            onChange={(e) => setObrigatorio(e.target.value)}
-          >
-            <option value="true">Sim</option>
-            <option value="false">Não</option>
+          <select className="form-label-teste  fw-bolder text-dark form-control">
+            <option value="" label="Selecione" disabled />
+            <option value="true" label="Sim" />
+            <option value="false" label="Não" />
           </select>
         </div>
+
+
         <div className="button-container">
           <button
             type="button"

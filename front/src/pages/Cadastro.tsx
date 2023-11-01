@@ -7,10 +7,7 @@ import { URI } from "../enumerations/uri";
 import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
-import Swal from 'sweetalert2';
-import { TermoDados, TermoSms, TermoEmail, TermoCookies } from "../controllers/termos";
-
-
+import Swal, { SweetAlertCustomClass } from 'sweetalert2';
 
 
 function Cadastro() {
@@ -57,6 +54,20 @@ function Cadastro() {
       avisoConcluido();
 
     }
+  }
+
+  function Termo() {
+    Swal.fire({
+      title: 'Termos de uso',
+      html:
+        'Ao se cadastrar, você declara o seu CONSENTIMENTO para coletarmos, tratarmos e armazenarmos dados sobre você quando julgarmos adequados à prestação de nossos serviços, tais como: nome, endereço, gênero, e-mail, telefone e cookies.',
+      icon: 'info',
+      customClass: {
+        popup: 'my-popup-class',
+        title: 'my-title-class',
+        confirmButton: 'my-confirm-button-class',
+      },
+    });
   }
 
   return (
@@ -283,8 +294,8 @@ function Cadastro() {
           </div>
         </div>
 
-        <div className="col-lg-3">
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="col-lg-9">
+          <div style={{ display: "flex"}}>
             <input
               type="checkbox"
               checked={formik.values.termo_dados === 1}
@@ -302,8 +313,8 @@ function Cadastro() {
                 }
               )}
             />
-            <label style={{ marginRight: 58 }} onClick={TermoDados}>
-              Termo para tratamento de dados.
+            <label style={{ display: "flex", marginLeft: "15px"}} onClick={Termo}>
+              Concordo com os termos de uso e condições previstas para uso desse website.
             </label>
             {formik.touched.termo_dados && formik.errors.termo_dados && (
               <div className="fv-plugins-message-container">
@@ -315,95 +326,8 @@ function Cadastro() {
           </div>
         </div>
 
-        <div className="col-lg-3" >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <input
-              type="checkbox"
-              checked={formik.values.termo_sms === 1}
-              onChange={(e) =>
-                formik.setFieldValue("termo_sms", e.target.checked ? 1 : 0)
-              }
-              className={clsx(
-                {
-                  "is-invalid":
-                    formik.touched.termo_sms && formik.errors.termo_sms,
-                },
-                {
-                  "is-valid":
-                    formik.touched.termo_sms && !formik.errors.termo_sms,
-                }
-              )}
-            />
-            <label onClick={TermoSms}>Termo para autorização de envio de SMS</label>
-            {formik.touched.termo_sms && formik.errors.termo_sms && (
-              <div className="fv-plugins-message-container">
-                <div className="fv-help-block">
-                  <span role="alert">{formik.errors.termo_sms}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+     
 
-        <div className="col-lg-3" >
-          <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-          <input
-              type="checkbox"
-              checked={formik.values.termo_email === 1}
-              onChange={(e) =>
-                formik.setFieldValue("termo_email", e.target.checked ? 1 : 0)
-              }
-              className={clsx(
-                {
-                  "is-invalid":
-                    formik.touched.termo_email && formik.errors.termo_email,
-                },
-                {
-                  "is-valid":
-                    formik.touched.termo_email && !formik.errors.termo_email,
-                }
-              )}
-            />
-            <label style={{ marginRight: 50 }} onClick={TermoEmail}>Termo para envio de E-mail.</label>
-            {formik.touched.termo_email && formik.errors.termo_email && (
-              <div className="fv-plugins-message-container">
-                <div className="fv-help-block">
-                  <span role="alert">{formik.errors.termo_email}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="col-lg-3" >
-          <div className="" style={{ display: "flex", justifyContent: "space-between" }}>
-          <input
-              type="checkbox"
-              checked={formik.values.termo_cookies === 1}
-              onChange={(e) =>
-                formik.setFieldValue("termo_cookies", e.target.checked ? 1 : 0)
-              }
-              className={clsx(
-                {
-                  "is-invalid":
-                    formik.touched.termo_cookies && formik.errors.termo_cookies,
-                },
-                {
-                  "is-valid":
-                    formik.touched.termo_cookies && !formik.errors.termo_cookies,
-                }
-              )}
-            />
-            <label style={{ marginRight: 50 }} onClick={TermoCookies}>Termo para autorização da colete de cookies.</label>
-            {formik.touched.termo_cookies && formik.errors.termo_cookies && (
-              <div className="fv-plugins-message-container">
-                <div className="fv-help-block">
-                  <span role="alert">{formik.errors.termo_cookies}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
 

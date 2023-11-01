@@ -88,7 +88,7 @@ function Termo() {
         <div className="col-lg-3">
           <label className="labelArea">Obrigatório:</label>
           <select className="form-label-teste  fw-bolder text-dark form-control">
-            <option value="" label="Selecione" disabled />
+            <option value="" label="Selecione" selected />
             <option value="true" label="Sim" />
             <option value="false" label="Não" />
           </select>

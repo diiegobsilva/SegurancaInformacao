@@ -46,10 +46,8 @@ function Termo() {
           <Table className="custom-table">
             <thead>
               <tr>
-                <th className="text-center">Ação</th>
                 <th className="text-center">Versão</th>
                 <th className="text-center">Obrigatório</th>
-                <th className="text-center">Padrão</th>
                 <th className="text-center">Data de Edição</th>
                 <th className="text-center">Termos</th>
               </tr>
@@ -58,10 +56,8 @@ function Termo() {
               {Array.isArray(termos) ? (
                 termos.map((termo) => (
                   <tr key={termo.id}>
-                    <td className="text-center">Ação</td>
                     <td className="text-center">Versão</td>
                     <td className="text-center">{termo.obrigatorio.toString()}</td>
-                    <td className="text-center">Padrão</td>
                     <td className="text-center">
           {format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")} {/* Formata a data e hora */}
         </td>
@@ -80,7 +76,7 @@ function Termo() {
           <label className="labelArea">Termos e Condições:</label>
           <textarea
             className="textArea"
-            value={descricao}
+            value={termo.descricao}
             onChange={(e) => setDescricao(e.target.value)}
           />
         </div>

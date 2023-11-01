@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { Cliente } from "../entities/Cliente";
 import { generateToken } from "../middlewares";
 import { loggerDelete, loggerUpdate } from "../config/logger";
+import cliente from "../routes/cliente";
 
 class ClienteController {
 
@@ -47,53 +48,70 @@ class ClienteController {
     }
   }
 
-    public async putCliente(req: Request, res: Response): Promise<Response> {
-      try {
-        const createCliente = req.body;
-        const idCliente: any = req.params.uuid;
-        const clienteRepository = AppDataSource.getRepository(Cliente);
-        const findCliente = await clienteRepository.findOneBy({ id: idCliente });
-        if (!findCliente) {
-          return res.status(404).json({ error: 'Cliente não encontrado' });
-        }
-        loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
-        // Verifique cada campo e atualize o cliente
-        if (createCliente.nome !== undefined) {
-          findCliente.nome = createCliente.nome;
-        }
-
-        if (createCliente.email !== undefined) {
-          findCliente.email = createCliente.email;
-        }
-
-        if (createCliente.sexo !== undefined) {
-          findCliente.sexo = createCliente.sexo;
-        }
-
-        if (createCliente.telefone !== undefined) {
-          findCliente.telefone = createCliente.telefone;
-        }
-
-        if (createCliente.endereco !== undefined) {
-          findCliente.endereco = createCliente.endereco;
-        }
-
-        // Salve as alterações no cliente
-        const updatedCliente = await clienteRepository.save(findCliente);
-
-        return res.json(updatedCliente);
-      } catch (error) {
-        console.error('Erro ao atualizar cliente:', error);
-
-        // Registre o erro no loggerDelete
-
-        // loggerDelete.error(Erro ao atualizar cliente: ID ${idCliente}, Erro: ${error});
-
-        return res.status(500).json({ error: 'Erro ao atualizar cliente' });
+  public async putCliente(req: Request, res: Response): Promise<Response> {
+    try {
+      const createCliente = req.body;
+      const idCliente: any = req.params.uuid;
+      const clienteRepository = AppDataSource.getRepository(Cliente);
+      const findCliente = await clienteRepository.findOneBy({ id: idCliente });
+      if (!findCliente) {
+        return res.status(404).json({ error: 'Cliente não encontrado' });
       }
+      loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
+      // Verifique cada campo e atualize o cliente
+      if (createCliente.nome !== undefined) {
+        findCliente.nome = createCliente.nome;
+      }
+
+      if (createCliente.email !== undefined) {
+        findCliente.email = createCliente.email;
+      }
+
+      if (createCliente.sexo !== undefined) {
+        findCliente.sexo = createCliente.sexo;
+      }
+
+      if (createCliente.telefone !== undefined) {
+        findCliente.telefone = createCliente.telefone;
+      }
+
+      if (createCliente.endereco !== undefined) {
+        findCliente.endereco = createCliente.endereco;
+      }
+
+      // Salve as alterações no cliente
+      const updatedCliente = await clienteRepository.save(findCliente);
+
+      return res.json(updatedCliente);
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error);
+
+      // Registre o erro no loggerDelete
+
+      // loggerDelete.error(Erro ao atualizar cliente: ID ${idCliente}, Erro: ${error});
+
+      return res.status(500).json({ error: 'Erro ao atualizar cliente' });
     }
-  
-  
+  }
+
+
+  public async putPassword(req: Request, res: Response): Promise<Response> {
+    const { password } = req.body
+    const id: any = req.params.uuid;
+    const client: any = await AppDataSource.manager
+      .getRepository(Cliente)
+      .createQueryBuilder("cliente")
+      .select()
+      .addSelect('cliente.password')
+      .where("cliente.id=:id", { id })
+      .getOne();
+    console.log(client);
+    client.password = password
+
+    const r = await AppDataSource.manager.save(Cliente, client)
+    return res.json(r)
+  }
+
 
   public async getHistoricCliente(req: Request, res: Response): Promise<Response> {
     const clienteRepository = AppDataSource.getRepository(Cliente)
@@ -139,7 +157,7 @@ class ClienteController {
     insertCliente.endereco = createCliente.endereco
     insertCliente.telefone = createCliente.telefone
     insertCliente.password = createCliente.password
-    
+
 
     const allCliente = await clienteRepository.save(insertCliente)
     return res.json(allCliente)

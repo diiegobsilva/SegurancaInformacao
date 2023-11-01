@@ -306,7 +306,12 @@ input::-webkit-inner-spin-button {
 
 .form-label {
   font-size: 20px;
-  margin-right: 10px;
+  margin-right: 20px;
+}
+
+.form-label-teste {
+  font-size: 20px;
+  margin-left: 40px;
 }
 
 .input-container .forma-pagamento-input label {

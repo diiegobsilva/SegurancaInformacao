@@ -13,8 +13,7 @@ class TermosController {
             const newTermos = new Termos();
             newTermos.obrigatorio = obrigatorio;
             newTermos.descricao = descricao;
-    
-            
+
             const termosRepository = AppDataSource.getRepository(Termos);
             const createdTermos = await termosRepository.save(newTermos);
     

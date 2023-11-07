@@ -4,6 +4,7 @@ import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+
 interface Termo {
   id: number;
   obrigatorio: string;
@@ -12,28 +13,29 @@ interface Termo {
 }
 
 function Termo() {
-  const [obrigatorio, setObrigatorio] = useState('true'); 
+  const [obrigatorio, setObrigatorio] = useState('true');
   const [descricao, setDescricao] = useState('');
   const [termos, setTermos] = useState<Termo[]>([]);
 
   const handleCreateTermo = async () => {
     try {
-      const response = await axios.post('termos/create', {
-        obrigatorio: obrigatorio === 'true', 
+      const response = await axios.post('/termos/create', {
+        obrigatorio: obrigatorio,
         descricao: descricao,
       });
 
-      setObrigatorio('true');
-      setDescricao('');
+      const updatedTermos = [...termos, response.data];
+      setTermos(updatedTermos);
 
-      console.log('Termo criado com sucesso:', response.data);
+      setDescricao('');
+      setObrigatorio('');
     } catch (error) {
       console.error('Erro ao criar termo:', error);
     }
   };
 
   useEffect(() => {
-    axios.get('termos/termos')
+    axios.get('/termos')
       .then((response) => setTermos(response.data))
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
@@ -56,11 +58,9 @@ function Termo() {
               {Array.isArray(termos) ? (
                 termos.map((termo) => (
                   <tr key={termo.id}>
-                    <td className="text-center">Versão</td>
+                    <td className="text-center">{termo.id}</td>
                     <td className="text-center">{termo.obrigatorio.toString()}</td>
-                    <td className="text-center">
-          {format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")} {/* Formata a data e hora */}
-        </td>
+                    <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
                     <td className="text-center">{termo.descricao}</td>
                   </tr>
                 ))
@@ -72,28 +72,30 @@ function Termo() {
             </tbody>
           </Table>
         </Container>
-        <div>
-          <label className="labelArea">Termos e Condições:</label>
-          {termos.map((termo, index) => (
-          <textarea
-            key={index}
-            className="textArea"
-            value={termo.descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-          />
-))}
-        </div>
-
-        <div className="col-lg-3">
-          <label className="labelArea">Obrigatório:</label>
-          <select className="form-label-teste  fw-bolder text-dark form-control">
-            <option value="" label="Selecione" selected />
-            <option value="true" label="Sim" />
-            <option value="false" label="Não" />
-          </select>
-        </div>
-
-
+        {termos.length > 0 && (
+          <>
+            <div>
+              <label className="labelArea">Termos e Condições:</label>
+              <textarea
+                className="textArea"
+                value={descricao || termos[termos.length - 1].descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+              />
+            </div>
+            <div className="col-lg-3">
+              <label className="labelArea">Obrigatório:</label>
+              <select
+                className="form-label-teste fw-bolder text-dark form-control"
+                value={obrigatorio || termos[termos.length - 1].obrigatorio}
+                onChange={(e) => setObrigatorio(e.target.value)}
+              >
+                <option value="" label="Selecione" />
+                <option value="true" label="Sim" />
+                <option value="false" label="Não" />
+              </select>
+            </div>
+          </>
+        )}
         <div className="button-container">
           <button
             type="button"

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import "../App.css";
 import axios from "axios";
@@ -8,10 +8,16 @@ import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
-
+interface Termo {
+  id: number;
+  obrigatorio: string;
+  descricao: string;
+  data: string;
+  versao: number
+}
 
 function Cadastro() {
-
+  const [termos, setTermos] = useState<Termo[]>([]);
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
@@ -55,19 +61,38 @@ function Cadastro() {
 
     }
   }
+  useEffect(() => {
+    axios.get('/termos')
+      .then((response) => setTermos(response.data))
+      .catch((error) => console.error('Erro ao buscar termos:', error));
+  }, []);
 
   function Termo() {
-    Swal.fire({
-      title: 'Termos de uso',
-      html:
-        'Ao se cadastrar, você declara o seu CONSENTIMENTO para coletarmos, tratarmos e armazenarmos dados sobre você quando julgarmos adequados à prestação de nossos serviços, tais como: nome, endereço, gênero, e-mail, telefone e cookies.',
-      icon: 'info',
-      customClass: {
-        popup: 'my-popup-class',
-        title: 'my-title-class',
-        confirmButton: 'my-confirm-button-class',
-      },
-    });
+    if (termos.length > 0) {
+      const ultimoTermo = termos[termos.length - 1];
+  
+      Swal.fire({
+        title: 'Termos de uso',
+        html: ultimoTermo.descricao,
+        icon: 'info',
+        customClass: {
+          popup: 'my-popup-class',
+          title: 'my-title-class',
+          confirmButton: 'my-confirm-button-class',
+        },
+      });
+    } else {
+      Swal.fire({
+        title: 'Termos de uso',
+        text: 'Nenhum termo disponível.',
+        icon: 'info',
+        customClass: {
+          popup: 'my-popup-class',
+          title: 'my-title-class',
+          confirmButton: 'my-confirm-button-class',
+        },
+      });
+    }
   }
 
   return (

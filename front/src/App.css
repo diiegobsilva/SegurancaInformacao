@@ -3,6 +3,7 @@
 
 .App {
   text-align: center;
+  
 }
 
 
@@ -102,7 +103,7 @@ svg{
 }
 
 .bg-div{
-  min-height: 95vh;
+  min-height: 100vh;
  background-color: #e49859;
 }
 

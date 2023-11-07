@@ -54,7 +54,7 @@ class TermosController {
             }
     
             const termosRepository = AppDataSource.getRepository(Termos);
-            const termos = await termosRepository.findOne(idTermos);
+            const termos = await termosRepository.findOneBy({ id: idTermos});
     
             if (!termos) {
                 return res.status(404).json({ error: 'Termos não encontrados' });

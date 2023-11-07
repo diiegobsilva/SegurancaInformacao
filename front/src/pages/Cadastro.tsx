@@ -62,7 +62,7 @@ function Cadastro() {
     }
   }
   useEffect(() => {
-    axios.get('/termos')
+    axios.get('/termos/')
       .then((response) => setTermos(response.data))
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);

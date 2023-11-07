@@ -16,8 +16,7 @@ function App() {
   return (
   
         <div className="bg-div">
-          
-          <Private><Header/></Private>
+            <Private><Header/></Private>
           
           <div className='d-flex flex-center flex-column flex-column-fluid hf-spacing px-2 mt-5'>
             <div className='container bg-light-opacity rounded mx-auto' style={{padding:"2rem"}}>
@@ -28,7 +27,7 @@ function App() {
                 <Route path="/senha" element={<Private><AlterarSenha /></Private>} />
                 <Route path="/cadastro" element={<Cadastro/>} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/termo" element={<Termo />} />
+                <Route path="/termo" element={<Private><Termo /></Private>} />
               </Routes>
             </div>
           </div>

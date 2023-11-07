@@ -41,6 +41,8 @@ export const AuthProvider = ({children}:any) => {
             const userTelefone = res.data.telefone
             const userEndereco = res.data.endereco
             const userSexo = res.data.sexo
+            const profile = res.data.profile
+
             localStorage.setItem('id', userId);
             localStorage.setItem('email', JSON.stringify(loggedUser));
             localStorage.setItem('nome', userName);
@@ -48,6 +50,7 @@ export const AuthProvider = ({children}:any) => {
             localStorage.setItem('endereco', userEndereco);
             localStorage.setItem('sexo', userSexo);
             localStorage.setItem('token', token);
+            localStorage.setItem('profile', profile)
     
             api.defaults.headers.Authorization = `Bearer ${token}`;
             api.defaults.headers.common = { Authorization: `Bearer ${token}` };
@@ -57,6 +60,12 @@ export const AuthProvider = ({children}:any) => {
         } catch (err) {     
             localStorage.removeItem("email");
             localStorage.removeItem("token");
+            localStorage.removeItem('id');
+            localStorage.removeItem('nome');
+            localStorage.removeItem('telefone');
+            localStorage.removeItem('endereco')
+            localStorage.removeItem('sexo');
+            localStorage.removeItem('profile')
             avisoErroLogin();
         }
     }
@@ -65,6 +74,13 @@ export const AuthProvider = ({children}:any) => {
     const logout = () => {
         localStorage.removeItem("email");
         localStorage.removeItem("token")
+
+        localStorage.removeItem('id');
+        localStorage.removeItem('nome');
+        localStorage.removeItem('telefone');
+        localStorage.removeItem('endereco')
+        localStorage.removeItem('sexo');
+        localStorage.removeItem('profile')
         api.defaults.headers.Authorization = null
         api.defaults.headers.common = { Authorization: `` }
         api.defaults.withCredentials = false
@@ -88,12 +104,9 @@ export const Private = ({ children }:any) => {
     if(loading){
         return <div className="loading">Carregando...</div>
     }
-    // if(!authenticated){
-    //     console.log(authenticated);
-        
-    //     return <Navigate to={"/login"}/> 
-
-    // }
+    if(!authenticated){
+        return <Navigate to={"/login"}/> 
+    }
 
 
     return children;

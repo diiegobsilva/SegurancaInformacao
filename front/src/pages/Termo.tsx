@@ -13,21 +13,25 @@ interface Termo {
 }
 
 function Termo() {
-  const [obrigatorio, setObrigatorio] = useState('true');
+  const [obrigatorio, setObrigatorio] = useState(null as any);
   const [descricao, setDescricao] = useState('');
   const [termos, setTermos] = useState<Termo[]>([]);
 
   const handleCreateTermo = async () => {
     try {
+      const recoveredToken = localStorage.getItem('token')
       const response = await axios.post('/termos/create', {
         obrigatorio: obrigatorio,
         descricao: descricao,
-      });
+      },{
+        headers:{
+          'authorization': `Bearer ${recoveredToken}`
+      }});
 
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      setDescricao('');
+      setDescricao(response.data.descricao);
       setObrigatorio('');
     } catch (error) {
       console.error('Erro ao criar termo:', error);
@@ -35,8 +39,15 @@ function Termo() {
   };
 
   useEffect(() => {
-    axios.get('/termos')
-      .then((response) => setTermos(response.data))
+    const recoveredToken = localStorage.getItem('token')
+    axios.get('/termos/',{
+      headers:{
+        'authorization': `Bearer ${recoveredToken}`
+    }})
+      .then((response) => {
+        setTermos(response.data)
+        setDescricao(response.data[response.data.length - 1].descricao)
+      })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
@@ -78,7 +89,7 @@ function Termo() {
               <label className="labelArea">Termos e Condições:</label>
               <textarea
                 className="textArea"
-                value={descricao || termos[termos.length - 1].descricao}
+                value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
               />
             </div>
@@ -90,8 +101,8 @@ function Termo() {
                 onChange={(e) => setObrigatorio(e.target.value)}
               >
                 <option value="" label="Selecione" />
-                <option value="true" label="Sim" />
-                <option value="false" label="Não" />
+                <option value='true' label="Sim" />
+                <option value='false' label="Não" />
               </select>
             </div>
           </>

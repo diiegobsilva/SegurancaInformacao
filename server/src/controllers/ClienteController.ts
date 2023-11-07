@@ -1,7 +1,7 @@
 import AppDataSource from "../data-source";
 import { Request, Response } from 'express';
 import { Cliente } from "../entities/Cliente";
-import { generateToken } from "../middlewares";
+import { authAdmin, generateToken } from "../middlewares";
 import { loggerDelete, loggerUpdate } from "../config/logger";
 import cliente from "../routes/cliente";
 
@@ -9,42 +9,50 @@ class ClienteController {
 
   public async login(req: Request, res: Response): Promise<Response> {
     const { email, password } = req.body;
-    //verifica se foram fornecidos os parâmetros
+
+    // Verifica se foram fornecidos os parâmetros
     if (!email || !password || email.trim() === "" || password.trim() === "") {
-      return res.json({ error: "e-userEmail e senha necessários" });
+      return res.json({ error: "E-mail e senha necessários" });
     }
-    // como a propriedade userPassword não está disponível para select {select: false},
-    // então precisamos usar esta conulta para forçar incluir a propriedade 
-    const usuario: any = await AppDataSource
-      .getRepository(Cliente)
-      .createQueryBuilder("cliente")
-      .select()
-      .addSelect('cliente.password')
-      .where("cliente.email=:email", { email })
-      .getOne();
-    loggerUpdate.info("Sucesso")
-    if (usuario && usuario.id) {
-      console.log(usuario)
-      const r = await usuario.compare(password);
-      console.log(r)
-      if (r) {
-        // cria um token codificando o objeto {id,userEmail}
-        const token = await generateToken({ id: usuario.id, email: usuario.email });
-        // retorna o token para o cliente
-        return res.json({
-          id: usuario.id,
-          nome: usuario.nome,
-          userEmail: usuario.email,
-          sexo: usuario.sexo,
-          telefone: usuario.telefone,
-          endereco: usuario.endereco,
-          token
-        });
+
+    try {
+      // Consulta o banco de dados para encontrar o usuário
+      const usuario: any = await AppDataSource
+        .getRepository(Cliente)
+        .createQueryBuilder("cliente")
+        .select()
+        .addSelect('cliente.password')
+        .where("cliente.email=:email", { email })
+        .getOne();
+
+      loggerUpdate.info("Sucesso");
+
+      if (usuario && usuario.id) {
+        const isPasswordValid = await usuario.compare(password);
+
+        if (isPasswordValid) {
+          // Cria um token codificando o objeto {id, email, profile}
+          const token = await generateToken({ id: usuario.id, email: usuario.email, profile: usuario.profile });
+
+          return res.json({
+            id: usuario.id,
+            nome: usuario.nome,
+            userEmail: usuario.email,
+            sexo: usuario.sexo,
+            telefone: usuario.telefone,
+            endereco: usuario.endereco,
+            profile: usuario.profile,
+            token
+          });
+        } else {
+          return res.status(400).json({ error: "Dados de login não conferem" });
+        }
+      } else {
+        return res.status(400).json({ error: "Usuário não localizado" });
       }
-      return res.status(400).json({ error: "Dados de login não conferem" });
-    }
-    else {
-      return res.status(400).json({ error: "Usuário não localizado" });
+    } catch (error) {
+      console.error('Erro ao buscar usuário:', error);
+      return res.status(500).json({ error: 'Erro ao buscar usuário' });
     }
   }
 
@@ -77,6 +85,9 @@ class ClienteController {
 
       if (createCliente.endereco !== undefined) {
         findCliente.endereco = createCliente.endereco;
+      }
+      if (createCliente.profile !== undefined) {
+        findCliente.profile = createCliente.profile;
       }
 
       // Salve as alterações no cliente
@@ -130,7 +141,7 @@ class ClienteController {
         return res.status(404).json({ error: 'Cliente não encontrado' });
       }
 
-      const { nome, email, sexo, telefone, endereco } = cliente;
+      const { nome, email, sexo, telefone, endereco, profile } = cliente;
 
       const clienteData = {
         id: idCliente,
@@ -139,6 +150,7 @@ class ClienteController {
         sexo,
         telefone,
         endereco,
+        profile
       };
 
       return res.json(clienteData);
@@ -156,6 +168,7 @@ class ClienteController {
     insertCliente.sexo = createCliente.sexo
     insertCliente.endereco = createCliente.endereco
     insertCliente.telefone = createCliente.telefone
+    insertCliente.profile = createCliente.profile
     insertCliente.password = createCliente.password
 
 

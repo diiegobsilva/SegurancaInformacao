@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { TermosControllers as TermosControllers} from "../controllers";
+import {TermosControllers} from "../controllers";
+import { authorization } from "../middlewares";
 
 
 const routes = Router();
 
-routes.get('/', TermosControllers.getAllTermos);
+routes.get('/', authorization, TermosControllers.getAllTermos);
 routes.get('/termos/:id',  TermosControllers.getOneTermos);
-routes.post('/create', TermosControllers.createTermos);
+routes.post('/create', authorization, TermosControllers.createTermos);
 
 
 

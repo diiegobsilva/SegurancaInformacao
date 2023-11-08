@@ -2,6 +2,7 @@ import AppDataSource from "../data-source";
 import { Request, Response } from 'express';
 import { Termos } from "../entities/Termos";
 import { authAdmin, authorization } from "../middlewares";
+import { userTermLog } from "../config/logger";
 
 class TermosController {
 
@@ -50,7 +51,10 @@ class TermosController {
       
           // Salve as alterações no termo
           const updatedTermo = await termosRepository.save(termo);
-      
+
+          const logMessage = `ID-${Date()}-{${termo.descricao}: ${obrigatorio ? 1 : 0}}`;
+          userTermLog.info(logMessage);
+          
           return res.json(updatedTermo);
         } catch (error) {
           console.error('Erro ao atualizar termo:', error);
@@ -60,7 +64,6 @@ class TermosController {
       
       public async getAllTermos(req: Request, res: Response): Promise<Response> {
         try {
-          // Aplica a middleware authorization antes da middleware authAdmin
           
             // Aplica a middleware authAdmin para proteger esta função
             authAdmin(req, res, async () => {

@@ -1,7 +1,15 @@
 import { createLogger, transports, format, level } from "winston";
 import { date } from "../utils/date";
 
-
+const userTermLog = createLogger({
+  format: format.printf((info) => {
+    return `${info.message}`;
+  }),
+  transports: [
+    new transports.Console(),
+    new transports.File({ filename: '../server/logs/user_term_log.log' }),
+  ],
+});
 
 const loggerDelete = createLogger({
     format: format.printf((info) => {
@@ -27,4 +35,4 @@ const loggerUpdate = createLogger({
 })
 
 
-export {loggerDelete, loggerUpdate}
+export {loggerDelete, loggerUpdate, userTermLog}

@@ -22,8 +22,12 @@ function AlterarSenha() {
   const handleAtualiza = async () => {
     try {
       const id = localStorage.getItem("id");
-      await axios.put(`/modifypassword/${id}`, { password: novaSenha});
-      console.log('Senha Alterada: ');
+      console.log(id);
+      
+      await axios.put(`/cliente/modifypassword/${id}`, { password: novaSenha}).then(() => {console.log('Senha Alterada: ');})
+      .catch((error) => {console.log(error);
+      }) 
+      
     } catch (error) {
       console.error('Error updating password:', error);
     }

@@ -116,7 +116,7 @@ class ClienteController {
       .addSelect('cliente.password')
       .where("cliente.id=:id", { id })
       .getOne();
-    console.log(client);
+    console.log();
     client.password = password
 
     const r = await AppDataSource.manager.save(Cliente, client)

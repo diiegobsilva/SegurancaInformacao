@@ -190,11 +190,11 @@ class ClienteController {
 
 
   public async deleteCliente(req: Request, res: Response): Promise<Response> {
-    const idCliente: any = req.params.uuid
+    const userId: any = req.params.uuid
     const clienteRepository = AppDataSource.getRepository(Cliente)
-    const findCliente = await clienteRepository.findOneBy({ id: idCliente })
+    const findCliente = await clienteRepository.findOneBy({ id: userId })
     const allCliente = await clienteRepository.remove(findCliente)
-    loggerDelete.info(`id: ${idCliente}`)
+    loggerDelete.info(`id: ${userId}`)
     return res.json(allCliente)
   }
 

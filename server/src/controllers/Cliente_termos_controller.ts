@@ -6,34 +6,31 @@ import { ClienteTermos } from "../entities/Cliente_Termos";
 
 class ClienteTermosController {
 
-    public async createClienteTermos(req: Request, res: Response): Promise<Response> {
-        try {
-          // Aplica a middleware authAdmin para proteger esta função
-          authAdmin(req, res, async () => {
-            const { cliente, termos, termosAceitos } = req.body;
-    
-            // Resto do código para criar cliente_termos
-            const newClienteTermos = new ClienteTermos();
-            newClienteTermos.cliente = cliente;
-            newClienteTermos.termos = termos;
-            newClienteTermos.termosAceitos = termosAceitos;
-    
-            const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
-            const createdClienteTermos = await clienteTermosRepository.save(newClienteTermos);
-    
-            const logMessage = `Created ClienteTermos: ${createdClienteTermos.id}, Cliente: ${createdClienteTermos.cliente.id}, Termos: ${createdClienteTermos.termos.id}`;
-            userTermLog.info(logMessage);
-    
-            return res.status(201).json(createdClienteTermos);
-          });
-        } catch (error) {
-          const errorMessage = `Erro ao criar cliente_termos: ${error.message}`;
-          console.error(errorMessage);
-          userTermLog.error(errorMessage);
-    
-          return res.status(500).json({ error: 'Erro ao criar cliente_termos' });
-        }
-      }
+  public async createClienteTermos(req: Request, res: Response): Promise<Response> {
+    try {
+        const { cliente, termos, termosAceitos } = req.body;
+
+        // Resto do código para criar cliente_termos
+        const newClienteTermos = new ClienteTermos();
+        newClienteTermos.cliente = cliente;
+        newClienteTermos.termos = termos;
+        newClienteTermos.termosAceitos = termosAceitos;
+
+        const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
+        const createdClienteTermos = await clienteTermosRepository.save(newClienteTermos);
+
+        const logMessage = `Created ClienteTermos: ${createdClienteTermos.id}, Cliente: ${createdClienteTermos.cliente.id}, Termos: ${createdClienteTermos.termos.id}`;
+        userTermLog.info(logMessage);
+
+        return res.status(201).json(createdClienteTermos);
+    } catch (error) {
+        const errorMessage = `Erro ao criar cliente_termos: ${error.message}`;
+        console.error(errorMessage);
+        userTermLog.error(errorMessage);
+
+        return res.status(500).json({ error: 'Erro ao criar cliente_termos' });
+    }
+}
 
   public async updateClienteTermos(req: Request, res: Response): Promise<Response> {
     try {

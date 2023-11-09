@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 import { Cliente } from "./Cliente";
 import { Termos } from "./Termos";
 
@@ -16,12 +16,21 @@ export class ClienteTermos {
     @JoinColumn({ name: "termos_id" })
     termos: Termos;
 
-    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    @CreateDateColumn({ type: "timestamp" })
     dataAssociacao: Date;
 
-    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    @UpdateDateColumn({ type: "timestamp" })
     dataAtualizacao: Date;
 
     @Column({ type: "json", nullable: true })
     termosAceitos: object; // Coluna para armazenar os termos aceitos em formato JSON
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    updateTimestamps() {
+        this.dataAtualizacao = new Date();
+        if (!this.dataAssociacao) {
+            this.dataAssociacao = new Date();
+        }
+    }
 }

@@ -3,11 +3,13 @@ import { Router, Request, Response } from "express";
 
 import cliente from "./cliente";
 import termos from "./termos";
+import cliente_termos from "./termos";
 
 const routes = Router()
 
 routes.use(cors());
 
+routes.use("/cliente_termo", cliente_termos);
 routes.use("/cliente", cliente);
 routes.use("/termos", termos);
 

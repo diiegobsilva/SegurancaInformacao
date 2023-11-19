@@ -76,26 +76,71 @@ class ClienteTermosController {
       return res.status(500).json({ error: 'Erro ao buscar cliente_termos' });
     }
   }
-
-  public async getOneClienteTermos(req: Request, res: Response): Promise<Response> {
+  public async getOneClienteTermos(req: Request, res: Response): Promise<Response | void> {
     try {
-      const idClienteTermos: any = req.params.id;
+      const idClienteTermos: number = parseInt(req.params.id, 10);
 
-      if (!idClienteTermos) {
-        return res.status(400).json({ error: 'ID do cliente_termos não fornecido' });
+      if (isNaN(idClienteTermos)) {
+        return res.status(422).json({ error: 'ID do cliente_termos inválido' });
       }
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
-      const clienteTermos = await clienteTermosRepository.findOneBy({ id: idClienteTermos });
+      const clienteTermos = await clienteTermosRepository.findOne({
+        where: { id: idClienteTermos },
+        relations: ['cliente', 'termos'],
+      });
 
       if (!clienteTermos) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado' });
       }
 
-      return res.json(clienteTermos);
+      const formattedResponse = {
+        id: clienteTermos.id,
+        cliente: clienteTermos.cliente,
+        termos: clienteTermos.termos,
+        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
+        termosAceitos: clienteTermos.termosAceitos,
+      };
+
+      userTermLog.info(`ClienteTermos encontrado: ${clienteTermos.id}`);
+
+      return res.json(formattedResponse);
     } catch (error) {
       console.error('Erro ao buscar cliente_termos:', error);
-      return res.status(500).json({ error: 'Erro ao buscar cliente_termos' });
+      userTermLog.error(`Erro ao buscar cliente_termos: ${error.message}`);
+      return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
+    }
+  }
+  public async deleteClienteTermos(req: Request, res: Response): Promise<Response | void> {
+    try {
+      const idClienteTermos: number = parseInt(req.params.id, 10);
+
+      if (isNaN(idClienteTermos)) {
+        return res.status(422).json({ error: 'ID do cliente_termos inválido' });
+      }
+
+      const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
+      const clienteTermos = await clienteTermosRepository.findOne({
+        where: { id: idClienteTermos },
+        relations: ['cliente', 'termos'],
+      });
+
+      if (!clienteTermos) {
+        return res.status(404).json({ error: 'ClienteTermos não encontrado' });
+      }
+
+      // Antes de excluir, você pode adicionar lógica para verificar se a exclusão é permitida com base em regras de negócios.
+
+      await clienteTermosRepository.remove(clienteTermos);
+
+      userTermLog.info(`ClienteTermos excluído: ${clienteTermos.id}`);
+
+      return res.status(204).send(); // Retorna 204 No Content após a exclusão bem-sucedida.
+    } catch (error) {
+      console.error('Erro ao excluir cliente_termos:', error);
+      userTermLog.error(`Erro ao excluir cliente_termos: ${error.message}`);
+      return res.status(500).json({ error: `Erro ao excluir cliente_termos: ${error.message}` });
     }
   }
 }

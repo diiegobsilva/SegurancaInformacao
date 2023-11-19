@@ -12,3 +12,5 @@ ID-Wed Nov 08 2023 19:56:47 GMT-0300 (Horário Padrão de Brasília)-{pode xinga
 [2023-11-09 16:15:47] ID-Thu Nov 09 2023 16:15:47 GMT-0300 (Horário Padrão de Brasília)-{nao pode chutar: 0}
 [2023-11-09 18:22:50] Created ClienteTermos: 1, Cliente: undefined, Termos: undefined
 [2023-11-09 18:24:39] ID-Thu Nov 09 2023 18:24:39 GMT-0300 (Horário Padrão de Brasília)-{ClienteTermos: 1, TermosAceitos: [object Object]}
+[2023-11-19 18:15:28] ClienteTermos encontrado: 1
+[2023-11-19 18:18:01] ClienteTermos excluído: undefined

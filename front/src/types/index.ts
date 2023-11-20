@@ -8,10 +8,8 @@ export const initialValues = {
     confirmPassword: "",
     confirmEmail: "",
     termo_dados: 0,
-    termo_sms: 0,
-    termo_email: 0,
-    termo_cookies: 0,
-    price: 0
+    profile: "user"
+
 }
 
 
@@ -26,7 +24,5 @@ export interface Clientes {
     confirmPassword: string;
     confirmEmail: string;
     termo_dados: number;
-    termo_sms: number,
-    termo_email: number,
-    termo_cookies: number,
+    profile: string
 }

@@ -1,4 +1,4 @@
-import AppDataSource from "../data-source";
+import AppDataSource from "../utils/data-source";
 import { Request, Response } from 'express';
 import { authAdmin } from "../middlewares";
 import { userTermLog } from "../config/logger";

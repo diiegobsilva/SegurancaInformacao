@@ -101,8 +101,8 @@ function Termo() {
                 onChange={(e) => setObrigatorio(e.target.value)}
               >
                 <option value="" label="Selecione" />
-                <option value='true' label="Sim" />
-                <option value='false' label="Não" />
+                <option value='1' label="Sim" />
+                <option value='0' label="Não" />
               </select>
             </div>
           </>

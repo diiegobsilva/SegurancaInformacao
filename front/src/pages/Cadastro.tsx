@@ -8,12 +8,15 @@ import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
+
+
 interface Termo {
   id: number;
   obrigatorio: string;
   descricao: string;
   data: string;
   versao: number
+  profile: string
 }
 
 function Cadastro() {

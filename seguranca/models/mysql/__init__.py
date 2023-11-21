@@ -54,3 +54,14 @@ def mysqlBackup(host, usuario, senha, banco, caminho_backup):
         print("Backup criado com sucesso!")
     except subprocess.CalledProcessError as e:
         print(f"Erro ao criar o backup: {e}")
+
+
+def mysqlRestaurar(host, usuario, senha, banco, caminho_backup):
+    """Restaura um backup do MySQL."""
+    comando = f"docker exec mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
+
+    try:
+        subprocess.run(shlex.split(comando), check=True)
+        print("Backup restaurado com sucesso!")
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao restaurar o backup: {e}")

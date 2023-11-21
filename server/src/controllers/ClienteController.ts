@@ -1,4 +1,4 @@
-import AppDataSource from "../utils/data-source";
+import AppDataSource from "../data-source";
 import { Request, Response } from 'express';
 import { Cliente } from "../entities/Cliente";
 import { authAdmin, generateToken } from "../middlewares";

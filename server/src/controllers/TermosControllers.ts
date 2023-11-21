@@ -1,4 +1,4 @@
-import AppDataSource from "../utils/data-source";
+import AppDataSource from "../data-source";
 import { Request, Response } from 'express';
 import { Termos } from "../entities/Termos";
 import { authAdmin, authorization } from "../middlewares";

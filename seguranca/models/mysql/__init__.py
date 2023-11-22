@@ -36,7 +36,7 @@ def mysqlRemoveUsers(ids):
     
 
 
-def mysqlBackup(host, usuario, senha, banco, caminho_backup):
+def mysqlBackup(host, usuario, senha, banco, caminho_backup, docker):
     """Cria um backup do MySQL."""
     data_hora_atual = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     nome_arquivo_backup = f"{banco}_backup_{data_hora_atual}.sql"
@@ -46,19 +46,28 @@ def mysqlBackup(host, usuario, senha, banco, caminho_backup):
     try:
         os.makedirs(caminho_backup, exist_ok=True)
 
+        if docker == True:
+            subprocess.run(shlex.split('docker exec mysql mkdir -p /var/mysql/backup/'), check=True)
+            subprocess.run(shlex.split(comando), check=True)
+            with open(caminho_completo_backup, 'wb') as f:
+                subprocess.run(shlex.split(f'docker exec mysql cat {backup}'), check=True, stdout=f)
+        else:
+            comando = f"mysql mysqldump -h {host} -u {usuario} -p{senha} --routines --triggers --databases {banco} > {caminho_completo_backup}"
+            subprocess.run(shlex.split(comando), check=True)
+
         # Executa o comando para criar o backup
-        subprocess.run(shlex.split('docker exec mysql mkdir -p /var/mysql/backup/'), check=True)
-        subprocess.run(shlex.split(comando), check=True)
-        with open(caminho_completo_backup, 'wb') as f:
-            subprocess.run(shlex.split(f'docker exec mysql cat {backup}'), check=True, stdout=f)
+        
         print("Backup criado com sucesso!")
     except subprocess.CalledProcessError as e:
         print(f"Erro ao criar o backup: {e}")
 
 
-def mysqlRestaurar(host, usuario, senha, banco, caminho_backup):
+def mysqlRestaurar(host, usuario, senha, banco, caminho_backup, docker):
     """Restaura um backup do MySQL."""
-    comando = f"docker exec mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
+    if docker == True:
+        comando = f"docker exec mysql -h {host} -u {usuario} -p{senha} {banco} < /var/mysql/backup/clientes_backup_2023-11-22_07-40-42.sql"
+    else:
+        comando = f"mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
 
     try:
         subprocess.run(shlex.split(comando), check=True)

@@ -23,6 +23,7 @@ interface Termo {
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [respostas, setRespostas] = useState<{ [termoId: number]: { [parteIndex: string]: number } }>({});
 
   const formik = useFormik({
     initialValues,
@@ -73,7 +74,7 @@ function Cadastro() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-console.log(termos);
+  console.log(termos);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -82,6 +83,41 @@ console.log(termos);
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+
+  const handleAceitar = (termoId:any, parteIndex:any) => {
+    setRespostas(prevState => ({
+      ...prevState,
+      [termoId]: {
+        ...prevState[termoId],
+        [parteIndex]: 1, 
+      },
+    }));
+  };
+  
+  const handleRecusar = (termoId:any, parteIndex:any) => {
+    setRespostas(prevState => ({
+      ...prevState,
+      [termoId]: {
+        ...prevState[termoId],
+        [parteIndex]: 0, 
+      },
+    }));
+  };
+
+  const renderizarTermo = (termo: any) => {
+    const partes = termo.descricao.split('.').filter((parte: any) => parte.trim() !== '');
+    return partes.map((parte: any, index: any) => (
+      <div key={index}>
+        <p>{parte}</p>
+        <button onClick={() => handleAceitar(termo.id, parte)}>Aceitar</button>
+        <button onClick={() => handleRecusar(termo.id, parte)}>Recusar</button>
+      </div>
+    ));
+  };
+
+  console.log(respostas);
+  
 
   return (
     <form>
@@ -330,16 +366,16 @@ console.log(termos);
             />
 
             {/* Modal */}
-            <Modal show={showModal} onHide={handleCloseModal} style={{ }}>
+            <Modal show={showModal} onHide={handleCloseModal} style={{}}>
               <Modal.Header closeButton>
                 <Modal.Title>Termo de Uso</Modal.Title>
               </Modal.Header>
 
 
               <Modal.Body>
-                {termos.map((termo) => (
-                  <div>
-                    <p> {termo.descricao}</p>
+                {termos.slice(-1).map((termo) => (
+                  <div key={termo.id}>
+                    {renderizarTermo(termo)}
                   </div>
                 ))}
               </Modal.Body>

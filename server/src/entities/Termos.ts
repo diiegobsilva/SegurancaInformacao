@@ -9,7 +9,7 @@ export class Termos {
     @Column({ nullable: false })
     obrigatorio: boolean;
 
-    @Column({ nullable: false, length: 10000 })
+    @Column({ nullable: false})
     descricao: string;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })

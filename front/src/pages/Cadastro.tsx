@@ -8,6 +8,7 @@ import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
+import { Button, Modal } from "react-bootstrap";
 
 
 interface Termo {
@@ -21,6 +22,8 @@ interface Termo {
 
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
@@ -70,33 +73,15 @@ function Cadastro() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-  function Termo() {
-    if (termos.length > 0) {
-      const ultimoTermo = termos[termos.length - 1];
-  
-      Swal.fire({
-        title: 'Termos de uso',
-        html: ultimoTermo.descricao,
-        icon: 'info',
-        customClass: {
-          popup: 'my-popup-class',
-          title: 'my-title-class',
-          confirmButton: 'my-confirm-button-class',
-        },
-      });
-    } else {
-      Swal.fire({
-        title: 'Termos de uso',
-        text: 'Nenhum termo disponível.',
-        icon: 'info',
-        customClass: {
-          popup: 'my-popup-class',
-          title: 'my-title-class',
-          confirmButton: 'my-confirm-button-class',
-        },
-      });
-    }
-  }
+console.log(termos);
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <form>
@@ -198,7 +183,7 @@ function Cadastro() {
         </div>
 
         <div className="col-lg-3">
-        <label className="form-label fw-bolder text-dark fs-6">Genero</label>
+          <label className="form-label fw-bolder text-dark fs-6">Genero</label>
           <select className="form-label fw-bolder text-dark form-control" {...formik.getFieldProps("sexo")} >
             <option value="" label="Selecione o Genero" disabled />
             <option value="masculino" label="Masculino" />
@@ -324,8 +309,8 @@ function Cadastro() {
         </div>
 
         <div className="col-lg-9">
-          <div style={{ display: "flex"}}>
-            
+          <div style={{ display: "flex" }}>
+
             <input
               type="checkbox"
               checked={formik.values.termo_dados === 1}
@@ -343,7 +328,33 @@ function Cadastro() {
                 }
               )}
             />
-            <label style={{ display: "flex", marginLeft: "15px"}} onClick={Termo}>
+
+            {/* Modal */}
+            <Modal show={showModal} onHide={handleCloseModal} style={{ }}>
+              <Modal.Header closeButton>
+                <Modal.Title>Termo de Uso</Modal.Title>
+              </Modal.Header>
+
+
+              <Modal.Body>
+                {termos.map((termo) => (
+                  <div>
+                    <p> {termo.descricao}</p>
+                  </div>
+                ))}
+              </Modal.Body>
+
+
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                  Fechar
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+
+
+            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}>
               Concordo com os termos de uso e condições previstas para uso desse website.
             </label>
             {formik.touched.termo_dados && formik.errors.termo_dados && (
@@ -356,7 +367,7 @@ function Cadastro() {
           </div>
         </div>
 
-     
+
 
       </div>
 

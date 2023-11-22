@@ -71,13 +71,12 @@ class TermosController {
       public async getAllTermos(req: Request, res: Response): Promise<Response> {
         try {
           
-            // Aplica a middleware authAdmin para proteger esta função
-            authAdmin(req, res, async () => {
+           
               const termoRepository = AppDataSource.getRepository(Termos);
               const termos = await termoRepository.find();
     
               return res.json(termos);
-            });
+           
           
         } catch (error) {
           console.error('Erro ao buscar termos:', error);

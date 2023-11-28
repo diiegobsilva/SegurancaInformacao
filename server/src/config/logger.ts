@@ -1,18 +1,18 @@
 import { createLogger, transports, format, level } from "winston";
 import { date } from "../utils/date";
 
-// const userTermLog = createLogger({
-//   format: format.combine(
-//     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-//     format.printf((info) => {
-//       return `[${info.timestamp}] ${info.message}`;
-//     })
-//   ),
-//   transports: [
-//     new transports.Console(),
-//     new transports.File({ filename: '../server/logs/user_term_log.log' }),
-//   ],
-// });
+const userTermLog = createLogger({
+  format: format.combine(
+    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    format.printf((info) => {
+      return `[${info.timestamp}] ${info.message}`;
+    })
+  ),
+  transports: [
+    new transports.Console(),
+    new transports.File({ filename: '../server/logs/user_term_log.log' }),
+  ],
+});
 
 const loggerNewTermo = createLogger({
   level: 'info',
@@ -52,4 +52,4 @@ const loggerUpdate = createLogger({
 })
 
 
-export { loggerDelete, loggerUpdate, loggerNewTermo }
+export { loggerDelete, loggerUpdate, loggerNewTermo, userTermLog }

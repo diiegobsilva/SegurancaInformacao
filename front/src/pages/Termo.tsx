@@ -7,22 +7,19 @@ import axios from "axios";
 
 interface Termo {
   id: number;
-  obrigatorio: string;
-  descricao: string;
+  itemTermo: string;
   data: string;
 }
 
 function Termo() {
-  const [obrigatorio, setObrigatorio] = useState(null as any);
-  const [descricao, setDescricao] = useState('');
+  const [itemTermo, setItemTermo] = useState('');
   const [termos, setTermos] = useState<Termo[]>([]);
 
   const handleCreateTermo = async () => {
     try {
       const recoveredToken = localStorage.getItem('token')
       const response = await axios.post('/termos/create', {
-        obrigatorio: obrigatorio,
-        descricao: descricao,
+        itemTermo: itemTermo,
       },{
         headers:{
           'authorization': `Bearer ${recoveredToken}`
@@ -31,8 +28,7 @@ function Termo() {
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      setDescricao(response.data.descricao);
-      setObrigatorio('');
+      setItemTermo(response.data.descricao);
     } catch (error) {
       console.error('Erro ao criar termo:', error);
     }
@@ -46,10 +42,11 @@ function Termo() {
     }})
       .then((response) => {
         setTermos(response.data)
-        setDescricao(response.data[response.data.length - 1].descricao)
+        setItemTermo(response.data[response.data.length - 1].descricao)
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
+
 
   return (
     <div>
@@ -60,7 +57,6 @@ function Termo() {
             <thead>
               <tr>
                 <th className="text-center">Versão</th>
-                <th className="text-center">Obrigatório</th>
                 <th className="text-center">Data de Edição</th>
                 <th className="text-center">Termos</th>
               </tr>
@@ -70,9 +66,8 @@ function Termo() {
                 termos.map((termo) => (
                   <tr key={termo.id}>
                     <td className="text-center">{termo.id}</td>
-                    <td className="text-center">{termo.obrigatorio.toString()}</td>
                     <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
-                    <td className="text-center">{termo.descricao}</td>
+                    <td className="text-center">{termo.itemTermo}</td>
                   </tr>
                 ))
               ) : (
@@ -89,21 +84,9 @@ function Termo() {
               <label className="labelArea">Termos e Condições:</label>
               <textarea
                 className="textArea"
-                value={descricao}
-                onChange={(e) => setDescricao(e.target.value)}
+                value={itemTermo}
+                onChange={(e) => setItemTermo(e.target.value)}
               />
-            </div>
-            <div className="col-lg-3">
-              <label className="labelArea">Obrigatório:</label>
-              <select
-                className="form-label-teste fw-bolder text-dark form-control"
-                value={obrigatorio || termos[termos.length - 1].obrigatorio}
-                onChange={(e) => setObrigatorio(e.target.value)}
-              >
-                <option value="" label="Selecione" />
-                <option value='1' label="Sim" />
-                <option value='0' label="Não" />
-              </select>
             </div>
           </>
         )}

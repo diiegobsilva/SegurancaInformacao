@@ -5,12 +5,9 @@ export class Termos {
 
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column({ nullable: false })
-    obrigatorio: boolean;
-
-    @Column({ nullable: false})
-    descricao: string;
+    
+    @Column({ type: "json", nullable: false })
+    itemTermos: object; 
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     data: Date;

@@ -10,17 +10,16 @@ class TermosController {
     try {
       // Aplica a middleware authAdmin para proteger esta função
       authAdmin(req, res, async () => {
-        const { obrigatorio, descricao } = req.body;
+        const { itemTermos } = req.body;
 
         // Resto do código para criar termos
         const newTermos = new Termos();
-        newTermos.obrigatorio = obrigatorio;
-        newTermos.descricao = descricao;
+        newTermos.itemTermos = itemTermos;
 
         const termosRepository = AppDataSource.getRepository(Termos);
         const createdTermos = await termosRepository.save(newTermos);
 
-        const logMessage = `Created Termos: ${createdTermos.id}, Descricao: ${createdTermos.descricao}`;
+        const logMessage = `Created Termos: ${createdTermos.id}, itemTermos: ${createdTermos.itemTermos}`;
         userTermLog.info(logMessage);
 
         return res.status(201).json(createdTermos);
@@ -36,7 +35,7 @@ class TermosController {
 
       public async updateTermos(req: Request, res: Response): Promise<Response> {
         try {
-          const { obrigatorio, descricao } = req.body;
+          const { itemTermos } = req.body;
           const idTermo: any = req.params.id; // Suponha que você está passando o ID do termo como parâmetro na URL
       
           const termosRepository = AppDataSource.getRepository(Termos);
@@ -47,18 +46,15 @@ class TermosController {
           }
       
           // Verifique cada campo e atualize o termo
-          if (obrigatorio !== undefined) {
-            termo.obrigatorio = obrigatorio;
-          }
       
-          if (descricao !== undefined) {
-            termo.descricao = descricao;
+          if (itemTermos !== undefined) {
+            termo.itemTermos = itemTermos;
           }
       
           // Salve as alterações no termo
           const updatedTermo = await termosRepository.save(termo);
 
-          const logMessage = `ID-${Date()}-{${termo.descricao}: ${obrigatorio ? 1 : 0}}`;
+          const logMessage = `ID-${Date()}-{${termo.itemTermos}`;
           userTermLog.info(logMessage);
           
           return res.json(updatedTermo);

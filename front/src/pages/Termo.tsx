@@ -7,7 +7,12 @@ import axios from "axios";
 
 interface Termo {
   id: number;
-  itemTermo: string;
+  itemTermos: {
+    Cookies: string;
+    ColetaDeDados: string;
+    TermosDeServico: string;
+    PoliticaDePrivacidade: string;
+  };
   data: string;
 }
 
@@ -19,7 +24,7 @@ function Termo() {
     try {
       const recoveredToken = localStorage.getItem('token')
       const response = await axios.post('/termos/create', {
-        itemTermo: itemTermo,
+        itemTermo:JSON.parse(itemTermo),
       },{
         headers:{
           'authorization': `Bearer ${recoveredToken}`
@@ -28,25 +33,36 @@ function Termo() {
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      setItemTermo(response.data.descricao);
+      setItemTermo(response.data.itemTermo);
     } catch (error) {
       console.error('Erro ao criar termo:', error);
     }
   };
 
   useEffect(() => {
-    const recoveredToken = localStorage.getItem('token')
-    axios.get('/termos/',{
-      headers:{
+    const recoveredToken = localStorage.getItem('token');
+    axios.get('/termos/', {
+      headers: {
         'authorization': `Bearer ${recoveredToken}`
-    }})
+      }
+    })
       .then((response) => {
-        setTermos(response.data)
-        setItemTermo(response.data[response.data.length - 1].descricao)
+        setTermos(response.data);
+
+        if (response.data.length > 0) {
+          const ultimoTermo = response.data[response.data.length - 1];
+          setItemTermo(
+            Object.entries(ultimoTermo.itemTermos)
+              .map(([termName, termValue]) => `${termName}: ${termValue}`)
+              .join('\n')
+          );
+        } else {
+          setItemTermo('');
+        }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
-
+console.log(itemTermo);
 
   return (
     <div>
@@ -67,7 +83,13 @@ function Termo() {
                   <tr key={termo.id}>
                     <td className="text-center">{termo.id}</td>
                     <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
-                    <td className="text-center">{termo.itemTermo}</td>
+                    <td className="text-center">
+                      {Object.entries(termo.itemTermos).map(([termName, termValue]) => (
+                        <div key={termName}>
+                          <strong>{termName}:</strong> {termValue}
+                        </div>
+                      ))}
+                    </td>
                   </tr>
                 ))
               ) : (

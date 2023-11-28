@@ -23,6 +23,11 @@ export interface Clientes {
     endereco: string;   
     confirmPassword: string;
     confirmEmail: string;
-    termo_dados: number;
     profile: string
+    itemTermos: {
+        Cookies: string;
+        ColetaDeDados: string;
+        TermosDeServico: string;
+        PoliticaDePrivacidade: string;
+      };
 }

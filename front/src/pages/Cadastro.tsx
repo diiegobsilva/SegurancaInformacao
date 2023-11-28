@@ -13,8 +13,12 @@ import { Button, Modal } from "react-bootstrap";
 
 interface Termo {
   id: number;
-  obrigatorio: string;
-  descricao: string;
+  itemTermos: {
+    Cookies: string;
+    ColetaDeDados: string;
+    TermosDeServico: string;
+    PoliticaDePrivacidade: string;
+  };
   data: string;
   versao: number
   profile: string
@@ -24,6 +28,13 @@ function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [respostas, setRespostas] = useState<{ [termoId: number]: { [parteIndex: string]: number } }>({});
+  const [itemTermo, setItemTermo] = useState({
+    Cookies: "",
+    ColetaDeDados: "",
+    TermosDeServico: "",
+    PoliticaDePrivacidade: "",
+  });
+
 
   const formik = useFormik({
     initialValues,
@@ -69,10 +80,30 @@ function Cadastro() {
     }
   }
   useEffect(() => {
-    axios.get('/termos/')
-      .then((response) => setTermos(response.data))
+    const recoveredToken = localStorage.getItem('token');
+    axios.get('/termos/', {
+      headers: {
+        'authorization': `Bearer ${recoveredToken}`
+      }
+    })
+      .then((response) => {
+        setTermos(response.data);
+
+        if (response.data.length > 0) {
+          const ultimoTermo = response.data[response.data.length - 1];
+          setItemTermo(ultimoTermo.itemTermos);
+        } else {
+          setItemTermo({
+            Cookies: "",
+            ColetaDeDados: "",
+            TermosDeServico: "",
+            PoliticaDePrivacidade: "",
+          });
+        }
+      })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
+
 
   console.log(termos);
 
@@ -85,37 +116,27 @@ function Cadastro() {
   };
 
 
-  const handleAceitar = (termoId:any, parteIndex:any) => {
-    setRespostas(prevState => ({
-      ...prevState,
-      [termoId]: {
-        ...prevState[termoId],
-        [parteIndex]: 1, 
-      },
-    }));
-  };
-  
-  const handleRecusar = (termoId:any, parteIndex:any) => {
-    setRespostas(prevState => ({
-      ...prevState,
-      [termoId]: {
-        ...prevState[termoId],
-        [parteIndex]: 0, 
-      },
-    }));
-  };
+const handleAceitar = (termoId: number, parte: string) => {
+  const resposta = { termoId, parte, resposta: 1 };
 
-  const renderizarTermo = (termo: any) => {
-    const partes = termo.descricao.split('.').filter((parte: any) => parte.trim() !== '');
-    return partes.map((parte: any, index: any) => (
-      <div key={index}>
-        <p>{parte}</p>
-        <button onClick={() => handleAceitar(termo.id, parte)}>Aceitar</button>
-        <button onClick={() => handleRecusar(termo.id, parte)}>Recusar</button>
-      </div>
-    ));
-  };
+};
 
+const handleRecusar = (termoId: number, parte: string) => {
+  const resposta = { termoId, parte, resposta: 0 };
+
+};
+
+// ...
+
+const renderizarTermo = (itemTermo: any) => {
+  return itemTermo.map((parte: any, index: any) => (
+    <div key={index}>
+      <p>{parte}</p>
+      <button onClick={() => handleAceitar(itemTermo.id, parte)}>Aceitar</button>
+      <button onClick={() => handleRecusar(itemTermo.id, parte)}>Recusar</button>
+    </div>
+  ));
+};
   console.log(respostas);
   
 

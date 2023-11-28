@@ -3,27 +3,20 @@ import { format } from "date-fns";
 import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import  InputTermo  from "./inputTermo";
 
 interface Termo {
   id: number;
-  itemTermos: {
-    Cookies: string;
-    ColetaDeDados: string;
-    TermosDeServico: string;
-    PoliticaDePrivacidade: string;
-  };
+  itemTermos: string;
   data: string;
 }
 
 function Termo() {
-  const [itemTermo, setItemTermo] = useState({
-    Cookies: "",
-    ColetaDeDados: "",
-    TermosDeServico: "",
-    PoliticaDePrivacidade: "",
-  });
-
+  const [itemTermo, setItemTermo] = useState();
   const [termos, setTermos] = useState<Termo[]>([]);
+  
+  const [titulo, setTitulo] = useState("")
+  const [descricao, setDescricao] = useState("")
 
   const handleCreateTermo = async () => {
     try {
@@ -38,12 +31,6 @@ function Termo() {
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      setItemTermo({
-        Cookies: "",
-        ColetaDeDados: "",
-        TermosDeServico: "",
-        PoliticaDePrivacidade: "",
-      });
       window.location.reload();
     } catch (error) {
       console.error('Erro ao criar termo:', error);
@@ -65,12 +52,7 @@ function Termo() {
           const ultimoTermo = response.data[response.data.length - 1];
           setItemTermo(ultimoTermo.itemTermos);
         } else {
-          setItemTermo({
-            Cookies: "",
-            ColetaDeDados: "",
-            TermosDeServico: "",
-            PoliticaDePrivacidade: "",
-          });
+
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
@@ -115,27 +97,8 @@ function Termo() {
             </tbody>
           </Table>
         </Container>
-        {termos.length > 0 && (
-          <>
-            <div>
-              <label className="labelArea">Termos e Condições:</label>
-              <textarea
-                className="textArea"
-                value={Object.values(itemTermo).join('\n')}
-                onChange={(e) => {
-                  // Pode precisar ajustar essa lógica conforme necessário
-                  const values = e.target.value.split('\n');
-                  setItemTermo({
-                    Cookies: values[0] || "",
-                    ColetaDeDados: values[1] || "",
-                    TermosDeServico: values[2] || "",
-                    PoliticaDePrivacidade: values[3] || "",
-                  });
-                }}
-              />
-            </div>
-          </>
-        )}
+              
+           <InputTermo titulo={titulo} descricao={descricao} setTitulo={setTitulo} setDescricao={setDescricao}/>   
         <div className="button-container">
           <button
             type="button"
@@ -143,6 +106,15 @@ function Termo() {
             onClick={handleCreateTermo}
           >
             Salvar
+          </button>
+
+
+          <button
+            type="button"
+            className="custom-button"
+            onClick={handleCreateTermo}
+          >
+            +
           </button>
         </div>
       </Container>

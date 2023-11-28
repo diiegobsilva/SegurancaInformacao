@@ -9,8 +9,8 @@ def mysqlConnection():
     from mysql.connector import errorcode
 
     try:
-        connection = mysql.connector.connect(user='root', password="fatec",
-                                    database='nova')
+        connection = mysql.connector.connect(host='bancoteste.mysql.database.azure.com' , user='fatec', password="sjc123@w",
+                                    database='clientes')
         print("Foi")
         return connection
     except mysql.connector.Error as err:
@@ -26,7 +26,7 @@ def mysqlRemoveUsers(ids):
         db = mysqlConnection()
         if db.is_connected():
             mycursor = db.cursor()
-            sql = f"delete from nova.users where id in {ids};"
+            sql = f"delete from clientes.cliente where id in {ids};"
             mycursor.execute(sql)
             db.commit()
             print(mycursor.rowcount, "record(s) deleted")
@@ -42,17 +42,17 @@ def mysqlBackup(host, usuario, senha, banco, caminho_backup, docker):
     nome_arquivo_backup = f"{banco}_backup_{data_hora_atual}.sql"
     caminho_completo_backup = os.path.join(caminho_backup, nome_arquivo_backup)
     backup = os.path.join('/var/mysql/backup/', nome_arquivo_backup)
-    comando = f"docker exec mysql sh -c 'mysqldump -h {host} -u {usuario} -p{senha} --routines --triggers --databases {banco} > {backup}'"
     try:
         os.makedirs(caminho_backup, exist_ok=True)
 
         if docker == True:
+            comando = f"docker exec mysql sh -c 'mysqldump -h {host} -u {usuario} -p{senha} --routines --triggers --databases {banco} > {backup}'"
             subprocess.run(shlex.split('docker exec mysql mkdir -p /var/mysql/backup/'), check=True)
             subprocess.run(shlex.split(comando), check=True)
             with open(caminho_completo_backup, 'wb') as f:
                 subprocess.run(shlex.split(f'docker exec mysql cat {backup}'), check=True, stdout=f)
         else:
-            comando = f"mysql mysqldump -h {host} -u {usuario} -p{senha} --routines --triggers --databases {banco} > {caminho_completo_backup}"
+            comando = f"mysqldump -h {host} -u {usuario} -p{senha} --routines --triggers --databases {banco} -r {caminho_completo_backup}"
             subprocess.run(shlex.split(comando), check=True)
 
         # Executa o comando para criar o backup
@@ -65,12 +65,15 @@ def mysqlBackup(host, usuario, senha, banco, caminho_backup, docker):
 def mysqlRestaurar(host, usuario, senha, banco, caminho_backup, docker):
     """Restaura um backup do MySQL."""
     if docker == True:
-        comando = f"docker exec mysql -h {host} -u {usuario} -p{senha} {banco} < /var/mysql/backup/clientes_backup_2023-11-22_07-40-42.sql"
+        comando = f"docker exec mysql mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
     else:
-        comando = f"mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
+        #comando = f"mysql -h {host} -u {usuario} -p{senha} {banco} < {caminho_backup}"
+        comando = f"mysql -h {host} -u {usuario} -p{senha} {banco}"
 
     try:
-        subprocess.run(shlex.split(comando), check=True)
+        with open(caminho_backup, 'rb') as arquivo:
+            subprocess.Popen(comando, stdin=arquivo, shell=True).wait()
+        #subprocess.run(shlex.split(comando), check=True)
         print("Backup restaurado com sucesso!")
     except subprocess.CalledProcessError as e:
         print(f"Erro ao restaurar o backup: {e}")

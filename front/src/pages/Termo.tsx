@@ -4,7 +4,6 @@ import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
 interface Termo {
   id: number;
   itemTermos: {
@@ -17,23 +16,37 @@ interface Termo {
 }
 
 function Termo() {
-  const [itemTermo, setItemTermo] = useState('');
+  const [itemTermo, setItemTermo] = useState({
+    Cookies: "",
+    ColetaDeDados: "",
+    TermosDeServico: "",
+    PoliticaDePrivacidade: "",
+  });
+
   const [termos, setTermos] = useState<Termo[]>([]);
 
   const handleCreateTermo = async () => {
     try {
-      const recoveredToken = localStorage.getItem('token')
+      const recoveredToken = localStorage.getItem('token');
+
       const response = await axios.post('/termos/create', {
-        itemTermo:JSON.parse(itemTermo),
-      },{
-        headers:{
+        itemTermo: itemTermo,
+      }, {
+        headers: {
           'authorization': `Bearer ${recoveredToken}`
-      }});
+        }
+      });
 
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      setItemTermo(response.data.itemTermo);
+      // Pode manter ou limpar os campos após a criação bem-sucedida
+      setItemTermo({
+        Cookies: "",
+        ColetaDeDados: "",
+        TermosDeServico: "",
+        PoliticaDePrivacidade: "",
+      });
     } catch (error) {
       console.error('Erro ao criar termo:', error);
     }
@@ -51,18 +64,21 @@ function Termo() {
 
         if (response.data.length > 0) {
           const ultimoTermo = response.data[response.data.length - 1];
-          setItemTermo(
-            Object.entries(ultimoTermo.itemTermos)
-              .map(([termName, termValue]) => `${termName}: ${termValue}`)
-              .join('\n')
-          );
+          setItemTermo(ultimoTermo.itemTermos);
         } else {
-          setItemTermo('');
+          // Pode inicializar os campos com valores padrão, se necessário
+          setItemTermo({
+            Cookies: "",
+            ColetaDeDados: "",
+            TermosDeServico: "",
+            PoliticaDePrivacidade: "",
+          });
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
-console.log(itemTermo);
+
+  console.log(itemTermo);
 
   return (
     <div>
@@ -106,8 +122,17 @@ console.log(itemTermo);
               <label className="labelArea">Termos e Condições:</label>
               <textarea
                 className="textArea"
-                value={itemTermo}
-                onChange={(e) => setItemTermo(e.target.value)}
+                value={Object.values(itemTermo).join('\n')}
+                onChange={(e) => {
+                  // Pode precisar ajustar essa lógica conforme necessário
+                  const values = e.target.value.split('\n');
+                  setItemTermo({
+                    Cookies: values[0] || "",
+                    ColetaDeDados: values[1] || "",
+                    TermosDeServico: values[2] || "",
+                    PoliticaDePrivacidade: values[3] || "",
+                  });
+                }}
               />
             </div>
           </>

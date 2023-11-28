@@ -44,6 +44,7 @@ function Termo() {
         TermosDeServico: "",
         PoliticaDePrivacidade: "",
       });
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao criar termo:', error);
     }
@@ -75,7 +76,8 @@ function Termo() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-  console.log(JSON.stringify(itemTermo));
+ console.log(itemTermo);
+ 
 
   return (
     <div>

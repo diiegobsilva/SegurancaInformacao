@@ -9,7 +9,7 @@ class TermosController {
   public async createTermos(req: Request, res: Response): Promise<Response> {
     try {
         const { itemTermos } = req.body;
-
+        console.log(req.body);
         const newTermos = new Termos();
         newTermos.itemTermos = itemTermos;
 
@@ -30,7 +30,7 @@ class TermosController {
     }
   }
 
-  
+
 
       public async updateTermos(req: Request, res: Response): Promise<Response> {
         try {

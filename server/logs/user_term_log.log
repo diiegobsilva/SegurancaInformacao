@@ -16,3 +16,9 @@ ID-Wed Nov 08 2023 19:56:47 GMT-0300 (Horário Padrão de Brasília)-{pode xinga
 [2023-11-19 18:18:01] ClienteTermos excluído: undefined
 [2023-11-20 17:24:10] Created Termos: 3, Descricao: linux merda
 [2023-11-21 21:03:14] Created Termos: 2, Descricao: Política de Privacidade: usuário. Termos de Serviço: Especifica. Cookies: cookies.
+[2023-11-27 23:59:38] Created Termos: 3, itemTermos: [object Object]
+[2023-11-28 00:11:38] Erro ao criar termos: Field 'itemTermos' doesn't have a default value
+[2023-11-28 00:11:57] Erro ao criar termos: Field 'itemTermos' doesn't have a default value
+[2023-11-28 00:14:33] Erro ao criar termos: Field 'itemTermos' doesn't have a default value
+[2023-11-28 00:26:34] Erro ao criar termos: Field 'itemTermos' doesn't have a default value
+[2023-11-28 00:28:56] Created Termos: 4, itemTermos: [object Object]

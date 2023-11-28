@@ -28,19 +28,16 @@ function Termo() {
   const handleCreateTermo = async () => {
     try {
       const recoveredToken = localStorage.getItem('token');
-
       const response = await axios.post('/termos/create', {
-        itemTermo: itemTermo,
+        itemTermos: itemTermo,  
       }, {
         headers: {
           'authorization': `Bearer ${recoveredToken}`
         }
       });
-
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
 
-      // Pode manter ou limpar os campos após a criação bem-sucedida
       setItemTermo({
         Cookies: "",
         ColetaDeDados: "",
@@ -51,6 +48,7 @@ function Termo() {
       console.error('Erro ao criar termo:', error);
     }
   };
+  
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -66,7 +64,6 @@ function Termo() {
           const ultimoTermo = response.data[response.data.length - 1];
           setItemTermo(ultimoTermo.itemTermos);
         } else {
-          // Pode inicializar os campos com valores padrão, se necessário
           setItemTermo({
             Cookies: "",
             ColetaDeDados: "",
@@ -78,7 +75,7 @@ function Termo() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-  console.log(itemTermo);
+  console.log(JSON.stringify(itemTermo));
 
   return (
     <div>

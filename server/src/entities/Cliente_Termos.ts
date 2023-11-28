@@ -23,7 +23,7 @@ export class ClienteTermos {
     dataAtualizacao: Date;
 
     @Column({ type: "json", nullable: true })
-    termosAceitos: object; // Coluna para armazenar os termos aceitos em formato JSON
+    itemTermos: object; // Coluna para armazenar os termos aceitos em formato JSON
 
     @BeforeInsert()
     @BeforeUpdate()

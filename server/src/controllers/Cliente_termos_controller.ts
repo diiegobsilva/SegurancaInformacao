@@ -8,12 +8,12 @@ class ClienteTermosController {
 
   public async createClienteTermos(req: Request, res: Response): Promise<Response> {
     try {
-      const { cliente, termos, termosAceitos } = req.body;
+      const { cliente, termos, itemTermos } = req.body;
 
       const newClienteTermos = new ClienteTermos();
       newClienteTermos.cliente = cliente;
       newClienteTermos.termos = termos;
-      newClienteTermos.termosAceitos = termosAceitos;
+      newClienteTermos.itemTermos = itemTermos;
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
       const createdClienteTermos = await clienteTermosRepository.save(newClienteTermos);
@@ -44,7 +44,7 @@ class ClienteTermosController {
       }
 
       if (termosAceitos !== undefined) {
-        clienteTermos.termosAceitos = termosAceitos;
+        clienteTermos.itemTermos = termosAceitos;
       }
 
       const updatedClienteTermos = await clienteTermosRepository.save(clienteTermos);
@@ -99,7 +99,7 @@ class ClienteTermosController {
         termos: clienteTermos.termos,
         dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
         dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
-        termosAceitos: clienteTermos.termosAceitos,
+        termosAceitos: clienteTermos.itemTermos,
       };
 
       loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });

@@ -51,9 +51,7 @@ function Cadastro() {
             itemTermos: termosAceitosJSON,
           });
   
-          if (response2.status === 200) {
-           await avisoConcluido().then(() => navigate('/login'));
-          }
+
         } 
       } catch (error) {
         console.error("Erro ao criar cliente:", error);
@@ -90,7 +88,7 @@ function Cadastro() {
       avisoErro();
     } else {
       formik.submitForm();
-      avisoConcluido();
+      avisoConcluido().then(() => navigate('/login'));
 
     }
   }

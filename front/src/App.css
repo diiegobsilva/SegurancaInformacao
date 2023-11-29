@@ -357,15 +357,30 @@ input::-webkit-inner-spin-button {
 }
 .textArea {
   width: 95%;
+  height: 80px; 
+  margin: 0 auto;
+  display: block;
+  resize: vertical; 
+  margin-bottom: 30px;
+  border-radius: 5px;
+}
+
+.textAreaTermos {
+  width: 95%;
   height: 180px; 
   margin: 0 auto;
   display: block;
   resize: vertical; 
+  border-width: 2px;
+  border-color: #000000;
+  border-radius: 5px;
 }
+
 .textTitulo {
   width: 95%;
   margin: 30px;
   border-width: 2px;
+  border-radius: 5px;
 }
 
 
@@ -384,4 +399,5 @@ input::-webkit-inner-spin-button {
   border-radius: 10px;
   font-size: 18px;
   font-weight: 600;
+  margin: 50px;
 }

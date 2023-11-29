@@ -118,6 +118,13 @@ function Termo() {
             onChange={handleDescricaoChange}
             value={descricao}
           />
+
+
+          <textarea
+            className="textAreaTermos"
+            disabled
+            value={descricao}
+          />  
         </div>
 
         <div className="button-container">
@@ -129,7 +136,7 @@ function Termo() {
   );
 }
 
-// Função separada para renderizar os termos
+
 function renderizarTermos(itemTermos: { [key: string]: string }) {
   return Object.keys(itemTermos).map((termName) => (
     <div key={termName}>

@@ -364,6 +364,9 @@ input::-webkit-inner-spin-button {
   margin-bottom: 30px;
   border-radius: 5px;
 }
+.linha{
+  border-width: 8px;
+}
 
 .textAreaTermos {
   width: 95%;

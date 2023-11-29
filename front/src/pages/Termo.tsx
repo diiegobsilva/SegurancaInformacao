@@ -129,7 +129,7 @@ function Termo() {
 
           {/* Exibir termos temporários */}
           <div>
-          <h2>................................................................................................................................................................</h2>
+          <hr className="linha"/>
             <ul>
               {renderizarTermos(termosTemporarios)}
             </ul>

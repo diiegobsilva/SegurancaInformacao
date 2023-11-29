@@ -82,8 +82,6 @@ function Cadastro() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-  console.log(termos);
-
 const handleOpenModal = () => {
   if (ultimoTermo) {
     setShowModal(true);
@@ -96,6 +94,8 @@ const handleOpenModal = () => {
  
   
 
+
+  
 
   return (
     <form>
@@ -413,7 +413,6 @@ const handleOpenModal = () => {
         </button>
 
       </div>
-      {/* end::Form group */}
     </form>
   );
 }

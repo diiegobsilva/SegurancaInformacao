@@ -1,13 +1,13 @@
 import { Entity, ObjectIdColumn, ObjectId, Column } from "typeorm"
 
 @Entity()
-export class Cliente {
+export class Users {
 
     @ObjectIdColumn()
     id: ObjectId
 
     @Column()
-    cli_id: string
+    cli_id: Number
 
     @Column()
     date: Date

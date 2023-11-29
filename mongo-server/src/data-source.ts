@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-import { Cliente } from "./entity/Cliente"
+import { Users } from "./entity/Cliente"
 import { ClienteEntity } from "./entity/Update"
 import { DataSource } from "typeorm";
 import 'dotenv/config';
@@ -8,10 +8,10 @@ import 'dotenv/config';
 export const AppDataSource = new DataSource({
   type: "mongodb", 
  // url: `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.CLUSTER}.gyfwek9.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
-  url: "mongodb+srv://fatec:CwNdaImFjuebsHKh@cluster0.gyfwek9.mongodb.net/",
+  url: "mongodb+srv://fatec:CwNdaImFjuebsHKh@cluster0.gyfwek9.mongodb.net/seguranca?retryWrites=true&w=majority",
   synchronize: true, 
   logging: true, 
-  entities: ["src/entities/*.ts"], 
+  entities: [Users], 
   subscribers: [],
   maxQueryExecutionTime: 2000,
   useUnifiedTopology: true

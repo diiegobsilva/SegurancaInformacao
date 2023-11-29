@@ -18,7 +18,7 @@ function Termo() {
   const [titulo, setTitulo] = useState("")
   const [descricao, setDescricao] = useState("")
   
-  const [listTermo, setListTermo] = useState<string>('');
+  const [listTermo, setListTermo] = useState<{ titulo: string; descricao: string }[]>([]);
 
   const handleCreateTermo = async () => {
     try {
@@ -75,15 +75,18 @@ const handleAddList = () => {
     titulo: titulo,
     descricao: descricao,
   };
-  setListTermo(prevList => {
-    const novoTermoJSON = JSON.stringify(novoTermo);
-    return prevList ? `${prevList}, ${novoTermoJSON}` : `[${novoTermoJSON}`;
-  });
-
+  setListTermo(prevList => [...prevList, novoTermo]);
   setTitulo("");
   setDescricao("");
 };
 console.log(listTermo);
+
+const handleSalvar = () => {
+  const jsonFinal = `{${listTermo.map(obj => `"titulo": "${obj.titulo}", "descricao": "${obj.descricao}"`).join('; ')}}`
+  console.log(jsonFinal);
+
+};
+
 
 
 
@@ -139,7 +142,7 @@ console.log(listTermo);
         <div className="button-container">
           <button  type="button" className="custom-button" onClick={handleAddList}  > + </button>
 
-          <button type="button" className="custom-button" onClick={handleCreateTermo} > Salvar </button>
+          <button type="button" className="custom-button" onClick={handleSalvar} > Salvar </button>
         </div>
 
 

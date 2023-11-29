@@ -41,9 +41,9 @@ function Cadastro() {
           const idCliente = response1.data.id;
           
           const response2 = await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
-            idCliente: idCliente,
-            idTermo: idTermo,
-            termoAceito: termoAceito,
+            cliente: idCliente,
+            termos: idTermo,
+            itemTermos: termosAceitosJSON,
           });
   
           if (response2.status === 200) {
@@ -135,7 +135,9 @@ const handleOpenModal = () => {
 
   console.log(termoAceito);
   
-
+  const termosAceitosJSON = JSON.stringify(termoAceito);
+  console.log(termosAceitosJSON);
+  
 
   return (
     <form>

@@ -17,28 +17,8 @@ function Termo() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [titulo, setTitulo] = useState("")
   const [descricao, setDescricao] = useState("")
-  
+
   const [listTermo, setListTermo] = useState<{ titulo: string; descricao: string }[]>([]);
-
-  const handleCreateTermo = async () => {
-    try {
-      const recoveredToken = localStorage.getItem('token');
-      const response = await axios.post('/termos/create', {
-        itemTermos: itemTermo,  
-      }, {
-        headers: {
-          'authorization': `Bearer ${recoveredToken}`
-        }
-      });
-      const updatedTermos = [...termos, response.data];
-      setTermos(updatedTermos);
-
-      window.location.reload();
-    } catch (error) {
-      console.error('Erro ao criar termo:', error);
-    }
-  };
-  
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -60,35 +40,48 @@ function Termo() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
- const handleTituloChange = (event: any) => {
-  setTitulo(event.target.value);
-};
-const handleDescricaoChange = (event: any) => {
-  setDescricao(event.target.value);
-};
 
+  const handleAddList = () => {
+    // Adiciona o novo termo ao objeto
+    setListTermo(prevList => ({
+      ...prevList,
+      [titulo]: descricao,
+    }));
 
-
-
-const handleAddList = () => {
-  const novoTermo = {
-    titulo: titulo,
-    descricao: descricao,
+    setTitulo("");
+    setDescricao("");
   };
-  setListTermo(prevList => [...prevList, novoTermo]);
-  setTitulo("");
-  setDescricao("");
-};
-console.log(listTermo);
-
-const handleSalvar = () => {
-  const jsonFinal = `{${listTermo.map(obj => `"titulo": "${obj.titulo}", "descricao": "${obj.descricao}"`).join('; ')}}`
-  console.log(jsonFinal);
-
-};
+  console.log(listTermo);
 
 
+  const handleSalvar = async () => {
+    try {
+      const recoveredToken = localStorage.getItem('token');
 
+      const response = await axios.post('/termos/create', {
+        itemTermos: listTermo,
+      }, {
+        headers: {
+          'authorization': `Bearer ${recoveredToken}`
+        }
+      });
+
+      const updatedTermos = [...termos, response.data];
+      setTermos(updatedTermos);
+
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao criar termo:', error);
+    }
+  };
+
+
+  const handleTituloChange = (event: any) => {
+    setTitulo(event.target.value);
+  };
+  const handleDescricaoChange = (event: any) => {
+    setDescricao(event.target.value);
+  };
 
   return (
     <div>
@@ -104,7 +97,7 @@ const handleSalvar = () => {
               </tr>
             </thead>
             <tbody>
-            {
+              {
                 termos.map((termo) => (
                   <tr key={termo.id}>
                     <td className="text-center">{termo.id}</td>
@@ -122,25 +115,25 @@ const handleSalvar = () => {
             </tbody>
           </Table>
         </Container>
-              
+
         <div>
-            <input
+          <input
             type="text"
             className="textTitulo"
-            placeholder="Titulo" 
+            placeholder="Titulo"
             onChange={handleTituloChange}
-            value={titulo}/>
-            
-            <textarea
+            value={titulo} />
+
+          <textarea
             className="textArea"
-            placeholder="Descrição" 
+            placeholder="Descrição"
             onChange={handleDescricaoChange}
             value={descricao}
-            />
-         </div>
+          />
+        </div>
 
         <div className="button-container">
-          <button  type="button" className="custom-button" onClick={handleAddList}  > + </button>
+          <button type="button" className="custom-button" onClick={handleAddList}  > + </button>
 
           <button type="button" className="custom-button" onClick={handleSalvar} > Salvar </button>
         </div>

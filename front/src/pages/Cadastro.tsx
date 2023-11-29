@@ -13,28 +13,17 @@ import { Button, Modal } from "react-bootstrap";
 
 interface Termo {
   id: number;
-  itemTermos: {
-    Cookies: string;
-    ColetaDeDados: string;
-    TermosDeServico: string;
-    PoliticaDePrivacidade: string;
-  };
+  descricao: string;
   data: string;
   versao: number
   profile: string
+  itemTermos?: { [key: string]: string };
 }
 
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [respostas, setRespostas] = useState<{ [termoId: number]: { [parteIndex: string]: number } }>({});
-  const [itemTermo, setItemTermo] = useState({
-    Cookies: "",
-    ColetaDeDados: "",
-    TermosDeServico: "",
-    PoliticaDePrivacidade: "",
-  });
-
+  const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
 
   const formik = useFormik({
     initialValues,
@@ -79,66 +68,34 @@ function Cadastro() {
 
     }
   }
+
   useEffect(() => {
-    const recoveredToken = localStorage.getItem('token');
-    axios.get('/termos/', {
-      headers: {
-        'authorization': `Bearer ${recoveredToken}`
-      }
-    })
+    axios.get('/termos/')
       .then((response) => {
         setTermos(response.data);
-
+  
         if (response.data.length > 0) {
           const ultimoTermo = response.data[response.data.length - 1];
-          setItemTermo(ultimoTermo.itemTermos);
-        } else {
-          setItemTermo({
-            Cookies: "",
-            ColetaDeDados: "",
-            TermosDeServico: "",
-            PoliticaDePrivacidade: "",
-          });
+          setUltimoTermo(ultimoTermo);
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-
   console.log(termos);
 
-  const handleOpenModal = () => {
+const handleOpenModal = () => {
+  if (ultimoTermo) {
     setShowModal(true);
-  };
-
+  }
+};
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-
-const handleAceitar = (termoId: number, parte: string) => {
-  const resposta = { termoId, parte, resposta: 1 };
-
-};
-
-const handleRecusar = (termoId: number, parte: string) => {
-  const resposta = { termoId, parte, resposta: 0 };
-
-};
-
-// ...
-
-const renderizarTermo = (itemTermo: any) => {
-  return itemTermo.map((parte: any, index: any) => (
-    <div key={index}>
-      <p>{parte}</p>
-      <button onClick={() => handleAceitar(itemTermo.id, parte)}>Aceitar</button>
-      <button onClick={() => handleRecusar(itemTermo.id, parte)}>Recusar</button>
-    </div>
-  ));
-};
-  console.log(respostas);
+ 
   
+
 
   return (
     <form>
@@ -391,15 +348,19 @@ const renderizarTermo = (itemTermo: any) => {
               <Modal.Header closeButton>
                 <Modal.Title>Termo de Uso</Modal.Title>
               </Modal.Header>
-
-
               <Modal.Body>
-                {termos.slice(-1).map((termo) => (
-                  <div key={termo.id}>
-                    {renderizarTermo(termo)}
+              <Modal.Body>
+                {ultimoTermo && ultimoTermo.itemTermos && (
+                  <div>
+                    {Object.entries(ultimoTermo.itemTermos).map(([termName, termValue]) => (
+                      <div key={termName}>
+                        <strong>{termName}:</strong> {termValue}
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </Modal.Body>
+            </Modal.Body>
 
 
               <Modal.Footer>

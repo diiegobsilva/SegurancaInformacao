@@ -22,8 +22,10 @@ interface Termo {
 
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
+
   const [showModal, setShowModal] = useState(false);
   const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
+  const [idTermo, setIdTermo] = useState('')
 
   const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
 
@@ -33,14 +35,23 @@ function Cadastro() {
     initialErrors: { nome: "" },
     onSubmit: async (values) => {
       try {
-        const [response1, response2] = await Promise.all([
-          axios.post(URI.CRIAR_CLIENTE, values),
-          axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, { ...values, termoAceito }),
-        ]);
+        const response1 = await axios.post(URI.CRIAR_CLIENTE, values);
   
-        if (response1.status === 200 && response2.status === 200) {
-          avisoConcluido();
-          onClickLimpar();
+        if (response1.status === 200) {
+          const idCliente = response1.data.id;
+          
+          const response2 = await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
+            idCliente: idCliente,
+            idTermo: idTermo,
+            termoAceito: termoAceito,
+          });
+  
+          if (response2.status === 200) {
+            avisoConcluido();
+            onClickLimpar();
+          } else {
+            avisoErro();
+          }
         } else {
           avisoErro();
         }
@@ -50,7 +61,6 @@ function Cadastro() {
       }
     },
   });
-
   
   function onClickLimpar() {
     formik.resetForm();
@@ -93,6 +103,8 @@ function Cadastro() {
         if (response.data.length > 0) {
           const ultimoTermo = response.data[response.data.length - 1];
           setUltimoTermo(ultimoTermo);
+          setIdTermo(ultimoTermo.id)
+
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));

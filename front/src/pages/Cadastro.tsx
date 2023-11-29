@@ -25,6 +25,8 @@ function Cadastro() {
   const [showModal, setShowModal] = useState(false);
   const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
 
+  const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
+
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
@@ -93,9 +95,23 @@ const handleOpenModal = () => {
 
  
   
+  const handleAceitarTermo = (termName: string) => {
+    setTermoAceito((prevTermoAceito) => ({
+      ...prevTermoAceito,
+      [termName]: true,
+    }));
+  };
 
+  const handleRecusarTermo = (termName: string) => {
+    setTermoAceito((prevTermoAceito) => ({
+      ...prevTermoAceito,
+      [termName]: false,
+    }));
+  };
 
+  console.log(termoAceito);
   
+
 
   return (
     <form>
@@ -349,17 +365,25 @@ const handleOpenModal = () => {
                 <Modal.Title>Termo de Uso</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-              <Modal.Body>
-                {ultimoTermo && ultimoTermo.itemTermos && (
-                  <div>
-                    {Object.entries(ultimoTermo.itemTermos).map(([termName, termValue]) => (
-                      <div key={termName}>
-                        <strong>{termName}:</strong> {termValue}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Modal.Body>
+                <Modal.Body>
+                  {ultimoTermo && ultimoTermo.itemTermos && (
+                    <div>
+                      {Object.entries(ultimoTermo.itemTermos).map(([termName, termValue]) => (
+                        <div key={termName}>
+                          <strong>{termName}:</strong> {termValue}
+                          <div>
+                            <Button variant="success" onClick={() => handleAceitarTermo(termName)}>
+                              Aceitar
+                            </Button>
+                            <Button variant="danger" onClick={() => handleRecusarTermo(termName)}>
+                              Recusar
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </Modal.Body>
             </Modal.Body>
 
 

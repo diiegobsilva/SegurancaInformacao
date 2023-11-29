@@ -3,22 +3,18 @@ import { format } from "date-fns";
 import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import clsx from "clsx";
-
 
 interface Termo {
   id: number;
-  itemTermos: string;
+  itemTermos: { [key: string]: string };
   data: string;
 }
 
 function Termo() {
-  const [itemTermo, setItemTermo] = useState();
   const [termos, setTermos] = useState<Termo[]>([]);
-  const [titulo, setTitulo] = useState("")
-  const [descricao, setDescricao] = useState("")
-
-  const [listTermo, setListTermo] = useState<{ titulo: string; descricao: string }[]>([]);
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [listTermo, setListTermo] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -32,27 +28,22 @@ function Termo() {
 
         if (response.data.length > 0) {
           const ultimoTermo = response.data[response.data.length - 1];
-          setItemTermo(ultimoTermo.itemTermos);
+          setListTermo(ultimoTermo.itemTermos);
         } else {
-
+          setListTermo({});
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
-
   const handleAddList = () => {
-    // Adiciona o novo termo ao objeto
     setListTermo(prevList => ({
       ...prevList,
       [titulo]: descricao,
     }));
-
     setTitulo("");
     setDescricao("");
   };
-  console.log(listTermo);
-
 
   const handleSalvar = async () => {
     try {
@@ -75,18 +66,18 @@ function Termo() {
     }
   };
 
-
-  const handleTituloChange = (event: any) => {
+  const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitulo(event.target.value);
   };
-  const handleDescricaoChange = (event: any) => {
+
+  const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescricao(event.target.value);
   };
 
   return (
     <div>
       <label className="labelArea">Últimas Versões:</label>
-      <Container className="">
+      <Container>
         <Container className="table-container">
           <Table className="custom-table">
             <thead>
@@ -103,11 +94,7 @@ function Termo() {
                     <td className="text-center">{termo.id}</td>
                     <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
                     <td className="text-center">
-                      {Object.entries(termo.itemTermos).map(([termName, termValue]) => (
-                        <div key={termName}>
-                          <strong>{termName}:</strong> {termValue}
-                        </div>
-                      ))}
+                      {renderizarTermos(termo.itemTermos)}
                     </td>
                   </tr>
                 ))
@@ -122,7 +109,8 @@ function Termo() {
             className="textTitulo"
             placeholder="Titulo"
             onChange={handleTituloChange}
-            value={titulo} />
+            value={titulo}
+          />
 
           <textarea
             className="textArea"
@@ -133,15 +121,21 @@ function Termo() {
         </div>
 
         <div className="button-container">
-          <button type="button" className="custom-button" onClick={handleAddList}  > + </button>
-
-          <button type="button" className="custom-button" onClick={handleSalvar} > Salvar </button>
+          <button type="button" className="custom-button" onClick={handleAddList}> + </button>
+          <button type="button" className="custom-button" onClick={handleSalvar}> Salvar </button>
         </div>
-
-
       </Container>
     </div>
   );
+}
+
+// Função separada para renderizar os termos
+function renderizarTermos(itemTermos: { [key: string]: string }) {
+  return Object.keys(itemTermos).map((termName) => (
+    <div key={termName}>
+      <strong>{termName}:</strong> {itemTermos[termName]}
+    </div>
+  ));
 }
 
 export default Termo;

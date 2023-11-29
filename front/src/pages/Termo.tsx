@@ -3,7 +3,8 @@ import { format } from "date-fns";
 import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import  InputTermo  from "./inputTermo";
+import clsx from "clsx";
+
 
 interface Termo {
   id: number;
@@ -14,9 +15,10 @@ interface Termo {
 function Termo() {
   const [itemTermo, setItemTermo] = useState();
   const [termos, setTermos] = useState<Termo[]>([]);
-  
   const [titulo, setTitulo] = useState("")
   const [descricao, setDescricao] = useState("")
+  
+  const [listTermo, setListTermo] = useState<string>('');
 
   const handleCreateTermo = async () => {
     try {
@@ -58,8 +60,32 @@ function Termo() {
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
- console.log(itemTermo);
- 
+ const handleTituloChange = (event: any) => {
+  setTitulo(event.target.value);
+};
+const handleDescricaoChange = (event: any) => {
+  setDescricao(event.target.value);
+};
+
+
+
+
+const handleAddList = () => {
+  const novoTermo = {
+    titulo: titulo,
+    descricao: descricao,
+  };
+  setListTermo(prevList => {
+    const novoTermoJSON = JSON.stringify(novoTermo);
+    return prevList ? `${prevList}, ${novoTermoJSON}` : `[${novoTermoJSON}`;
+  });
+
+  setTitulo("");
+  setDescricao("");
+};
+console.log(listTermo);
+
+
 
   return (
     <div>
@@ -75,7 +101,7 @@ function Termo() {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(termos) ? (
+            {
                 termos.map((termo) => (
                   <tr key={termo.id}>
                     <td className="text-center">{termo.id}</td>
@@ -89,34 +115,34 @@ function Termo() {
                     </td>
                   </tr>
                 ))
-              ) : (
-                <tr>
-                  <td colSpan={6}>Nenhum termo disponível.</td>
-                </tr>
-              )}
+              }
             </tbody>
           </Table>
         </Container>
               
-           <InputTermo titulo={titulo} descricao={descricao} setTitulo={setTitulo} setDescricao={setDescricao}/>   
+        <div>
+            <input
+            type="text"
+            className="textTitulo"
+            placeholder="Titulo" 
+            onChange={handleTituloChange}
+            value={titulo}/>
+            
+            <textarea
+            className="textArea"
+            placeholder="Descrição" 
+            onChange={handleDescricaoChange}
+            value={descricao}
+            />
+         </div>
+
         <div className="button-container">
-          <button
-            type="button"
-            className="custom-button"
-            onClick={handleCreateTermo}
-          >
-            Salvar
-          </button>
+          <button  type="button" className="custom-button" onClick={handleAddList}  > + </button>
 
-
-          <button
-            type="button"
-            className="custom-button"
-            onClick={handleCreateTermo}
-          >
-            +
-          </button>
+          <button type="button" className="custom-button" onClick={handleCreateTermo} > Salvar </button>
         </div>
+
+
       </Container>
     </div>
   );

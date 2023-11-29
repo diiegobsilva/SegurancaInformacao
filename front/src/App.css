@@ -357,16 +357,21 @@ input::-webkit-inner-spin-button {
 }
 .textArea {
   width: 95%;
-  height: 200px; 
+  height: 180px; 
   margin: 0 auto;
   display: block;
   resize: vertical; 
+}
+.textTitulo {
+  width: 95%;
+  margin: 30px;
+  border-width: 2px;
 }
 
 
 .button-container {
   text-align: center;
-  margin-top: 20px; /* Ajuste conforme necessário para centralizar verticalmente */
+  margin-top: 20px; 
 }
 
 .custom-button {

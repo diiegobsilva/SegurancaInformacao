@@ -49,12 +49,8 @@ function Cadastro() {
           if (response2.status === 200) {
             avisoConcluido();
             onClickLimpar();
-          } else {
-            avisoErro();
           }
-        } else {
-          avisoErro();
-        }
+        } 
       } catch (error) {
         console.error("Erro ao criar cliente:", error);
         avisoErro();
@@ -134,9 +130,10 @@ const handleOpenModal = () => {
   };
 
   console.log(termoAceito);
-  
-  const termosAceitosJSON = JSON.stringify(termoAceito);
-  console.log(termosAceitosJSON);
+  const termosAceitosJSON = Object.fromEntries(
+    Object.entries(termoAceito).map(([key, value]) => [key, value ? "true" : "false"])
+  );
+
   
 
   return (

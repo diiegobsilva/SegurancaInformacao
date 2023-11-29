@@ -7,7 +7,8 @@ import 'dotenv/config';
 
 export const AppDataSource = new DataSource({
   type: "mongodb", 
-  url: `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.CLUSTER}.gyfwek9.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
+ // url: `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.CLUSTER}.gyfwek9.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`,
+  url: "mongodb+srv://fatec:CwNdaImFjuebsHKh@cluster0.gyfwek9.mongodb.net/",
   synchronize: true, 
   logging: true, 
   entities: ["src/entities/*.ts"], 

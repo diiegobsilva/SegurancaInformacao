@@ -79,7 +79,9 @@ function Perfil() {
     try {
       avisoDeletar().then(async (result) => {
         if (result.isConfirmed) {
-          await axios.delete(`/cliente/delete/${userId}`).then(() => navigate('/login'));
+          await axios.delete(`/cliente/delete/${userId}`).then(async () => {
+            await axios.post('http://localhost:3002/cliente/create/', {id: userId}).then((res) => navigate('/login'))
+          });
         }
       })
 

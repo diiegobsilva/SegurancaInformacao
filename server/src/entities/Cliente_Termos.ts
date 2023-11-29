@@ -8,11 +8,11 @@ export class ClienteTermos {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Cliente)
+    @ManyToOne(() => Cliente, {onDelete: 'CASCADE'})
     @JoinColumn({ name: "cliente_id" })
     cliente: Cliente;
 
-    @ManyToOne(() => Termos)
+    @ManyToOne(() => Termos, {onDelete: 'CASCADE'})
     @JoinColumn({ name: "termos_id" })
     termos: Termos;
 

@@ -9,6 +9,9 @@ export enum URI {
     LOGIN_USER = "http://localhost:3001/cliente/login"
 }
 
+export enum URITERMOS {
+    CRIAR_CLIENTE_TERMO = "http://localhost:3001/cliente_termo/create",
+}
 
 export const api = axios.create({
     baseURL: 'http://localhost:3001/',

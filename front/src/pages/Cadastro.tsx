@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import "../App.css";
 import axios from "axios";
 import { avisoConcluido, avisoErro, registrationSchema } from "../controllers";
-import { URI } from "../enumerations/uri";
+import { URI, URITERMOS } from "../enumerations/uri";
 import React from "react";
 import { initialValues } from "../types";
 import clsx from "clsx";
@@ -32,12 +32,26 @@ function Cadastro() {
     validationSchema: registrationSchema,
     initialErrors: { nome: "" },
     onSubmit: async (values) => {
-      JSON.stringify(values, null, 2);
-      await axios.post(URI.CRIAR_CLIENTE, formik.values);
-      onClickLimpar();
+      try {
+        const [response1, response2] = await Promise.all([
+          axios.post(URI.CRIAR_CLIENTE, values),
+          axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, { ...values, termoAceito }),
+        ]);
+  
+        if (response1.status === 200 && response2.status === 200) {
+          avisoConcluido();
+          onClickLimpar();
+        } else {
+          avisoErro();
+        }
+      } catch (error) {
+        console.error("Erro ao criar cliente:", error);
+        avisoErro();
+      }
     },
   });
 
+  
   function onClickLimpar() {
     formik.resetForm();
   }
@@ -93,8 +107,6 @@ const handleOpenModal = () => {
     setShowModal(false);
   };
 
- 
-  
   const handleAceitarTermo = (termName: string) => {
     setTermoAceito((prevTermoAceito) => ({
       ...prevTermoAceito,
@@ -341,23 +353,7 @@ const handleOpenModal = () => {
         <div className="col-lg-9">
           <div style={{ display: "flex" }}>
 
-            <input
-              type="checkbox"
-              checked={formik.values.termo_dados === 1}
-              onChange={(e) =>
-                formik.setFieldValue("termo_dados", e.target.checked ? 1 : 0)
-              }
-              className={clsx(
-                {
-                  "is-invalid":
-                    formik.touched.termo_dados && formik.errors.termo_dados,
-                },
-                {
-                  "is-valid":
-                    formik.touched.termo_dados && !formik.errors.termo_dados,
-                }
-              )}
-            />
+
 
             {/* Modal */}
             <Modal show={showModal} onHide={handleCloseModal} style={{}}>
@@ -375,6 +371,7 @@ const handleOpenModal = () => {
                             <Button variant="success" onClick={() => handleAceitarTermo(termName)}>
                               Aceitar
                             </Button>
+                            
                             <Button variant="danger" onClick={() => handleRecusarTermo(termName)}>
                               Recusar
                             </Button>
@@ -396,16 +393,7 @@ const handleOpenModal = () => {
 
 
 
-            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}>
-              Concordo com os termos de uso e condições previstas para uso desse website.
-            </label>
-            {formik.touched.termo_dados && formik.errors.termo_dados && (
-              <div className="fv-plugins-message-container">
-                <div className="fv-help-block">
-                  <span role="alert">{formik.errors.termo_dados}</span>
-                </div>
-              </div>
-            )}
+            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
           </div>
         </div>
 

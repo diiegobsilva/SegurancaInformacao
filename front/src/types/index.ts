@@ -7,7 +7,6 @@ export const initialValues = {
     password: "",
     confirmPassword: "",
     confirmEmail: "",
-    termo_dados: 0,
     profile: "user"
 
 }
@@ -24,10 +23,4 @@ export interface Clientes {
     confirmPassword: string;
     confirmEmail: string;
     profile: string
-    itemTermos: {
-        Cookies: string;
-        ColetaDeDados: string;
-        TermosDeServico: string;
-        PoliticaDePrivacidade: string;
-      };
 }

@@ -7,9 +7,7 @@ routes.get('/',authorization, Cliente_termos_controller.getAllClienteTermos);
 
 routes.get('/specific/:id', Cliente_termos_controller.getOneClienteTermos);
 
-routes.post('/create', authorization, Cliente_termos_controller.createClienteTermos)
-
-// routes.post('/create', Cliente_termos_controller.postCliente);
+routes.post('/create', Cliente_termos_controller.createClienteTermos)
 
 routes.put('/modify/:uuid', Cliente_termos_controller.updateClienteTermos);
 

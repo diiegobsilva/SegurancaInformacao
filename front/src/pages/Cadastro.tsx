@@ -9,6 +9,8 @@ import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate} from "react-router-dom";
+
 
 
 interface Termo {
@@ -22,12 +24,15 @@ interface Termo {
 
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
-
   const [showModal, setShowModal] = useState(false);
   const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
   const [idTermo, setIdTermo] = useState('')
 
   const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
+
+
+  const navigate = useNavigate();
+
 
   const formik = useFormik({
     initialValues,
@@ -47,8 +52,7 @@ function Cadastro() {
           });
   
           if (response2.status === 200) {
-            avisoConcluido();
-            onClickLimpar();
+           await avisoConcluido().then(() => navigate('/login'));
           }
         } 
       } catch (error) {

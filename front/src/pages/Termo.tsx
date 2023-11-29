@@ -14,7 +14,7 @@ function Termo() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [listTermo, setListTermo] = useState<{ [key: string]: string }>({});
+  const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -26,21 +26,18 @@ function Termo() {
       .then((response) => {
         setTermos(response.data);
 
-        if (response.data.length > 0) {
-          const ultimoTermo = response.data[response.data.length - 1];
-          setListTermo(ultimoTermo.itemTermos);
-        } else {
-          setListTermo({});
-        }
+        // Inicializar termos temporários como um objeto vazio
+        setTermosTemporarios({});
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
 
   const handleAddList = () => {
-    setListTermo(prevList => ({
-      ...prevList,
+    setTermosTemporarios((prevTemporarios) => ({
+      ...prevTemporarios,
       [titulo]: descricao,
     }));
+
     setTitulo("");
     setDescricao("");
   };
@@ -50,7 +47,7 @@ function Termo() {
       const recoveredToken = localStorage.getItem('token');
 
       const response = await axios.post('/termos/create', {
-        itemTermos: listTermo,
+        itemTermos: termosTemporarios,
       }, {
         headers: {
           'authorization': `Bearer ${recoveredToken}`
@@ -59,6 +56,9 @@ function Termo() {
 
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);
+
+      // Limpar os termos temporários após salvar
+      setTermosTemporarios({});
 
       window.location.reload();
     } catch (error) {
@@ -74,6 +74,14 @@ function Termo() {
     setDescricao(event.target.value);
   };
 
+  function renderizarTermos(itemTermos: { [key: string]: string }) {
+    return Object.keys(itemTermos).map((termName) => (
+      <li key={termName}>
+        <strong>{termName}:</strong> {itemTermos[termName]}
+      </li>
+    ));
+  }
+
   return (
     <div>
       <label className="labelArea">Últimas Versões:</label>
@@ -88,17 +96,17 @@ function Termo() {
               </tr>
             </thead>
             <tbody>
-              {
-                termos.map((termo) => (
-                  <tr key={termo.id}>
-                    <td className="text-center">{termo.id}</td>
-                    <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
-                    <td className="text-center">
+              {termos.map((termo) => (
+                <tr key={termo.id}>
+                  <td className="text-center">{termo.id}</td>
+                  <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
+                  <td className="text-center">
+                    <ul>
                       {renderizarTermos(termo.itemTermos)}
-                    </td>
-                  </tr>
-                ))
-              }
+                    </ul>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Container>
@@ -119,12 +127,13 @@ function Termo() {
             value={descricao}
           />
 
-
-          <textarea
-            className="textAreaTermos"
-            disabled
-            value={descricao}
-          />  
+          {/* Exibir termos temporários */}
+          <div>
+          <h2>................................................................................................................................................................</h2>
+            <ul>
+              {renderizarTermos(termosTemporarios)}
+            </ul>
+          </div>
         </div>
 
         <div className="button-container">
@@ -134,15 +143,6 @@ function Termo() {
       </Container>
     </div>
   );
-}
-
-
-function renderizarTermos(itemTermos: { [key: string]: string }) {
-  return Object.keys(itemTermos).map((termName) => (
-    <div key={termName}>
-      <strong>{termName}:</strong> {itemTermos[termName]}
-    </div>
-  ));
 }
 
 export default Termo;

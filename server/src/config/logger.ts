@@ -18,8 +18,8 @@ const loggerNewTermo = createLogger({
   level: 'info',
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    format.printf(({ level, message, timestamp, clienteTermosId, clientId, termsInfo }) => {
-      return `[${level.toUpperCase()}] ClienteTermos ID: ${clienteTermosId} - Client ID: ${clientId} - Timestamp: ${timestamp} - Message: ${message} - Terms: ${JSON.stringify(termsInfo)}`;
+    format.printf(({ level, message, timestamp, clienteTermosId, clientId }) => {
+      return `[${level.toUpperCase()}] ClienteTermos ID: ${clienteTermosId} - Cliente ID: ${clientId} - Timestamp: ${timestamp} - Message: ${message}`;
     })
   ),
   transports: [
@@ -27,6 +27,7 @@ const loggerNewTermo = createLogger({
     new transports.File({ filename: '../server/logs/client_term_log.log' }),
   ],
 });
+
 
 const loggerDelete = createLogger({
   format: format.printf((info) => {

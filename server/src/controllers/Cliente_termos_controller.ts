@@ -18,8 +18,8 @@ class ClienteTermosController {
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
       const createdClienteTermos = await clienteTermosRepository.save(newClienteTermos);
 
-      const logMessage = `Created ClienteTermos: ${createdClienteTermos.id}, Cliente: ${createdClienteTermos.cliente.id}, Termos: ${createdClienteTermos.termos.id}`;
-      loggerNewTermo.info({ message: logMessage, clienteTermosId: createdClienteTermos.id, clientId: createdClienteTermos.cliente.id, termsInfo: createdClienteTermos.termos });
+      const logMessage = `Created ClienteTermos: ${createdClienteTermos.id}, Cliente: ${cliente}, Termos: ${JSON.stringify(itemTermos)}`;
+      loggerNewTermo.info({ message: logMessage, clienteTermosId: createdClienteTermos.id, clientId: cliente, Termos: JSON.stringify(itemTermos) });
 
       return res.status(201).json(createdClienteTermos);
     } catch (error) {

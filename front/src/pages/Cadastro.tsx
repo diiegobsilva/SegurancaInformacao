@@ -159,6 +159,20 @@ const handleOpenModal = () => {
       setCurrentPage(index);
     }    
   };
+  const getColor = (index:any, termo:string) => {
+    if(currentPage === index){
+      return 'blue'
+    }
+    else if(termoAceito[termo] === true ){
+      return "green" 
+    }
+    else if(termoAceito[termo] === false){
+      return "red"
+    }
+    else{
+      return 'gray'
+    }
+  }
   
 
   console.log(termoAceito);
@@ -426,7 +440,7 @@ const handleOpenModal = () => {
                             width: '10px',
                             height: '10px',
                             borderRadius: '50%',
-                            background: currentPage === index ? 'blue' : 'gray',
+                            background: getColor(index, _),
                             cursor: 'pointer',
                           }}
                           onClick={() => handleChangePage(index, _)}

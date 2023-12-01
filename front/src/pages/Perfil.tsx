@@ -3,7 +3,7 @@ import "../App.css";
 import clsx from "clsx";
 import axios from "axios";
 import { avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Perfil() {
   const [userId, setUserId] = useState("");
@@ -12,6 +12,7 @@ function Perfil() {
   const [telefone, setTelefone] = useState("");
   const [endereco, setEndereco] = useState("");
   const [sexo, setSexo] = useState("");
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -78,9 +79,10 @@ function Perfil() {
     try {
       avisoDeletar().then(async (result) => {
         if (result.isConfirmed) {
-          await axios.delete(`/cliente/delete/${userId}`);
+          await axios.delete(`/cliente/delete/${userId}`).then(async () => {
+            await axios.post('http://localhost:3002/cliente/create/', {id: userId}).then((res) => navigate('/login'))
+          });
         }
-
       })
 
     } catch (error) {

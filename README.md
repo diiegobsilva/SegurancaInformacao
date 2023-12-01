@@ -2,9 +2,9 @@
 
 
 
-![Captura de tela 2023-11-20 101541](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/8d0d1f4b-2aa5-43cc-85cd-cab28821717b)
+![modelo](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/0989322c-478b-4cb6-af49-2cdd0c86e02c)
 
 
 
-![modelo logico](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/3a364b35-0879-461c-b891-b0bdff161ce3)
+![WhatsApp Image 2023-11-29 at 10 18 44](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/e1eac972-8c82-42e3-9cac-aeaf51d068ed)
 

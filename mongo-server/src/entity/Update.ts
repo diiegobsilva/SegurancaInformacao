@@ -1,7 +1,7 @@
 import { Entity, ObjectIdColumn, ObjectId, Column, BeforeUpdate, BeforeInsert, PrimaryGeneratedColumn } from "typeorm"
 import * as bcrypt from "bcrypt";
 
-@Entity({ name: "cliente" })
+@Entity()
 export class  ClienteEntity {
 
     @ObjectIdColumn()

@@ -9,6 +9,8 @@ import { initialValues } from "../types";
 import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate} from "react-router-dom";
+
 
 
 interface Termo {
@@ -22,12 +24,15 @@ interface Termo {
 
 function Cadastro() {
   const [termos, setTermos] = useState<Termo[]>([]);
-
   const [showModal, setShowModal] = useState(false);
   const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
   const [idTermo, setIdTermo] = useState('')
 
   const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const navigate = useNavigate();
+
 
   const formik = useFormik({
     initialValues,
@@ -46,10 +51,7 @@ function Cadastro() {
             itemTermos: termosAceitosJSON,
           });
   
-          if (response2.status === 200) {
-            avisoConcluido();
-            onClickLimpar();
-          }
+
         } 
       } catch (error) {
         console.error("Erro ao criar cliente:", error);
@@ -86,7 +88,7 @@ function Cadastro() {
       avisoErro();
     } else {
       formik.submitForm();
-      avisoConcluido();
+      avisoConcluido().then(() => navigate('/login'));
 
     }
   }
@@ -120,6 +122,14 @@ const handleOpenModal = () => {
       ...prevTermoAceito,
       [termName]: true,
     }));
+    if(ultimoTermo && ultimoTermo.itemTermos){
+      if (currentPage < Object.keys(ultimoTermo.itemTermos || {}).length - 1) {
+        handleNextPage();
+      }else{
+        handleCloseModal()
+      }
+    }
+    
   };
 
   const handleRecusarTermo = (termName: string) => {
@@ -127,7 +137,29 @@ const handleOpenModal = () => {
       ...prevTermoAceito,
       [termName]: false,
     }));
+    if(ultimoTermo && ultimoTermo.itemTermos){
+      if (currentPage < Object.keys(ultimoTermo.itemTermos || {}).length - 1) {
+        handleNextPage();
+      }else{
+        handleCloseModal()
+      }
+    }
   };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const handleChangePage = (index: React.SetStateAction<number>, termo:string) => {
+    if(termoAceito[termo] !== undefined){      
+      setCurrentPage(index);
+    }    
+  };
+  
 
   console.log(termoAceito);
   const termosAceitosJSON = Object.fromEntries(
@@ -367,41 +399,57 @@ const handleOpenModal = () => {
 
 
             {/* Modal */}
-            <Modal show={showModal} onHide={handleCloseModal} style={{}}>
-              <Modal.Header closeButton>
-                <Modal.Title>Termo de Uso</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
+            <>
+            {ultimoTermo && ultimoTermo.itemTermos && (
+              <Modal show={showModal} onHide={handleCloseModal} style={{}}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Termo de Uso</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
-                  {ultimoTermo && ultimoTermo.itemTermos && (
-                    <div>
-                      {Object.entries(ultimoTermo.itemTermos).map(([termName, termValue]) => (
-                        <div key={termName}>
-                          <strong>{termName}:</strong> {termValue}
-                          <div>
-                            <Button variant="success" onClick={() => handleAceitarTermo(termName)}>
-                              Aceitar
-                            </Button>
-                            
-                            <Button variant="danger" onClick={() => handleRecusarTermo(termName)}>
-                              Recusar
-                            </Button>
-                          </div>
-                        </div>
+                  {Object.entries(ultimoTermo.itemTermos)
+                    .slice(currentPage, currentPage + 1)
+                    .map(([termName, termValue]) => (
+                      <div key={termName}>
+                        <strong>{termName}</strong>
+                        <div>{termValue}</div>
+                      </div>
+                    ))}
+                </Modal.Body>
+                <Modal.Footer>
+                  {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}> */}
+
+                    <div style={{ display: 'flex', gap: '10px', marginRight: 'auto' }}>
+                      {Object.keys(ultimoTermo?.itemTermos || {}).map((_, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            background: currentPage === index ? 'blue' : 'gray',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => handleChangePage(index, _)}
+                        />
                       ))}
                     </div>
-                  )}
-                </Modal.Body>
-            </Modal.Body>
 
-
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseModal}>
-                  Fechar
-                </Button>
-              </Modal.Footer>
-            </Modal>
-
+                  {/* </div> */}
+                  <Button variant="success" onClick={() => {
+                      handleAceitarTermo(Object.keys(ultimoTermo.itemTermos || {})[currentPage])
+                  }}>
+                    Aceitar
+                  </Button>
+                  <Button variant="danger" onClick={() => {
+                      handleRecusarTermo(Object.keys(ultimoTermo.itemTermos || {})[currentPage])
+                      
+                  }}>
+                    Recusar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            )}
+          </>
 
 
             <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>

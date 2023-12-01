@@ -1,21 +1,26 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
-import { Cliente } from "../entity/Cliente";
+import { Users } from "../entity/Cliente";
 class ClienteController{
     public async getCli(req: Request, res: Response): Promise<Response> {
-        const rep = AppDataSource.getRepository(Cliente)
+        const rep = AppDataSource.getRepository(Users)
         const all = await rep.find()
         return res.json(all)
     }
 
     public async postCli(req: Request, res: Response): Promise<Response> {
-        const { id } = req.body
-        const rep = AppDataSource.getRepository(Cliente)
-        const insert = new Cliente()
-        insert.cli_id = id
-        insert.date = new Date()
-        const save = rep.save(insert)
-        return res.json(save)
+        try{
+            const { id } = req.body
+            const rep = AppDataSource.getRepository(Users)
+            const insert = new Users()
+            insert.cli_id = Number(id)
+            insert.date = new Date()
+            const save = rep.save(insert)
+            return res.json(save)
+        }catch(err){
+            return res.status(400).json(err)
+        }
+        
     }
 }
 export default new ClienteController()

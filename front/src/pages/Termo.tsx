@@ -19,7 +19,9 @@ function Termo() {
   const [descricao, setDescricao] = useState("");
  // const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
   const [ render, setRender ] = useState(null as any)
+  const [novosItem, setNovosItem] = useState(null as any)
   const { termosTemporarios, setTermosTemporarios } = useContext(AuthContext);
+console.log(novosItem);
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -81,12 +83,13 @@ function Termo() {
 
   function renderizarTermos(itemTermos: { [key: string]: string }) {
     return Object.keys(itemTermos).map((termName) => (
-      <div style={{textAlign: "justify", overflowY: 'auto'}}>
+      <div style={{textAlign: "justify", overflowY: 'auto'}} onClick={() => {setNovosItem([termName, itemTermos[termName]])}}>
         <h1 style={{fontSize: 30}}>{termName}</h1> 
         <p style={{textAlign: 'justify', width: '100%'}}>{itemTermos[termName]}</p>
       </div>
     ));
   }
+
 
 
   return (
@@ -124,6 +127,9 @@ function Termo() {
           Object.entries(render).map(([termName, termValue]) => (
             <RenderTermoExite key={termName} title={termName} value={termValue} />
           ))
+        )}
+        {novosItem &&(
+          <RenderTermoExite key={novosItem[0]} title={novosItem[0]} value={novosItem[1]} />
         )}
         </div>
         <div>

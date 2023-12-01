@@ -423,9 +423,9 @@ const handleOpenModal = () => {
                   {Object.entries(ultimoTermo.itemTermos)
                     .slice(currentPage, currentPage + 1)
                     .map(([termName, termValue]) => (
-                      <div key={termName}>
-                        <strong>{termName}</strong>
-                        <div>{termValue}</div>
+                      <div key={termName} style={{height: 500, overflowY: 'auto'}}>
+                        <h1 style={{fontSize: 30}}>{termName}</h1>
+                        <p style={{textAlign: 'justify', width: '100%'}}>{termValue}</p>
                       </div>
                     ))}
                 </Modal.Body>

@@ -11,6 +11,7 @@ export const AuthProvider = ({children}:any) => {
     const navigate = useNavigate()
     const [ user, setUser ] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         try{
@@ -90,7 +91,7 @@ export const AuthProvider = ({children}:any) => {
     
 
     return (
-        <AuthContext.Provider value={{authenticated: Boolean(user), user, loading , logout, login}}>
+        <AuthContext.Provider value={{authenticated: Boolean(user), user, loading , logout, login, termosTemporarios, setTermosTemporarios}}>
             {children}
         </AuthContext.Provider>
     )

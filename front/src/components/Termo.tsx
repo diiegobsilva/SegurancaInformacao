@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../contexts/auth";
 
 interface Props{
     title: any
@@ -8,6 +9,23 @@ interface Props{
 function RenderTermoExite(props: Props) {
   const [titulo, setTitulo] = useState(props.title);
   const [desc, setDesc] = useState(props.value);
+  const { termosTemporarios, setTermosTemporarios } = useContext(AuthContext);
+
+console.log(termosTemporarios);
+
+  const handleAddList = () => {
+    setTermosTemporarios((prevTemporarios:any) => ({
+      ...prevTemporarios,
+      [titulo]: desc,
+    }));
+  };
+  const handleRemoverItem = () => {
+    delete termosTemporarios[props.title || titulo]
+    setTermosTemporarios((prevTemporarios:any) => ({
+      ...prevTemporarios
+    }));
+    
+  };
 
   return (
     <div>
@@ -25,6 +43,8 @@ function RenderTermoExite(props: Props) {
         onChange={(e) => setDesc(e.target.value)}
         defaultValue={desc}
       />
+      <button type="button" className="custom-button" onClick={handleAddList}> + </button>
+      <button type="button" className="custom-button" onClick={handleRemoverItem}> Remover </button>
     </div>
   );
 }

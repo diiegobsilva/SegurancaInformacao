@@ -1,9 +1,11 @@
 import { Container, Table } from "react-bootstrap";
 import { format } from "date-fns";
 import "../App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { RenderTermoExite } from "../components/Termo";
+import { AuthContext } from "../contexts/auth";
+
 
 interface Termo {
   id: number;
@@ -15,8 +17,9 @@ function Termo() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
+ // const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
   const [ render, setRender ] = useState(null as any)
+  const { termosTemporarios, setTermosTemporarios } = useContext(AuthContext);
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -35,7 +38,7 @@ function Termo() {
   }, []);
 
   const handleAddList = () => {
-    setTermosTemporarios((prevTemporarios) => ({
+    setTermosTemporarios((prevTemporarios:any) => ({
       ...prevTemporarios,
       [titulo]: descricao,
     }));

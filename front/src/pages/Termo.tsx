@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import "../App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { RenderTermoExite } from "../components/Termo";
 
 interface Termo {
   id: number;
@@ -15,6 +16,7 @@ function Termo() {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
+  const [ render, setRender ] = useState(null as any)
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token');
@@ -76,11 +78,13 @@ function Termo() {
 
   function renderizarTermos(itemTermos: { [key: string]: string }) {
     return Object.keys(itemTermos).map((termName) => (
-      <li key={termName}>
-        <strong>{termName}:</strong> {itemTermos[termName]}
-      </li>
+      <div style={{textAlign: "justify", overflowY: 'auto'}}>
+        <h1 style={{fontSize: 30}}>{termName}</h1> 
+        <p style={{textAlign: 'justify', width: '100%'}}>{itemTermos[termName]}</p>
+      </div>
     ));
   }
+
 
   return (
     <div>
@@ -97,13 +101,14 @@ function Termo() {
             </thead>
             <tbody>
               {termos.map((termo) => (
-                <tr key={termo.id}>
+                <tr key={termo.id} onClick={(e) => setRender(termo.itemTermos)}>
                   <td className="text-center">{termo.id}</td>
                   <td className="text-center">{format(new Date(termo.data), "yyyy-MM-dd HH:mm:ss")}</td>
-                  <td className="text-center">
-                    <ul>
+                  <td >
+                    <div style={{ overflowY: 'auto', maxHeight: '400px' }}>
                       {renderizarTermos(termo.itemTermos)}
-                    </ul>
+                    </div>
+                 
                   </td>
                 </tr>
               ))}
@@ -111,6 +116,13 @@ function Termo() {
           </Table>
         </Container>
 
+        <div>
+        {render && (
+          Object.entries(render).map(([termName, termValue]) => (
+            <RenderTermoExite key={termName} title={termName} value={termValue} />
+          ))
+        )}
+        </div>
         <div>
           <input
             type="text"
@@ -135,7 +147,7 @@ function Termo() {
             </ul>
           </div>
         </div>
-
+          
         <div className="button-container">
           <button type="button" className="custom-button" onClick={handleAddList}> + </button>
           <button type="button" className="custom-button" onClick={handleSalvar}> Salvar </button>

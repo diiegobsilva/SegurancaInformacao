@@ -17,7 +17,6 @@ function Termo() {
   const [termos, setTermos] = useState<Termo[]>([]);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
- // const [termosTemporarios, setTermosTemporarios] = useState<{ [key: string]: string }>({});
   const [ render, setRender ] = useState(null as any)
   const [novosItem, setNovosItem] = useState(null as any)
   const { termosTemporarios, setTermosTemporarios } = useContext(AuthContext);
@@ -33,7 +32,7 @@ console.log(novosItem);
       .then((response) => {
         setTermos(response.data);
 
-        // Inicializar termos temporários como um objeto vazio
+
         setTermosTemporarios({});
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
@@ -90,7 +89,29 @@ console.log(novosItem);
     ));
   }
 
-
+  const handleTermoTemporarioClick = (termName: string, termValue: string) => {
+    // Ao clicar em um termo temporário, define o termo clicado como o termo atual a ser editado
+    setNovosItem([termName, termValue]);
+    setTitulo(termName);
+    setDescricao(termValue);
+    // Remove o termo temporário clicado
+    setTermosTemporarios((prevTemporarios: any) => {
+      const { [termName]: termRemovido, ...novosTermos } = prevTemporarios;
+      return novosTermos;
+    });
+  };
+  const renderizarTermosTemporarios = (termosTemporarios: { [key: string]: string }) => {
+    return Object.keys(termosTemporarios).map((termName) => (
+      <div
+        style={{ textAlign: "justify", overflowY: "auto", cursor: "pointer" }}
+        key={termName}
+        onClick={() => handleTermoTemporarioClick(termName, termosTemporarios[termName])}
+      >
+        <h1 style={{ fontSize: 30 }}>{termName}</h1>
+        <p style={{ textAlign: "justify", width: "100%" }}>{termosTemporarios[termName]}</p>
+      </div>
+    ));
+  };
 
   return (
     <div>
@@ -128,31 +149,28 @@ console.log(novosItem);
             <RenderTermoExite key={termName} title={termName} value={termValue} />
           ))
         )}
-        {novosItem &&(
-          <RenderTermoExite key={novosItem[0]} title={novosItem[0]} value={novosItem[1]} />
-        )}
-        </div>
-        <div>
-          <input
-            type="text"
-            className="textTitulo"
-            placeholder="Titulo"
-            onChange={handleTituloChange}
-            value={titulo}
-          />
+      </div>
+      <div>
+        <input
+          type="text"
+          className="textTitulo"
+          placeholder="Titulo"
+          onChange={handleTituloChange}
+          value={titulo}
+        />
 
-          <textarea
-            className="textArea"
-            placeholder="Descrição"
-            onChange={handleDescricaoChange}
-            value={descricao}
-          />
+        <textarea
+          className="textArea"
+          placeholder="Descrição"
+          onChange={handleDescricaoChange}
+          value={descricao}
+        />
 
-          {/* Exibir termos temporários */}
+
           <div>
           <hr className="linha"/>
             <ul>
-              {renderizarTermos(termosTemporarios)}
+              {renderizarTermosTemporarios(termosTemporarios)}
             </ul>
           </div>
         </div>

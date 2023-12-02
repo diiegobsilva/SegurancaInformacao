@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-
+import logs from "./postMongo";
 
 
 // const AppDataSource = new DataSource({
@@ -42,5 +42,13 @@ AppDataSource.initialize()
   .catch((e) => {
     console.error("Erro na inicialização do Data Source:", e);
   });
+
+  async function qualquer  ()  {
+    const logsCollection = await logs();
+      console.log('vasco da gama',logsCollection);
+   
+  }
+  qualquer();
+  
 
 export default AppDataSource;

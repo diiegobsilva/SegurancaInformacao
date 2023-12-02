@@ -6,7 +6,7 @@ import { authorization } from "../middlewares";
 const routes = Router();
 
 routes.get('/', TermosControllers.getAllTermos);
-routes.get('/termos/:id',  TermosControllers.getOneTermos);
+// routes.get('/termos/:id',  TermosControllers.getOneTermos);
 routes.post('/create',  TermosControllers.createTermos);
 routes.put('/update/:id', authorization, TermosControllers.updateTermos);
 

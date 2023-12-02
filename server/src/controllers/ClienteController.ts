@@ -80,12 +80,18 @@ class ClienteController {
   }
 
   public async putCliente(req: Request, res: Response): Promise<Response> {
+    const infoLog =  await info()
+    const warmLog = await warm()
     try {
       const createCliente = req.body;
       const idCliente: any = req.params.uuid;
       const clienteRepository = AppDataSource.getRepository(Cliente);
       const findCliente = await clienteRepository.findOneBy({ id: idCliente });
       if (!findCliente) {
+        warmLog.insertOne({
+          date: new Date(),
+          message: "Cliente não encontrado"
+        })
         return res.status(404).json({ error: 'Cliente não encontrado' });
       }
       loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
@@ -116,13 +122,18 @@ class ClienteController {
       // Salve as alterações no cliente
       const updatedCliente = await clienteRepository.save(findCliente);
 
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Cliente atualizado",
+        idUser: updatedCliente.id
+      })
       return res.json(updatedCliente);
     } catch (error) {
       console.error('Erro ao atualizar cliente:', error);
-
-      // Registre o erro no loggerDelete
-
-      // loggerDelete.error(Erro ao atualizar cliente: ID ${idCliente}, Erro: ${error});
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao atualizar cliente: ' + error
+      })
 
       return res.status(500).json({ error: 'Erro ao atualizar cliente' });
     }
@@ -130,37 +141,72 @@ class ClienteController {
 
 
   public async putPassword(req: Request, res: Response): Promise<Response> {
-    const { password } = req.body
-    const id: any = req.params.uuid;
-    const client: any = await AppDataSource.manager
-      .getRepository(Cliente)
-      .createQueryBuilder("cliente")
-      .select()
-      .addSelect('cliente.password')
-      .where("cliente.id=:id", { id })
-      .getOne();
-    console.log();
-    client.password = password
+    const infoLog =  await info()
+    const warmLog = await warm()
+    try{
+      const { password } = req.body
+      const id: any = req.params.uuid;
+      const client: any = await AppDataSource.manager
+        .getRepository(Cliente)
+        .createQueryBuilder("cliente")
+        .select()
+        .addSelect('cliente.password')
+        .where("cliente.id=:id", { id })
+        .getOne();
+      console.log();
+      client.password = password
 
-    const r = await AppDataSource.manager.save(Cliente, client)
-    return res.json(r)
+      const r = await AppDataSource.manager.save(Cliente, client)
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Senha atualizada com sucesso",
+        idUser: id
+      })
+      return res.json(r)
+    }catch(err){
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao atualizar senha: ' + err
+      })
+      return res.status(400).json({error: err})
+    }
   }
 
 
   public async getHistoricCliente(req: Request, res: Response): Promise<Response> {
-    const clienteRepository = AppDataSource.getRepository(Cliente)
-    const allCliente = await clienteRepository.find()
-    console.log(allCliente)
-    return res.json(allCliente)
+    const infoLog =  await info()
+    const warmLog = await warm()
+    try{
+      const clienteRepository = AppDataSource.getRepository(Cliente)
+      const allCliente = await clienteRepository.find()
+      console.log(allCliente)
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Clientes pegos com sucesso"
+      })
+      return res.json(allCliente)
+    }catch(err){
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao pegar usuarios: ' + err
+      })
+      return res.status(400).json({error: err})
+    }
   }
 
   public async getCliente(req: Request, res: Response): Promise<Response> {
+    const infoLog =  await info()
+    const warmLog = await warm()
     try {
       const idCliente: any = req.params.uuid;
       const clienteRepository = AppDataSource.getRepository(Cliente);
       const cliente = await clienteRepository.findOneBy({ id: idCliente });
 
       if (!cliente) {
+        warmLog.insertOne({
+          date: new Date(),
+          message: 'Cliente não encontrado'
+        })
         return res.status(404).json({ error: 'Cliente não encontrado' });
       }
 
@@ -175,28 +221,51 @@ class ClienteController {
         endereco,
         profile
       };
-
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Clientes pego com sucesso",
+        id: idCliente
+      })
       return res.json(clienteData);
     } catch (error) {
       console.error('Erro ao buscar cliente:', error);
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao buscar cliente: ' + error
+      })
       return res.status(500).json({ error: 'Erro ao buscar cliente' });
     }
   }
   public async postCliente(req: Request, res: Response): Promise<Response> {
-    const createCliente = req.body
-    const clienteRepository = AppDataSource.getRepository(Cliente)
-    const insertCliente = new Cliente();
-    insertCliente.nome = createCliente.nome
-    insertCliente.email = createCliente.email
-    insertCliente.sexo = createCliente.sexo
-    insertCliente.endereco = createCliente.endereco
-    insertCliente.telefone = createCliente.telefone
-    insertCliente.profile = createCliente.profile
-    insertCliente.password = createCliente.password
-
-
-    const allCliente = await clienteRepository.save(insertCliente)
-    return res.json(allCliente)
+    const infoLog =  await info()
+    const warmLog = await warm()
+    try{
+      const createCliente = req.body
+      const clienteRepository = AppDataSource.getRepository(Cliente)
+      const insertCliente = new Cliente();
+      insertCliente.nome = createCliente.nome
+      insertCliente.email = createCliente.email
+      insertCliente.sexo = createCliente.sexo
+      insertCliente.endereco = createCliente.endereco
+      insertCliente.telefone = createCliente.telefone
+      insertCliente.profile = createCliente.profile
+      insertCliente.password = createCliente.password
+  
+  
+      const allCliente = await clienteRepository.save(insertCliente)
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Clientes cadastrado com sucesso",
+        id: allCliente.id
+      })
+      return res.json(allCliente)
+    }catch(err){
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao cadastrar cliente: ' + err
+      })
+      return res.status(400).json({error: err})
+    }
   }
 
   // public async putCliente(req: Request, res: Response): Promise<Response> {
@@ -226,14 +295,25 @@ class ClienteController {
 
 
   public async deleteCliente(req: Request, res: Response): Promise<Response> {
+    const infoLog =  await info()
+    const warmLog = await warm()
     try{
       const userId: any = req.params.uuid
       const clienteRepository = AppDataSource.getRepository(Cliente)
       const findCliente = await clienteRepository.findOneBy({ id: userId })
       const allCliente = await clienteRepository.remove(findCliente)
       loggerDelete.info(`id: ${userId}`)
+      infoLog.insertOne({
+        date: new Date(),
+        message: "Clientes deletado",
+        id: userId
+      })
       return res.json(allCliente)
     }catch(err){
+      warmLog.insertOne({
+        date: new Date(),
+        message: 'Erro ao deletar cliente: ' + err
+      })
       return res.status(400).json(err)
     }
   }

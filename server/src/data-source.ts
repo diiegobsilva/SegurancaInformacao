@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import logs from "./postMongo";
+import {info} from "./postMongo";
 
 
 // const AppDataSource = new DataSource({
@@ -44,7 +44,7 @@ AppDataSource.initialize()
   });
 
   async function qualquer  ()  {
-    const logsCollection = await logs();
+    const logsCollection = await info();
       console.log('vasco da gama',logsCollection);
    
   }

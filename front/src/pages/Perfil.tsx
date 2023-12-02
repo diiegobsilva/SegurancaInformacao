@@ -86,12 +86,21 @@ function Perfil() {
   };
   const handleAtualiza = async () => {
     try {
-      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco});
+      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco}).then(async () => {
+        await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
+          cliente: userId,
+          termos: idTermo,
+          itemTermos: termoAceito,
+        });
+      })
       console.log('Cliente alterado uhuuuu: ');
     } catch (error) {
       console.error('Error updating client:', error);
     }
   }
+console.log("id do termo aqui" + idTermo);
+console.log("id do user aqui" + userId);
+
 
   async function handleDeleteUser() {
     try {
@@ -333,7 +342,7 @@ console.log(termoAceito);
               </Modal>
             )}
           </>
-            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
+            <label style={{fontSize:"18px", fontWeight: "bold", marginTop: "20px"}} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
           </div>
         </div>
 

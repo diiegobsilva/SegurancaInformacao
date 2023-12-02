@@ -168,25 +168,18 @@ function Perfil() {
     };
     
     const getColor = (index: any, termo: any) => {
-      // Verificar se o termo foi aceito ou recusado pelo usuário
       const termoAceitoPeloUsuario = termoAceito[termo];
       if (termoAceitoPeloUsuario !== undefined) {
         return termoAceitoPeloUsuario ? 'green' : 'red';
       }
-    
-      // Verificar o valor booleano diretamente em cliente_termo
       const termoClienteStatus = cliente_termo && cliente_termo[termo];
       if (termoClienteStatus !== undefined) {
         return termoClienteStatus ? 'green' : 'red';
       }
-    
-      // Verificar se o termo faz parte do termo mais recente e atribuir a cor correspondente
       const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
       if (termoUltimoTermo) {
         return 'gray';
       }
-    
-      // Se nenhum dos casos anteriores, retornar 'gray' como padrão
       return 'gray';
     };
     
@@ -214,8 +207,6 @@ console.log(termoAceito);
   
 console.log("id do termo aqui" + idTermo);
 console.log("id do user aqui" + userId);
-
-
 
   return (
     <>

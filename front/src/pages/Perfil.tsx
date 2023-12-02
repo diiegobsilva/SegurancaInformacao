@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../App.css";
 import clsx from "clsx";
 import axios from "axios";
-import { avisoAtualizacaoTermo, avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
+import { avisoAtualizacaoTermo, avisoDeletar, avisoErroDeletar, avisoPerfilAlterada } from "../controllers/avisoConcluido";
 import { Link, useNavigate } from "react-router-dom";
 import { URITERMOS } from "../enumerations/uri";
 import { Button, Modal } from "react-bootstrap";
@@ -214,6 +214,8 @@ console.log(termoAceito);
         itemTermos: cliente_termo,
       });
 
+      avisoPerfilAlterada()
+      
     } catch (error) {
       console.error('Erro ao atualizar cliente:', error);
     }

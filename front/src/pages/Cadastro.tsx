@@ -10,6 +10,7 @@ import clsx from "clsx";
 import Swal, { SweetAlertCustomClass } from 'sweetalert2';
 import { Button, Modal } from "react-bootstrap";
 import { useNavigate} from "react-router-dom";
+import { avisoValidateTermo } from "../controllers/avisoErro";
 
 
 
@@ -32,6 +33,9 @@ function Cadastro() {
   const [currentPage, setCurrentPage] = useState(0);
 
   const navigate = useNavigate();
+  const termosAceitosJSON = Object.fromEntries(
+    Object.entries(termoAceito).map(([key, value]) => [key, value ? "true" : "false"])
+  );
 
 
   const formik = useFormik({
@@ -40,23 +44,24 @@ function Cadastro() {
     initialErrors: { nome: "" },
     onSubmit: async (values) => {
       try {
-        const response1 = await axios.post(URI.CRIAR_CLIENTE, values);
-  
-        if (response1.status === 200) {
+          const response1 = await axios.post(URI.CRIAR_CLIENTE, values);
           const idCliente = response1.data.id;
-          
           await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
             cliente: idCliente,
             termos: idTermo,
             itemTermos: termosAceitosJSON,
           });
-        } 
+        
       } catch (error) {
         console.error("Erro ao criar cliente:", error);
         avisoErro();
       }
     },
   });
+
+ console.log(termosAceitosJSON);
+ 
+
   
   function onClickLimpar() {
     formik.resetForm();
@@ -82,13 +87,16 @@ function Cadastro() {
 
 
   function onClickEnviar() {
-    if (!formik.isValid || formik.errors.confirmPassword) {
-      avisoErro();
-    } else {
-      formik.submitForm();
-      avisoConcluido().then(() => navigate('/login'));
-
-    }
+    if(Object.keys(termosAceitosJSON).length === 0){
+      avisoValidateTermo()
+     }else{
+      if (!formik.isValid || formik.errors.confirmPassword) {
+        avisoErro();
+      } else {
+        formik.submitForm();
+        avisoConcluido().then(() => navigate('/login'));
+      }
+     }
   }
 
   useEffect(() => {
@@ -171,13 +179,6 @@ const handleOpenModal = () => {
       return 'gray'
     }
   }
-  
-
-  console.log(termoAceito);
-  const termosAceitosJSON = Object.fromEntries(
-    Object.entries(termoAceito).map(([key, value]) => [key, value ? "true" : "false"])
-  );
-
   
 
   return (
@@ -497,3 +498,5 @@ const handleOpenModal = () => {
 }
 
 export default Cadastro;
+
+

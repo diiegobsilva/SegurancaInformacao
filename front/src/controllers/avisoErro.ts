@@ -15,8 +15,16 @@ function avisoErroDeletar() {
     title: "Ocorreu um erro!",
     text: "Não foi possível excluir o chamado.",
   });
-  
 }
+
+function avisoValidateTermo() {
+  Swal.fire({
+    icon: "error",
+    title: "Ocorreu um erro!",
+    text: "É necessario preencher todos os termos",
+  });
+}
+
 function avisoErroLogin(){
   Swal.fire({
     icon: 'error',
@@ -24,4 +32,4 @@ function avisoErroLogin(){
     text: 'Não foi possível realizar o login.',
   })
 }
-export { avisoErro, avisoErroDeletar, avisoErroLogin };
+export { avisoErro, avisoErroDeletar, avisoErroLogin, avisoValidateTermo };

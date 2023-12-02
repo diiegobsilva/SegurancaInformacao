@@ -87,17 +87,24 @@ function Cadastro() {
 
 
   function onClickEnviar() {
-    if(Object.keys(termosAceitosJSON).length === 0){
-      avisoValidateTermo()
-     }else{
-      if (!formik.isValid || formik.errors.confirmPassword) {
-        avisoErro();
+    if (Object.keys(termosAceitosJSON).length === 0) {
+      avisoValidateTermo();
+    } else {
+      const quantidadeTitulosUltimoTermo = Object.keys(ultimoTermo?.itemTermos || {}).length;
+
+      if (quantidadeTitulosUltimoTermo !== Object.keys(termosAceitosJSON).length) {
+        avisoValidateTermo();
       } else {
-        formik.submitForm();
-        avisoConcluido().then(() => navigate('/login'));
+        if (!formik.isValid || formik.errors.confirmPassword) {
+          avisoErro();
+        } else {
+          formik.submitForm();
+          avisoConcluido().then(() => navigate('/login'));
+        }
       }
-     }
+    }
   }
+  
 
   useEffect(() => {
     axios.get('/termos/')
@@ -108,11 +115,13 @@ function Cadastro() {
           const ultimoTermo = response.data[response.data.length - 1];
           setUltimoTermo(ultimoTermo);
           setIdTermo(ultimoTermo.id)
-
+      
+          
         }
       })
       .catch((error) => console.error('Erro ao buscar termos:', error));
   }, []);
+
 
 const handleOpenModal = () => {
   if (ultimoTermo) {

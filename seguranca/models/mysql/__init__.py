@@ -2,6 +2,7 @@ import subprocess
 import shlex
 import os
 import datetime
+from logs import error, info, warm
 
 
 def mysqlConnection():
@@ -15,23 +16,45 @@ def mysqlConnection():
         return connection
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            error().insert_one({
+                'date': datetime.datetime.now(),
+                'message': f"Something is wrong with your user name or password"
+            })
             print("Something is wrong with your user name or password")
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            error().insert_one({
+                'date': datetime.datetime.now(),
+                'message': f"Database does not exist"
+            })
             print("Database does not exist")
         else:
+            error().insert_one({
+                'date': datetime.datetime.now(),
+                'message': f"{str(err)}"
+            })
             print(err)
 
 def mysqlRemoveUsers(ids):
     try:
         db = mysqlConnection()
+        cont = 0
         if db.is_connected():
             mycursor = db.cursor()
             sql = f"delete from clientes.cliente where id in {ids};"
             mycursor.execute(sql)
             db.commit()
             print(mycursor.rowcount, "record(s) deleted")
+            cont = mycursor.rowcount
             db.close()
+        info().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"{cont} usuarios deletados"
+        })
     except Exception as e:
+        error().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"{str(e)}"
+        })
         return e
     
 
@@ -56,9 +79,16 @@ def mysqlBackup(host, usuario, senha, banco, caminho_backup, docker):
             subprocess.run(shlex.split(comando), check=True)
 
         # Executa o comando para criar o backup
-        
+        info().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"Backup criado com sucesso!"
+        })
         print("Backup criado com sucesso!")
     except subprocess.CalledProcessError as e:
+        error().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"Erro ao criar o backup: {e}"
+        })
         print(f"Erro ao criar o backup: {e}")
 
 
@@ -74,6 +104,14 @@ def mysqlRestaurar(host, usuario, senha, banco, caminho_backup, docker):
         with open(caminho_backup, 'rb') as arquivo:
             subprocess.Popen(comando, stdin=arquivo, shell=True).wait()
         #subprocess.run(shlex.split(comando), check=True)
+        info().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"Backup restaurado com sucesso!"
+        })
         print("Backup restaurado com sucesso!")
     except subprocess.CalledProcessError as e:
+        error().insert_one({
+            'date': datetime.datetime.now(),
+            'message': f"Erro ao restaurar o backup: {e}"
+        })
         print(f"Erro ao restaurar o backup: {e}")

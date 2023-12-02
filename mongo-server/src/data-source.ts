@@ -4,6 +4,7 @@ import { Users } from "./entity/Cliente"
 import { ClienteEntity } from "./entity/Update"
 import { DataSource } from "typeorm";
 import 'dotenv/config';
+import { info } from "./postMongo";
 
 export const AppDataSource = new DataSource({
   type: "mongodb", 
@@ -25,5 +26,12 @@ AppDataSource.initialize()
   .catch((e) => {
     console.error("Erro na inicialização do Data Source:", e);
   });
-
+  
+  async function qualquer  ()  {
+    const logsCollection = await info();
+      console.log('vasco da gama',logsCollection);
+   
+  }
+  qualquer();
+  
 export default AppDataSource;

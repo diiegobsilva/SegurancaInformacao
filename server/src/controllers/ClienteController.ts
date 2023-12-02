@@ -4,6 +4,7 @@ import { Cliente } from "../entities/Cliente";
 import { authAdmin, generateToken } from "../middlewares";
 import { loggerDelete, loggerUpdate } from "../config/logger";
 import cliente from "../routes/cliente";
+import { info, error, warm } from "../postMongo";
 
 class ClienteController {
 
@@ -33,7 +34,12 @@ class ClienteController {
         if (isPasswordValid) {
           // Cria um token codificando o objeto {id, email, profile}
           const token = await generateToken({ id: usuario.id, email: usuario.email, profile: usuario.profile });
-
+          const infoLog =  await info()
+          infoLog.insertOne({
+            date: new Date(),
+            message: "User login sucesso",
+            idUser: usuario.id
+          })
           return res.json({
             id: usuario.id,
             nome: usuario.nome,

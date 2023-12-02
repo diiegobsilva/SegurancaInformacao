@@ -3,9 +3,11 @@ import { Cliente_termos_controller } from "../controllers";
 import { authorization } from "../middlewares";
 const routes = Router();
 
-routes.get('/',authorization, Cliente_termos_controller.getAllClienteTermos);
+routes.get('/', Cliente_termos_controller.getAllClienteTermos);
 
 routes.get('/specific/:id', Cliente_termos_controller.getOneClienteTermos);
+
+routes.get('/specificCliente/:id', Cliente_termos_controller.getOneClienteTermosByClienteId);
 
 routes.post('/create', Cliente_termos_controller.createClienteTermos)
 

@@ -409,10 +409,6 @@ const handleOpenModal = () => {
 
         <div className="col-lg-9">
           <div style={{ display: "flex" }}>
-
-
-
-            {/* Modal */}
             <>
             {ultimoTermo && ultimoTermo.itemTermos && (
               <Modal show={showModal} onHide={handleCloseModal} style={{}}>

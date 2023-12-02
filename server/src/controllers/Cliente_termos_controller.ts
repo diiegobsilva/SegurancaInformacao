@@ -112,6 +112,44 @@ class ClienteTermosController {
     }
   }
 
+
+  public async getOneClienteTermosByClienteId(req: Request, res: Response): Promise<Response | void> {
+    try {
+      const idCliente: number = parseInt(req.params.id, 10);
+  
+      if (isNaN(idCliente)) {
+        return res.status(422).json({ error: 'ID do cliente inválido' });
+      }
+  
+      const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
+      const clienteTermos = await clienteTermosRepository.findOne({
+        where: { cliente: { id: idCliente } },
+        relations: ['cliente', 'termos'],
+      });
+  
+      if (!clienteTermos) {
+        return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
+      }
+  
+      const formattedResponse = {
+        id: clienteTermos.id,
+        cliente: clienteTermos.cliente,
+        termos: clienteTermos.termos,
+        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
+        termosAceitos: clienteTermos.itemTermos,
+      };
+  
+      loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });
+  
+      return res.json(formattedResponse);
+    } catch (error) {
+      console.error('Erro ao buscar cliente_termos:', error);
+      loggerNewTermo.error({ message: `Erro ao buscar cliente_termos: ${error.message}` });
+      return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
+    }
+  }
+  
   public async deleteClienteTermos(req: Request, res: Response): Promise<Response | void> {
     try {
       const idClienteTermos: number = parseInt(req.params.id, 10);

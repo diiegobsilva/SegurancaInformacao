@@ -4,6 +4,9 @@ import clsx from "clsx";
 import axios from "axios";
 import { avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
 import { Link, useNavigate } from "react-router-dom";
+import { URITERMOS } from "../enumerations/uri";
+import { Button, Modal } from "react-bootstrap";
+import Termo from "./Termo";
 
 function Perfil() {
   const [userId, setUserId] = useState("");
@@ -12,38 +15,54 @@ function Perfil() {
   const [telefone, setTelefone] = useState("");
   const [endereco, setEndereco] = useState("");
   const [sexo, setSexo] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const [cliente_termo, setCliente_termo] = useState("");
+  const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
+  const [idTermo, setIdTermo] = useState('')
+  const [termos, setTermos] = useState<Termo[]>([]);
+  
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    const carregarDadosDaLocalStorage = () => {
+    const carregarDadosDaLocalStorage = async () => {
       const id = (localStorage.getItem("id") || "").replace(/['"]+/g, '');
       const emailLocal = (localStorage.getItem("email") || "").replace(/['"]+/g, '');
       const nomeLocal = (localStorage.getItem("nome") || "").replace(/['"]+/g, '');
       const telefoneLocal = (localStorage.getItem("telefone") || "").replace(/['"]+/g, '');
       const enderecoLocal = (localStorage.getItem("endereco") || "").replace(/['"]+/g, '');
       const sexoLocal = (localStorage.getItem("sexo") || "").replace(/['"]+/g, '');
-
+  
       setUserId(id);
       setEmail(emailLocal);
       setNome(nomeLocal);
       setTelefone(telefoneLocal);
       setEndereco(enderecoLocal);
       setSexo(sexoLocal);
+  
+      try {
+        const response = await axios.get(`http://localhost:3001/cliente_termo/specificCliente/${id}`);
+        const { termosAceitos } = response.data;
+        setCliente_termo(termosAceitos);
+      } catch (error) {
+        console.error(error);
+      }
     };
-    carregarDadosDaLocalStorage()
+  
+    carregarDadosDaLocalStorage();
   }, []);
 
-  console.log("foda se");
-  console.log("foda se");
   console.log(userId);
   console.log(email);
   console.log(nome);
   console.log(endereco);
   console.log(telefone);
   console.log(sexo);
-
-
+  console.log(cliente_termo);
+  
   const handleEmailChange = (event: any) => {
     setEmail(event.target.value);
   };
@@ -65,7 +84,6 @@ function Perfil() {
   const handleSexoChange = (event: any) => {
     setSexo(event.target.value);
   };
-
   const handleAtualiza = async () => {
     try {
       await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco});
@@ -84,12 +102,105 @@ function Perfil() {
           });
         }
       })
-
     } catch (error) {
       console.error(error);
       avisoErroDeletar();
     }
   }
+
+  useEffect(() => {
+    axios.get('/termos/')
+      .then((response) => {
+        setTermos(response.data);
+  
+        if (response.data.length > 0) {
+          const ultimoTermo = response.data[response.data.length - 1];
+          setUltimoTermo(ultimoTermo);
+          setIdTermo(ultimoTermo.id)
+
+        }
+      })
+      .catch((error) => console.error('Erro ao buscar termos:', error));
+  }, []);
+
+  const handleOpenModal = () => {
+    if (ultimoTermo) {
+      setShowModal(true);
+    }
+  };
+    const handleCloseModal = () => {
+      setShowModal(false);
+    };
+  
+    const handleAceitarTermo = (termName: string) => {
+      setTermoAceito((prevTermoAceito) => ({
+        ...prevTermoAceito,
+        [termName]: true,
+      }));
+      if(ultimoTermo && ultimoTermo.itemTermos){
+        if (currentPage < Object.keys(ultimoTermo.itemTermos || {}).length - 1) {
+          handleNextPage();
+        }else{
+          handleCloseModal()
+        }
+      }
+      
+    };
+  
+    const handleRecusarTermo = (termName: string) => {
+      setTermoAceito((prevTermoAceito) => ({
+        ...prevTermoAceito,
+        [termName]: false,
+      }));
+      if(ultimoTermo && ultimoTermo.itemTermos){
+        if (currentPage < Object.keys(ultimoTermo.itemTermos || {}).length - 1) {
+          handleNextPage();
+        }else{
+          handleCloseModal()
+        }
+      }
+    };
+  
+    const handleNextPage = () => {
+      setCurrentPage((prevPage) => prevPage + 1);
+    };
+  
+    const handlePrevPage = () => {
+      setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+    };
+  
+    const handleChangePage = (index: React.SetStateAction<number>, termo:string) => {
+      if(termoAceito[termo] !== undefined){      
+        setCurrentPage(index);
+      }    
+    };
+    const getColor = (index: any, termo: any) => {
+      const termoClienteAceito = cliente_termo && cliente_termo[termo] === 'true';
+      const termoClienteRecusado = cliente_termo && cliente_termo[termo] === 'false';
+      const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
+      const termoAceitoPeloUsuario = termoAceito[termo];
+      if (termoAceitoPeloUsuario !== undefined) {
+        return termoAceitoPeloUsuario ? 'green' : 'red';
+      } else if (termoClienteAceito) {
+        return 'green';
+      } else if (termoClienteRecusado) {
+        return 'red';
+      } else if (termoUltimoTermo) {
+        return 'gray';
+      } else {
+        return 'gray'; 
+      }
+    };
+    
+console.log(termoAceito);
+
+
+  console.log(cliente_termo);
+  console.log(ultimoTermo);
+  
+
+  console.log(termoAceito);
+  
 
 
   return (
@@ -164,6 +275,63 @@ function Perfil() {
               <option value="feminino" label="Feminino" />
               <option value="outro" label="Outro" />
             </select>
+          </div>
+        </div>
+
+        <div className="col-lg-9">
+          <div style={{ display: "flex" }}>
+            <>
+            {ultimoTermo && ultimoTermo.itemTermos && (
+              <Modal show={showModal} onHide={handleCloseModal} style={{}}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Termo de Uso</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {Object.entries(ultimoTermo.itemTermos)
+                    .slice(currentPage, currentPage + 1)
+                    .map(([termName, termValue]) => (
+                      <div key={termName} style={{height: 500, overflowY: 'auto'}}>
+                        <h1 style={{fontSize: 30}}>{termName}</h1>
+                        <p style={{textAlign: 'justify', width: '100%'}}>{termValue}</p>
+                      </div>
+                    ))}
+                </Modal.Body>
+                <Modal.Footer>
+                  {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}> */}
+
+                    <div style={{ display: 'flex', gap: '10px', marginRight: 'auto' }}>
+                      {Object.keys(ultimoTermo?.itemTermos || {}).map((_, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            background: getColor(index, _),
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => handleChangePage(index, _)}
+                        />
+                      ))}
+                    </div>
+
+                  {/* </div> */}
+                  <Button variant="success" onClick={() => {
+                      handleAceitarTermo(Object.keys(ultimoTermo.itemTermos || {})[currentPage])
+                  }}>
+                    Aceitar
+                  </Button>
+                  <Button variant="danger" onClick={() => {
+                      handleRecusarTermo(Object.keys(ultimoTermo.itemTermos || {})[currentPage])
+                      
+                  }}>
+                    Recusar
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            )}
+          </>
+            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
           </div>
         </div>
 

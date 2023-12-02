@@ -86,12 +86,21 @@ function Perfil() {
   };
   const handleAtualiza = async () => {
     try {
-      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco});
+      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco}).then(async () => {
+        await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
+          cliente: userId,
+          termos: idTermo,
+          itemTermos: termoAceito,
+        });
+      })
       console.log('Cliente alterado uhuuuu: ');
     } catch (error) {
       console.error('Error updating client:', error);
     }
   }
+console.log("id do termo aqui" + idTermo);
+console.log("id do user aqui" + userId);
+
 
   async function handleDeleteUser() {
     try {
@@ -162,23 +171,25 @@ function Perfil() {
     };
   
     const handleNextPage = () => {
-      setCurrentPage((prevPage) => prevPage + 1);
+      setCurrentPage((prevPage) =>
+        Math.min(prevPage + 1, Object.keys(ultimoTermo?.itemTermos || {}).length - 1)
+      );
     };
-  
+    
     const handlePrevPage = () => {
       setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
     };
-  
-    const handleChangePage = (index: React.SetStateAction<number>, termo:string) => {
-      if(termoAceito[termo] !== undefined){      
-        setCurrentPage(index);
-      }    
+    
+    const handleChangePage = (index: React.SetStateAction<number>, termo: string) => {
+      setCurrentPage(index);
     };
+    
     const getColor = (index: any, termo: any) => {
       const termoClienteAceito = cliente_termo && cliente_termo[termo] === 'true';
       const termoClienteRecusado = cliente_termo && cliente_termo[termo] === 'false';
       const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
       const termoAceitoPeloUsuario = termoAceito[termo];
+    
       if (termoAceitoPeloUsuario !== undefined) {
         return termoAceitoPeloUsuario ? 'green' : 'red';
       } else if (termoClienteAceito) {
@@ -188,12 +199,12 @@ function Perfil() {
       } else if (termoUltimoTermo) {
         return 'gray';
       } else {
-        return 'gray'; 
+        return 'gray';
       }
     };
     
+    
 console.log(termoAceito);
-
 
   console.log(cliente_termo);
   console.log(ultimoTermo);
@@ -331,7 +342,7 @@ console.log(termoAceito);
               </Modal>
             )}
           </>
-            <label style={{ display: "flex", marginLeft: "15px" }} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
+            <label style={{fontSize:"18px", fontWeight: "bold", marginTop: "20px"}} onClick={handleOpenModal}> Concordo com os termos de uso e condições previstas para uso desse website. </label>
           </div>
         </div>
 

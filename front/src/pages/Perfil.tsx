@@ -84,23 +84,6 @@ function Perfil() {
   const handleSexoChange = (event: any) => {
     setSexo(event.target.value);
   };
-  const handleAtualiza = async () => {
-    try {
-      await axios.put(`/cliente/modify/${userId}`, { email: email, nome: nome, telefone: telefone, sexo: sexo, endereco: endereco}).then(async () => {
-        await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
-          cliente: userId,
-          termos: idTermo,
-          itemTermos: termoAceito,
-        });
-      })
-      console.log('Cliente alterado uhuuuu: ');
-    } catch (error) {
-      console.error('Error updating client:', error);
-    }
-  }
-console.log("id do termo aqui" + idTermo);
-console.log("id do user aqui" + userId);
-
 
   async function handleDeleteUser() {
     try {
@@ -185,34 +168,45 @@ console.log("id do user aqui" + userId);
     };
     
     const getColor = (index: any, termo: any) => {
-      const termoClienteAceito = cliente_termo && cliente_termo[termo] === 'true';
-      const termoClienteRecusado = cliente_termo && cliente_termo[termo] === 'false';
-      const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
       const termoAceitoPeloUsuario = termoAceito[termo];
-    
       if (termoAceitoPeloUsuario !== undefined) {
         return termoAceitoPeloUsuario ? 'green' : 'red';
-      } else if (termoClienteAceito) {
-        return 'green';
-      } else if (termoClienteRecusado) {
-        return 'red';
-      } else if (termoUltimoTermo) {
-        return 'gray';
-      } else {
+      }
+      const termoClienteStatus = cliente_termo && cliente_termo[termo];
+      if (termoClienteStatus !== undefined) {
+        return termoClienteStatus ? 'green' : 'red';
+      }
+      const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
+      if (termoUltimoTermo) {
         return 'gray';
       }
+      return 'gray';
     };
     
     
+
 console.log(termoAceito);
 
   console.log(cliente_termo);
   console.log(ultimoTermo);
   
 
-  console.log(termoAceito);
-  
+  const handleAtualiza = async () => {
+    try {
+      await axios.put(`/cliente/modify/${userId}`, { email, nome, telefone, sexo, endereco });
+      await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
+        cliente: userId,
+        termos: idTermo,
+        itemTermos: termoAceito,
+      });
 
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error);
+    }
+  };
+  
+console.log("id do termo aqui" + idTermo);
+console.log("id do user aqui" + userId);
 
   return (
     <>

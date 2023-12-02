@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { authAdmin } from "../middlewares";
 import { loggerNewTermo } from "../config/logger";
 import { ClienteTermos } from "../entities/Cliente_Termos";
+import { Termos } from "../entities/Termos";
 
 class ClienteTermosController {
 
@@ -122,7 +123,7 @@ class ClienteTermosController {
   
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
   
-      // Ordenar por data de atualização em ordem decrescente e limitar a 1 resultado
+
       const clienteTermos = await clienteTermosRepository.find({
         where: { cliente: { id: idCliente } },
         relations: ['cliente', 'termos'],
@@ -155,7 +156,55 @@ class ClienteTermosController {
     }
   }
   
+  public async getVerificaDataTermo(req: Request, res: Response): Promise<Response | void> {
+    let idTermo = 0
+    let idClieteTermo = 0
+    try {
+      const idCliente: number = parseInt(req.params.id, 10);
+      if (isNaN(idCliente)) {
+        return res.status(422).json({ error: 'ID do cliente inválido' });
+      }
+      const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
+      const clienteTermos = await clienteTermosRepository.find({
+        where: { cliente: { id: idCliente } },
+        relations: ['cliente', 'termos'],
+        order: {
+          dataAtualizacao: 'DESC',
+        },
+        take: 1,
+      });
   
+      if (!clienteTermos || clienteTermos.length === 0) {
+        return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
+      }
+
+      const termosRepository = AppDataSource.getRepository(Termos)
+      const termos = await termosRepository.find({
+        order: {
+          data: 'DESC',
+        },
+        take: 1,
+      });
+
+      termos.forEach(element => {
+        idTermo = element.id
+      });
+      clienteTermos.forEach(element => {
+        idClieteTermo = element.termos.id
+      });
+      if(idClieteTermo < idTermo){
+        return res.json({atualizacao: true});
+      }else{
+        return res.json({atualizacao: false});
+      }
+    } catch (error) {
+      console.error('Erro ao buscar cliente_termos:', error);
+      loggerNewTermo.error({ message: `Erro ao buscar cliente_termos: ${error.message}` });
+      return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
+    }
+
+
+  }
   
   public async deleteClienteTermos(req: Request, res: Response): Promise<Response | void> {
     try {

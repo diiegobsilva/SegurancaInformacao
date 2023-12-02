@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../App.css";
 import pizza1 from "../images/pizza1.jpg";
 import pizza2 from "../images/pizza2.jpg";
@@ -7,6 +7,8 @@ import pizza4 from "../images/pizza4.jpg";
 import pizza5 from "../images/pizza5.jpg";
 import pizza6 from "../images/pizza6.jpg";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { URITERMOS } from '../enumerations/uri';
 
 
 interface PizzaQuantities {
@@ -14,7 +16,24 @@ interface PizzaQuantities {
 }
 
 function Home() {
-  const navigate = useNavigate();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const id = (localStorage.getItem("id") || "").replace(/['"]+/g, '');
+      async function get(){
+        const response = await axios.get(`${URITERMOS.CLIETE_TERMO_ATUALIZA}${id}`)
+        console.log(response.data);
+      
+        if(response.data.atualizacao === true){ 
+          navigate('/perfil')
+        }
+     }
+     
+    get()
+      
+    },[])
+
   const [pizzaQuantities, setPizzaQuantities] = useState<PizzaQuantities>({
     pizza1: 0,
     pizza2: 0,

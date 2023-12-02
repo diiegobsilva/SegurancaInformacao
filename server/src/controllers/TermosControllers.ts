@@ -24,8 +24,7 @@ class TermosController {
         message: "Termo Criado com Sucesso",
         idTermo: createdTermos.itemTermos
       });
-  
-      // Return the success response after logging
+
       return res.status(201).json(createdTermos);
   
     } catch (erro) {

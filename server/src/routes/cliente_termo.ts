@@ -9,6 +9,8 @@ routes.get('/specific/:id', Cliente_termos_controller.getOneClienteTermos);
 
 routes.get('/specificCliente/:id', Cliente_termos_controller.getOneClienteTermosByClienteId);
 
+routes.get('/specificClienteTermo/:id', Cliente_termos_controller.getVerificaDataTermo);
+
 routes.post('/create', Cliente_termos_controller.createClienteTermos)
 
 routes.put('/modify/:uuid', Cliente_termos_controller.updateClienteTermos);

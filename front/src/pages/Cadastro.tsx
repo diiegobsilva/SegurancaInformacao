@@ -45,13 +45,11 @@ function Cadastro() {
         if (response1.status === 200) {
           const idCliente = response1.data.id;
           
-          const response2 = await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
+          await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
             cliente: idCliente,
             termos: idTermo,
             itemTermos: termosAceitosJSON,
           });
-  
-
         } 
       } catch (error) {
         console.error("Erro ao criar cliente:", error);

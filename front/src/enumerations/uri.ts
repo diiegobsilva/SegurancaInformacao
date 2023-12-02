@@ -11,7 +11,8 @@ export enum URI {
 
 export enum URITERMOS {
     CRIAR_CLIENTE_TERMO = "http://localhost:3001/cliente_termo/create",
-    PEGER_CLIENTE_TERMO = "http://localhost:3001/cliente_termo/specificCliente/:uuid"
+    PEGER_CLIENTE_TERMO = "http://localhost:3001/cliente_termo/specificCliente/:uuid",
+    CLIETE_TERMO_ATUALIZA = "http://localhost:3001/cliente_termo/specificClienteTermo/"
 }
 
 export const api = axios.create({

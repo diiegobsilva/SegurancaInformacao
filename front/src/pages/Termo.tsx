@@ -58,7 +58,7 @@ console.log(novosItem);
         headers: {
           'authorization': `Bearer ${recoveredToken}`
         }
-      });
+      })
 
       const updatedTermos = [...termos, response.data];
       setTermos(updatedTermos);

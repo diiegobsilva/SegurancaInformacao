@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../App.css";
 import clsx from "clsx";
 import axios from "axios";
-import { avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
+import { avisoAtualizacaoTermo, avisoDeletar, avisoErroDeletar } from "../controllers/avisoConcluido";
 import { Link, useNavigate } from "react-router-dom";
 import { URITERMOS } from "../enumerations/uri";
 import { Button, Modal } from "react-bootstrap";
@@ -36,6 +36,18 @@ function Perfil() {
       const enderecoLocal = (localStorage.getItem("endereco") || "").replace(/['"]+/g, '');
       const sexoLocal = (localStorage.getItem("sexo") || "").replace(/['"]+/g, '');
   
+
+      async function get(){
+        const response = await axios.get(`${URITERMOS.CLIETE_TERMO_ATUALIZA}${id}`)
+        console.log(response.data);
+      
+        if(response.data.atualizacao === true){ 
+          avisoAtualizacaoTermo();
+          setShowModal(true)
+        }
+     }
+
+     get()
       setUserId(id);
       setEmail(emailLocal);
       setNome(nomeLocal);

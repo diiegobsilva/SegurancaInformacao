@@ -38,6 +38,14 @@ function avisoErroDeletar() {
   });
 }
 
+function avisoAtualizacaoTermo() {
+  Swal.fire({
+    icon: "error",
+    title: "Atualização!",
+    text: "Os termos foram atualizado!.",
+  });
+}
+
 function avisoErroAlterarSenha() {
   Swal.fire({
     icon: "error",
@@ -46,4 +54,4 @@ function avisoErroAlterarSenha() {
   });
 }
 
-export { avisoConcluido, avisoSenhaAlterada, avisoDeletar, avisoErroDeletar, avisoErroAlterarSenha };
+export { avisoConcluido, avisoSenhaAlterada, avisoDeletar, avisoErroDeletar, avisoErroAlterarSenha, avisoAtualizacaoTermo};

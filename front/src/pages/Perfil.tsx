@@ -125,7 +125,7 @@ function Perfil() {
     };
   
     const handleAceitarTermo = (termName: string) => {
-      setTermoAceito((prevTermoAceito) => ({
+      setCliente_termo((prevTermoAceito:any) => ({
         ...prevTermoAceito,
         [termName]: true,
       }));
@@ -136,11 +136,11 @@ function Perfil() {
           handleCloseModal()
         }
       }
-      
+   
     };
   
     const handleRecusarTermo = (termName: string) => {
-      setTermoAceito((prevTermoAceito) => ({
+      setCliente_termo((prevTermoAceito:any) => ({
         ...prevTermoAceito,
         [termName]: false,
       }));
@@ -192,12 +192,14 @@ console.log(termoAceito);
   
 
   const handleAtualiza = async () => {
+
     try {
       await axios.put(`/cliente/modify/${userId}`, { email, nome, telefone, sexo, endereco });
+      
       await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
         cliente: userId,
         termos: idTermo,
-        itemTermos: termoAceito,
+        itemTermos: cliente_termo,
       });
 
     } catch (error) {

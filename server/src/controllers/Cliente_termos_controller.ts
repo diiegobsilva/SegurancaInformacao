@@ -116,31 +116,36 @@ class ClienteTermosController {
   public async getOneClienteTermosByClienteId(req: Request, res: Response): Promise<Response | void> {
     try {
       const idCliente: number = parseInt(req.params.id, 10);
-  
       if (isNaN(idCliente)) {
         return res.status(422).json({ error: 'ID do cliente inválido' });
       }
   
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
-      const clienteTermos = await clienteTermosRepository.findOne({
+  
+      // Ordenar por data de atualização em ordem decrescente e limitar a 1 resultado
+      const clienteTermos = await clienteTermosRepository.find({
         where: { cliente: { id: idCliente } },
         relations: ['cliente', 'termos'],
+        order: {
+          dataAtualizacao: 'DESC',
+        },
+        take: 1,
       });
   
-      if (!clienteTermos) {
+      if (!clienteTermos || clienteTermos.length === 0) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
       }
-  
+
       const formattedResponse = {
-        id: clienteTermos.id,
-        cliente: clienteTermos.cliente,
-        termos: clienteTermos.termos,
-        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
-        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
-        termosAceitos: clienteTermos.itemTermos,
+        id: clienteTermos[0].id,
+        cliente: clienteTermos[0].cliente,
+        termos: clienteTermos[0].termos,
+        dataAssociacao: clienteTermos[0].dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos[0].dataAtualizacao.toISOString(),
+        termosAceitos: clienteTermos[0].itemTermos,
       };
   
-      loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });
+      loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos[0].id}`, clienteTermosId: clienteTermos[0].id });
   
       return res.json(formattedResponse);
     } catch (error) {
@@ -149,6 +154,8 @@ class ClienteTermosController {
       return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
     }
   }
+  
+  
   
   public async deleteClienteTermos(req: Request, res: Response): Promise<Response | void> {
     try {

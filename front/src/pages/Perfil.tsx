@@ -162,23 +162,25 @@ function Perfil() {
     };
   
     const handleNextPage = () => {
-      setCurrentPage((prevPage) => prevPage + 1);
+      setCurrentPage((prevPage) =>
+        Math.min(prevPage + 1, Object.keys(ultimoTermo?.itemTermos || {}).length - 1)
+      );
     };
-  
+    
     const handlePrevPage = () => {
       setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
     };
-  
-    const handleChangePage = (index: React.SetStateAction<number>, termo:string) => {
-      if(termoAceito[termo] !== undefined){      
-        setCurrentPage(index);
-      }    
+    
+    const handleChangePage = (index: React.SetStateAction<number>, termo: string) => {
+      setCurrentPage(index);
     };
+    
     const getColor = (index: any, termo: any) => {
       const termoClienteAceito = cliente_termo && cliente_termo[termo] === 'true';
       const termoClienteRecusado = cliente_termo && cliente_termo[termo] === 'false';
       const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
       const termoAceitoPeloUsuario = termoAceito[termo];
+    
       if (termoAceitoPeloUsuario !== undefined) {
         return termoAceitoPeloUsuario ? 'green' : 'red';
       } else if (termoClienteAceito) {
@@ -188,12 +190,12 @@ function Perfil() {
       } else if (termoUltimoTermo) {
         return 'gray';
       } else {
-        return 'gray'; 
+        return 'gray';
       }
     };
     
+    
 console.log(termoAceito);
-
 
   console.log(cliente_termo);
   console.log(ultimoTermo);

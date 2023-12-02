@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { authAdmin } from "../middlewares";
 import { loggerNewTermo } from "../config/logger";
 import { ClienteTermos } from "../entities/Cliente_Termos";
+import { info } from "../postMongo";
 
 class ClienteTermosController {
 
@@ -18,6 +19,15 @@ class ClienteTermosController {
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
       const createdClienteTermos = await clienteTermosRepository.save(newClienteTermos);
 
+      const infoLog = await info();
+      await infoLog.insertOne({
+        date: new Date(),
+        message: "Aceite dos termos feito com sucesso",
+        clienteTermosId: createdClienteTermos.id,
+        clientId: cliente,
+        Termos: JSON.stringify(itemTermos)
+      });
+
       const logMessage = `Created ClienteTermos: ${createdClienteTermos.id}, Cliente: ${cliente}, Termos: ${JSON.stringify(itemTermos)}`;
       loggerNewTermo.info({ message: logMessage, clienteTermosId: createdClienteTermos.id, clientId: cliente, Termos: JSON.stringify(itemTermos) });
 
@@ -25,6 +35,13 @@ class ClienteTermosController {
     } catch (error) {
       const errorMessage = `Erro ao criar cliente_termos: ${error.message}`;
       console.error(errorMessage);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: errorMessage,
+      });
+
       loggerNewTermo.error({ message: errorMessage });
 
       return res.status(500).json({ error: 'Erro ao criar cliente_termos' });
@@ -41,6 +58,13 @@ class ClienteTermosController {
 
       if (!clienteTermos) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ClienteTermos não encontrado",
+          clienteTermosId: idClienteTermos.id,
+        })
       }
 
       if (termosAceitos !== undefined) {
@@ -49,13 +73,29 @@ class ClienteTermosController {
 
       const updatedClienteTermos = await clienteTermosRepository.save(clienteTermos);
 
+      const infoLog = await info();
+      await infoLog.insertOne({
+        date: new Date(),
+        message: "Atualização dos termos feita com sucesso",
+        ClienteTermoslientId: idClienteTermos.id,
+        Termos: JSON.stringify(termosAceitos),
+      });
+
       const logMessage = `Updated ClienteTermos: ${clienteTermos.id}, TermosAceitos: ${termosAceitos}`;
       loggerNewTermo.info({ message: logMessage, clienteTermosId: clienteTermos.id, termsInfo: clienteTermos.termos });
 
       return res.json(updatedClienteTermos);
     } catch (error) {
       console.error('Erro ao atualizar cliente_termos:', error);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao atualizar cliente_termos:" + error,
+      });
+
       loggerNewTermo.error({ message: `Erro ao atualizar cliente_termos: ${error.message}` });
+
       return res.status(500).json({ error: 'Erro ao atualizar cliente_termos' });
     }
   }
@@ -66,11 +106,25 @@ class ClienteTermosController {
         const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
         const clienteTermos = await clienteTermosRepository.find();
 
+        const infoLog = await info();
+        await infoLog.insertOne({
+          date: new Date(),
+          message: "Lista de aceites recuperada com sucesso",
+        });
+
         return res.json(clienteTermos);
       });
     } catch (error) {
       console.error('Erro ao buscar cliente_termos:', error);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao buscar cliente_termos:" + error,
+      });
+
       loggerNewTermo.error({ message: `Erro ao buscar cliente_termos: ${error.message}` });
+
       return res.status(500).json({ error: 'Erro ao buscar cliente_termos' });
     }
   }
@@ -81,6 +135,12 @@ class ClienteTermosController {
 
       if (isNaN(idClienteTermos)) {
         return res.status(422).json({ error: 'ID do cliente_termos inválido' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ID do cliente_termos inválido",
+        })
       }
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
@@ -91,6 +151,12 @@ class ClienteTermosController {
 
       if (!clienteTermos) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ClienteTermos não encontrado",
+        })
       }
 
       const formattedResponse = {
@@ -102,12 +168,32 @@ class ClienteTermosController {
         termosAceitos: clienteTermos.itemTermos,
       };
 
+      const infoLog = await info();
+      await infoLog.insertOne({
+        date: new Date(),
+        message: "Dados de aceite dos termos para o cliente feita com sucesso",
+        id: clienteTermos.id,
+        cliente: clienteTermos.cliente,
+        termos: clienteTermos.termos,
+        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
+        termosAceitos: JSON.stringify(clienteTermos.itemTermos),
+      });
+
       loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });
 
       return res.json(formattedResponse);
     } catch (error) {
       console.error('Erro ao buscar cliente_termos:', error);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao buscar cliente_termos:" + error,
+      });
+
       loggerNewTermo.error({ message: `Erro ao buscar cliente_termos: ${error.message}` });
+
       return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
     }
   }
@@ -116,53 +202,84 @@ class ClienteTermosController {
   public async getOneClienteTermosByClienteId(req: Request, res: Response): Promise<Response | void> {
     try {
       const idCliente: number = parseInt(req.params.id, 10);
+
       if (isNaN(idCliente)) {
         return res.status(422).json({ error: 'ID do cliente inválido' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ID do cliente inválido",
+        })
       }
-  
+
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
-  
-      // Ordenar por data de atualização em ordem decrescente e limitar a 1 resultado
-      const clienteTermos = await clienteTermosRepository.find({
+      const clienteTermos = await clienteTermosRepository.findOne({
         where: { cliente: { id: idCliente } },
         relations: ['cliente', 'termos'],
-        order: {
-          dataAtualizacao: 'DESC',
-        },
-        take: 1,
       });
-  
-      if (!clienteTermos || clienteTermos.length === 0) {
+
+      if (!clienteTermos) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ClienteTermos não encontrado para o ID do cliente fornecido",
+        })
       }
 
       const formattedResponse = {
-        id: clienteTermos[0].id,
-        cliente: clienteTermos[0].cliente,
-        termos: clienteTermos[0].termos,
-        dataAssociacao: clienteTermos[0].dataAssociacao.toISOString(),
-        dataAtualizacao: clienteTermos[0].dataAtualizacao.toISOString(),
-        termosAceitos: clienteTermos[0].itemTermos,
+        id: clienteTermos.id,
+        cliente: clienteTermos.cliente,
+        termos: clienteTermos.termos,
+        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
+        termosAceitos: clienteTermos.itemTermos,
       };
-  
-      loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos[0].id}`, clienteTermosId: clienteTermos[0].id });
-  
+
+      const infoLog = await info();
+      await infoLog.insertOne({
+        date: new Date(),
+        message: "Dados de aceite dos termos para o cliente feita com sucesso",
+        id: clienteTermos.id,
+        cliente: clienteTermos.cliente,
+        termos: clienteTermos.termos,
+        dataAssociacao: clienteTermos.dataAssociacao.toISOString(),
+        dataAtualizacao: clienteTermos.dataAtualizacao.toISOString(),
+        termosAceitos: JSON.stringify(clienteTermos.itemTermos),
+      });
+
+      loggerNewTermo.info({ message: `ClienteTermos encontrado: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });
+
       return res.json(formattedResponse);
     } catch (error) {
       console.error('Erro ao buscar cliente_termos:', error);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao buscar cliente_termos:" + error,
+      });
+
       loggerNewTermo.error({ message: `Erro ao buscar cliente_termos: ${error.message}` });
+
       return res.status(500).json({ error: `Erro ao buscar cliente_termos: ${error.message}` });
     }
   }
-  
-  
-  
+
   public async deleteClienteTermos(req: Request, res: Response): Promise<Response | void> {
     try {
       const idClienteTermos: number = parseInt(req.params.id, 10);
 
       if (isNaN(idClienteTermos)) {
         return res.status(422).json({ error: 'ID do cliente_termos inválido' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ID do cliente_termos inválido",
+        })
       }
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
@@ -173,16 +290,37 @@ class ClienteTermosController {
 
       if (!clienteTermos) {
         return res.status(404).json({ error: 'ClienteTermos não encontrado' });
+
+        const errorLog = await info();
+        await errorLog.insertOne({
+          date: new Date(),
+          message: "ClienteTermos não encontrado",
+        })
       }
 
       await clienteTermosRepository.remove(clienteTermos);
+
+      const infoLog = await info();
+      await infoLog.insertOne({
+        date: new Date(),
+        message: "Cliente excluído com sucesso",
+        id: clienteTermos.id,
+      });
 
       loggerNewTermo.info({ message: `ClienteTermos excluído: ${clienteTermos.id}`, clienteTermosId: clienteTermos.id });
 
       return res.status(204).send();
     } catch (error) {
       console.error('Erro ao excluir cliente_termos:', error);
+
+      const errorLog = await error();
+      await errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao excluir cliente_termos:" + error,
+      });
+
       loggerNewTermo.error({ message: `Erro ao excluir cliente_termos: ${error.message}` });
+
       return res.status(500).json({ error: `Erro ao excluir cliente_termos: ${error.message}` });
     }
   }

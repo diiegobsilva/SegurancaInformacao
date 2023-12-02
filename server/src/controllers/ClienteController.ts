@@ -7,12 +7,17 @@ import cliente from "../routes/cliente";
 import { info, error, warm } from "../postMongo";
 
 class ClienteController {
-
   public async login(req: Request, res: Response): Promise<Response> {
     const { email, password } = req.body;
-
+    const infoLog =  await info()
+    const warmLog = await warm()
+    const errorLog =  await error()
     // Verifica se foram fornecidos os parâmetros
     if (!email || !password || email.trim() === "" || password.trim() === "") {
+      warmLog.insertOne({
+        date: new Date(),
+        message: "E-mail e senha necessários"
+      })
       return res.json({ error: "E-mail e senha necessários" });
     }
 
@@ -34,10 +39,10 @@ class ClienteController {
         if (isPasswordValid) {
           // Cria um token codificando o objeto {id, email, profile}
           const token = await generateToken({ id: usuario.id, email: usuario.email, profile: usuario.profile });
-          const infoLog =  await info()
+          
           infoLog.insertOne({
             date: new Date(),
-            message: "User login sucesso",
+            message: "User login sucess",
             idUser: usuario.id
           })
           return res.json({
@@ -51,12 +56,24 @@ class ClienteController {
             token
           });
         } else {
+          warmLog.insertOne({
+            date: new Date(),
+            message: "Dados de login não conferem"
+          })
           return res.status(400).json({ error: "Dados de login não conferem" });
         }
       } else {
+        warmLog.insertOne({
+          date: new Date(),
+          message: "Usuário não localizado"
+        })
         return res.status(400).json({ error: "Usuário não localizado" });
       }
     } catch (error) {
+      errorLog.insertOne({
+        date: new Date(),
+        message: "Erro ao buscar usuário"
+      })
       console.error('Erro ao buscar usuário:', error);
       return res.status(500).json({ error: 'Erro ao buscar usuário' });
     }

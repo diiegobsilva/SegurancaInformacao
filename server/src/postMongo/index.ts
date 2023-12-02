@@ -4,14 +4,26 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const logs = async ():Promise< Response | any> => {
+const info = async ():Promise< Response | any> => {
     const client = new MongoClient(`${process.env.mongo}`);
-         await client.connect();
-
-         const collection = client.db('seguranca').collection('logs');
-
-        return collection;
-         
+    await client.connect();
+    return client.db('seguranca').collection('info');    
 }
 
-export default logs;
+const warm = async ():Promise< Response | any> => {
+    const client = new MongoClient(`${process.env.mongo}`);
+    await client.connect();
+    return client.db('seguranca').collection('warm')     
+}
+
+const error = async ():Promise< Response | any> => {
+    const client = new MongoClient(`${process.env.mongo}`);
+    await client.connect();
+    return client.db('seguranca').collection('error');   
+}
+
+export {
+    info,
+    warm,
+    error
+}

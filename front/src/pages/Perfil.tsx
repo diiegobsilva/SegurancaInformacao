@@ -226,7 +226,14 @@ console.log(termoAceito);
   const handleAtualiza = async () => {
 
     try {
-      await axios.put(`/cliente/modify/${userId}`, { email, nome, telefone, sexo, endereco });
+      await axios.put(`/cliente/modify/${userId}`, { email, nome, telefone, sexo, endereco }).then((res) => {
+
+        localStorage.setItem('email', JSON.stringify(email));
+        localStorage.setItem('nome', nome);
+        localStorage.setItem('telefone', telefone);
+        localStorage.setItem('endereco', endereco);
+        localStorage.setItem('sexo', sexo);
+      })
       
       await axios.post(URITERMOS.CRIAR_CLIENTE_TERMO, {
         cliente: userId,

@@ -95,28 +95,47 @@ class ClienteController {
         return res.status(404).json({ error: 'Cliente não encontrado' });
       }
       loggerUpdate.info(`Cliente atualizado: ID ${idCliente}`);
+      
       // Verifique cada campo e atualize o cliente
-      if (createCliente.nome !== undefined) {
-        findCliente.nome = createCliente.nome;
-      }
+      // if (createCliente.nome !== undefined) {
+      //   findCliente.nome = createCliente.nome;
+      // }
 
-      if (createCliente.email !== undefined) {
-        findCliente.email = createCliente.email;
-      }
+      // if (createCliente.email !== undefined) {
+      //   findCliente.email = createCliente.email;
+      // }
 
-      if (createCliente.sexo !== undefined) {
-        findCliente.sexo = createCliente.sexo;
-      }
+      // if (createCliente.sexo !== undefined) {
+      //   findCliente.sexo = createCliente.sexo;
+      // }
 
-      if (createCliente.telefone !== undefined) {
-        findCliente.telefone = createCliente.telefone;
-      }
+      // if (createCliente.telefone !== undefined) {
+      //   findCliente.telefone = createCliente.telefone;
+      // }
 
-      if (createCliente.endereco !== undefined) {
-        findCliente.endereco = createCliente.endereco;
+      // if (createCliente.endereco !== undefined) {
+      //   findCliente.endereco = createCliente.endereco;
+      // }
+      // if (createCliente.profile !== undefined) {
+      //   findCliente.profile = createCliente.profile;
+      // }
+
+      if (createCliente.nome === undefined || createCliente.email === undefined || createCliente.sexo === undefined || createCliente.telefone === undefined || createCliente.endereco === undefined ) {
+        warmLog.insertOne({
+          date: new Date(),
+          message: 'Erro ao atualizar cliente: ' + "Dados invalidos!"
+        })
+        return res.status(405).json({erro: "Dados invalidos!"})
       }
-      if (createCliente.profile !== undefined) {
-        findCliente.profile = createCliente.profile;
+      findCliente.nome = createCliente.nome;
+      findCliente.email = createCliente.email
+      findCliente.sexo = createCliente.sexo;
+      findCliente.telefone = createCliente.telefone;
+      findCliente.endereco = createCliente.endereco;
+      console.log(findCliente);
+      
+      if(createCliente.profile !== undefined){
+        findCliente.profile = createCliente.profile
       }
 
       // Salve as alterações no cliente

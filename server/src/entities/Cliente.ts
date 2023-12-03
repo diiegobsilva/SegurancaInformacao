@@ -22,7 +22,7 @@ export class Cliente {
     @Column({ nullable: false })
     endereco: string
 
-    @Column({ nullable: false })
+    @Column({ nullable: false, select: false, length: 200 })
     password: string
 
     @Column()

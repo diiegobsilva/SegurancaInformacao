@@ -205,29 +205,31 @@ class ClienteTermosController {
       const idCliente: number = parseInt(req.params.id, 10);
 
       if (isNaN(idCliente)) {
-        return res.status(422).json({ error: 'ID do cliente inválido' });
-
         const errorLog = await info();
         await errorLog.insertOne({
           date: new Date(),
           message: "ID do cliente inválido",
         })
+        return res.status(422).json({ error: 'ID do cliente inválido' });
       }
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);
       const clienteTermos = await clienteTermosRepository.findOne({
         where: { cliente: { id: idCliente } },
         relations: ['cliente', 'termos'],
+        order: {
+          dataAtualizacao: 'DESC',
+        },
+        
       });
 
       if (!clienteTermos) {
-        return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
-
         const errorLog = await info();
         await errorLog.insertOne({
           date: new Date(),
           message: "ClienteTermos não encontrado para o ID do cliente fornecido",
         })
+        return res.status(404).json({ error: 'ClienteTermos não encontrado para o ID do cliente fornecido' });
       }
 
       const formattedResponse = {
@@ -277,13 +279,12 @@ class ClienteTermosController {
     try {
       const idCliente: number = parseInt(req.params.id, 10);
       if (isNaN(idCliente)) {
-        return res.status(422).json({ error: 'ID do cliente inválido' });
-
         const errorLog = await info();
         await errorLog.insertOne({
           date: new Date(),
           message: "ID do cliente inválido",
         })
+        return res.status(422).json({ error: 'ID do cliente inválido' });
       }
 
       const clienteTermosRepository = AppDataSource.getRepository(ClienteTermos);

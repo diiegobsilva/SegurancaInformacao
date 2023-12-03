@@ -17,7 +17,7 @@ function Perfil() {
   const [sexo, setSexo] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const [cliente_termo, setCliente_termo] = useState("");
+  const [cliente_termo, setCliente_termo] = useState("" as any);
   const [termoAceito, setTermoAceito] = useState<{ [key: string]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [ultimoTermo, setUltimoTermo] = useState<Termo | null>(null);
@@ -28,7 +28,7 @@ function Perfil() {
 
 
   useEffect(() => {
-    const carregarDadosDaLocalStorage = async () => {
+   
       const id = (localStorage.getItem("id") || "").replace(/['"]+/g, '');
       const emailLocal = (localStorage.getItem("email") || "").replace(/['"]+/g, '');
       const nomeLocal = (localStorage.getItem("nome") || "").replace(/['"]+/g, '');
@@ -38,6 +38,13 @@ function Perfil() {
   
 
       async function get(){
+        try {
+          const response = await axios.get(`http://localhost:3001/cliente_termo/specificCliente/${id}`);
+          const { termosAceitos } = response.data;
+          setCliente_termo(termosAceitos);
+        } catch (error) {
+          console.error(error);
+        }
         const response = await axios.get(`${URITERMOS.CLIETE_TERMO_ATUALIZA}${id}`)
         console.log(response.data);
       
@@ -45,6 +52,7 @@ function Perfil() {
           avisoAtualizacaoTermo();
           setShowModal(true)
         }
+        
      }
 
      get()
@@ -55,16 +63,10 @@ function Perfil() {
       setEndereco(enderecoLocal);
       setSexo(sexoLocal);
   
-      try {
-        const response = await axios.get(`http://localhost:3001/cliente_termo/specificCliente/${id}`);
-        const { termosAceitos } = response.data;
-        setCliente_termo(termosAceitos);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      
+   
   
-    carregarDadosDaLocalStorage();
+    
   }, []);
 
   console.log(userId);
@@ -179,20 +181,38 @@ function Perfil() {
       setCurrentPage(index);
     };
     
-    const getColor = (index: any, termo: any) => {
-      const termoAceitoPeloUsuario = termoAceito[termo];
-      if (termoAceitoPeloUsuario !== undefined) {
-        return termoAceitoPeloUsuario ? 'green' : 'red';
+    const getColor = (index: any, termo: any) => {   
+      console.log(cliente_termo[termo] === 'true');
+       
+      if(currentPage === index){
+        return 'blue'
       }
-      const termoClienteStatus = cliente_termo && cliente_termo[termo];
-      if (termoClienteStatus !== undefined) {
-        return termoClienteStatus ? 'green' : 'red';
+      else if(cliente_termo[termo] === 'true' || cliente_termo[termo] === true  ){
+        return "green" 
       }
-      const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
-      if (termoUltimoTermo) {
-        return 'gray';
+      else if(cliente_termo[termo] === 'false' || cliente_termo[termo] === false ){
+        return "red"
       }
-      return 'gray';
+      else{
+        return 'gray'
+      }
+      // const termoAceitoPeloUsuario = cliente_termo[termo];      
+      // if (termoAceitoPeloUsuario !== undefined) {
+      //   return termoAceitoPeloUsuario ? 'green' : 'red';
+      // }
+      // const termoClienteStatus = cliente_termo && cliente_termo[termo];
+      // console.log(cliente_termo);
+      // console.log("VASCOOOOOOOOOOOOOO");
+      
+      
+      // if (termoClienteStatus !== undefined) {
+      //   return termoClienteStatus ? 'green' : 'red';
+      // }
+      // const termoUltimoTermo = ultimoTermo && ultimoTermo.itemTermos && ultimoTermo.itemTermos[termo];
+      // if (termoUltimoTermo) {
+      //   return 'gray';
+      // }
+      // return 'gray';
     };
     
     

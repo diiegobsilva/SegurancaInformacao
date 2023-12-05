@@ -1,6 +1,12 @@
-# SegurancaInformacao
+# Segurança Da Informação
+
+## Diagramas do Banco de Dados mongo-server NoSQL
+
+![diagrama mongo-server](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/c37228b2-47ef-4e93-b415-c7764904bedf)
 
 
+
+## Diagramas do Banco de Dados Server SQL
 
 ![modelo](https://github.com/diiegobsilva/SegurancaInformacao/assets/88494278/0989322c-478b-4cb6-af49-2cdd0c86e02c)
 
